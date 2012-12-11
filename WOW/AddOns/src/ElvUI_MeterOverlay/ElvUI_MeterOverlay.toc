@@ -3,7 +3,7 @@
 ## Title: |cff1784d1ElvUI |rMeter Overlay
 ## Author: Cecile
 ## Dependencies: ElvUI
-## Version: 1.0
+## Version: 1.2
 ## Notes: Display your damage meter as overlay in an ElvUI data text
 
 ElvUI_MeterOverlay.lua

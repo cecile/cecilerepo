@@ -84,6 +84,25 @@ colortable["UNKNOWN"] = {r = 0.49803921568627, g = 0.49803921568627, b = 0.49803
 colortable["MOB"] = {r = 0.58, g = 0.24, b = 0.63}
 colortable["UNGROUPED"] = {r = 0.63, g = 0.58, b = 0.24}
 colortable["HOSTILE"] = {r = 0.7, g = 0.1, b = 0.1}
+
+-- Formats a number into human readable form.
+function FormatNumber(number)
+	if number then
+
+		if number > 1000000 then
+			return 	("%02.2fM"):format(number / 1000000)
+		else
+			if number > 10000 then
+				return 	("%02.1fK"):format(number / 1000)
+			else
+				return math.floor(number)
+			end
+		end
+	else
+		return 0
+	end
+end
+
 	
 function DisplayTable(mode,repotType,amount)
 	
@@ -103,7 +122,12 @@ function DisplayTable(mode,repotType,amount)
 		if numofcombatants > amount then
 			numofcombatants = amount
 		end
-		GameTooltip:AddDoubleLine("Total",format("%d (%.1f) 100.0%%",totalsum,totalpersec))
+		
+		local value = FormatNumber(totalsum)
+		local vps = FormatNumber(totalpersec)
+		local percent = 100
+		
+		GameTooltip:AddDoubleLine("Total",format("%s (%s) 100.0%%",value,vps))
 		
 		for i = 1, numofcombatants do			
 		
@@ -113,11 +137,18 @@ function DisplayTable(mode,repotType,amount)
 				classc = notgroup
 			end
 			
-			if repotType == TYPE_DPS then		
-				GameTooltip:AddDoubleLine(StatsTable[i].name,format("%d (%.1f) %.1f%%",StatsTable[i].damage,StatsTable[i].dps, math.floor(1000*StatsTable[i].damage/totalsum)/10),classc.r,classc.g,classc.b,classc.r,classc.g,classc.b)
-			elseif repotType == TYPE_HEAL then									
-				GameTooltip:AddDoubleLine(StatsTable[i].name,format("%d (%.1f) %.1f%%",StatsTable[i].healing,StatsTable[i].hps, math.floor(1000*StatsTable[i].healing/totalsum)/10),classc.r,classc.g,classc.b,classc.r,classc.g,classc.b)					
+			if repotType == TYPE_DPS then	
+				value = FormatNumber(StatsTable[i].damage)
+				vps = FormatNumber(StatsTable[i].dps)
+				percent = math.floor(1000*StatsTable[i].damage/totalsum)/10
+			else
+				value = FormatNumber(StatsTable[i].healing)
+				vps = FormatNumber(StatsTable[i].hps)			
+				percent = math.floor(1000*StatsTable[i].healing/totalsum)/10
 			end
+			
+			GameTooltip:AddDoubleLine(StatsTable[i].name,format("%s (%s) %.1f%%",value,vps,percent),classc.r,classc.g,classc.b,classc.r,classc.g,classc.b)
+			
 		end
 	end
 end
