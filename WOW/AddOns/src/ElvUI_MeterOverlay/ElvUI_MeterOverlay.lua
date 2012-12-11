@@ -17,13 +17,34 @@ local OVERALL_DATA 		= "OverallData"
 local TYPE_DPS			= "DPS"
 local TYPE_HEAL			= "Heal"
 
-local CONFIG_LINES 		= 10
-local CONFIG_SEGMENT 	= CURRENT_SEGMENT
-local CONFIG_TYPE		= TYPE_DPS
+local config = {
+	lines = 10,
+	segment = CURRENT_SEGMENT,
+	type= TYPE_DPS,
+}
+
 local lastPanel
 local displayString = ''; 
 
+local CONFIG = false
+
 local function OnEvent(self, event, ...)
+
+	if not CONFIG then
+	
+		if E.db.MeterOverlay == nil then
+			E.db.MeterOverlay = {
+				lines = 10,
+				segment = CURRENT_SEGMENT,
+				type = TYPE_DPS,
+			}
+		else
+			config = E.db.MeterOverlay
+		end
+		
+		CONFIG = true
+	end
+	
 end
 
 EMO = {
@@ -44,17 +65,17 @@ local function OnUpdate(self, t)
 	
 	if now - lastSegment > 1 then
 		
-		if CONFIG_SEGMENT==CURRENT_SEGMENT then
+		if config.segment==CURRENT_SEGMENT then
 			if InCombatLockdown() then
-				rps,mydps = EMO.getRaidValuePerSecond(CURRENT_DATA, CONFIG_TYPE)
+				rps,mydps = EMO.getRaidValuePerSecond(CURRENT_DATA, config.type)
 			else
-				rps,mydps = EMO.getRaidValuePerSecond(LAST_DATA, CONFIG_TYPE)								
+				rps,mydps = EMO.getRaidValuePerSecond(LAST_DATA, config.type)								
 			end
 		else		
-			rps,mydps = EMO.getRaidValuePerSecond(OVERALL_DATA, CONFIG_TYPE)
+			rps,mydps = EMO.getRaidValuePerSecond(OVERALL_DATA, config.type)
 		end
 		
-		if CONFIG_TYPE==TYPE_DPS then
+		if config.type==TYPE_DPS then
 			self.text:SetFormattedText(displayString, L["DPS"]..': ', mydps/1000)	
 		else
 			self.text:SetFormattedText(displayString, L["HPS"]..': ', mydps/1000)	
@@ -159,7 +180,7 @@ end
 
 local function changeType (self,arg1)
 
-	CONFIG_TYPE = arg1		
+	config.type = arg1		
 	
 	CloseDropDownMenus()
 	
@@ -168,7 +189,7 @@ end
 
 local function changeMode (self,arg1)
 
-	CONFIG_SEGMENT = arg1		
+	config.segment = arg1		
 	
 	CloseDropDownMenus()
 	
@@ -177,7 +198,7 @@ end
 
 local function changeAmount (self,arg1)
 
-	CONFIG_LINES = arg1		
+	config.lines = arg1		
 	
 	CloseDropDownMenus()
 	
@@ -199,7 +220,7 @@ menuList = {
 
 local function CreateMenu(self)
 
-	if(CONFIG_SEGMENT==CURRENT_SEGMENT) then
+	if(config.segment==CURRENT_SEGMENT) then
 	
 		menuList[2].menuList = {
 				{ notCheckable=false,text = "Current/Last Fight",checked=true,func = changeMode, arg1=CURRENT_SEGMENT},		
@@ -213,7 +234,7 @@ local function CreateMenu(self)
 	
 	end
 	
-	if(CONFIG_TYPE==TYPE_DPS) then	
+	if(config.type==TYPE_DPS) then	
 		menuList[3].menuList = {
 				{ notCheckable=false,text = TYPE_DPS,checked=true,func = changeType, arg1=TYPE_DPS},
 				{ notCheckable=false,text = "Healing",func = changeType, arg1=TYPE_HEAL},							
@@ -225,7 +246,7 @@ local function CreateMenu(self)
 			} 			
 	end
 	
-	if(CONFIG_LINES==5) then	
+	if(config.lines==5) then	
 		menuList[4].menuList = {
 				{ notCheckable=false,text = "5",checked=true,func = changeAmount, arg1=5},
 				{ notCheckable=false,text = "10",func = changeAmount, arg1=10},							
@@ -233,7 +254,7 @@ local function CreateMenu(self)
 				{ notCheckable=false,text = "20",func = changeAmount, arg1=20},										
 				{ notCheckable=false,text = "25",func = changeAmount, arg1=25},										
 			} 				
-	elseif (CONFIG_LINES==10) then
+	elseif (config.lines==10) then
 		menuList[4].menuList = {
 				{ notCheckable=false,text = "5",func = changeAmount, arg1=5},
 				{ notCheckable=false,text = "10",checked=true,func = changeAmount, arg1=10},							
@@ -241,7 +262,7 @@ local function CreateMenu(self)
 				{ notCheckable=false,text = "20",func = changeAmount, arg1=20},										
 				{ notCheckable=false,text = "25",func = changeAmount, arg1=25},										
 			}	
-	elseif (CONFIG_LINES==15) then
+	elseif (config.lines==15) then
 		menuList[4].menuList = {
 				{ notCheckable=false,text = "5",func = changeAmount, arg1=5},
 				{ notCheckable=false,text = "10",func = changeAmount, arg1=10},							
@@ -249,7 +270,7 @@ local function CreateMenu(self)
 				{ notCheckable=false,text = "20",func = changeAmount, arg1=20},										
 				{ notCheckable=false,text = "25",func = changeAmount, arg1=25},										
 			}	
-	elseif (CONFIG_LINES==20) then
+	elseif (config.lines==20) then
 		menuList[4].menuList = {
 				{ notCheckable=false,text = "5",func = changeAmount, arg1=5},
 				{ notCheckable=false,text = "10",func = changeAmount, arg1=10},							
@@ -274,14 +295,14 @@ local function OnEnter(self)
 	GameTooltip:AddLine(EMO.desc,tthead.r,tthead.g,tthead.b)
 	GameTooltip:AddLine(" ")
 
-	if CONFIG_SEGMENT==CURRENT_SEGMENT then	
+	if config.segment==CURRENT_SEGMENT then	
 		if InCombatLockdown() then
-			DisplayTable(CURRENT_DATA, CONFIG_TYPE,CONFIG_LINES)
+			DisplayTable(CURRENT_DATA, config.type,config.lines)
 		else
-			DisplayTable(LAST_DATA, CONFIG_TYPE,CONFIG_LINES)
+			DisplayTable(LAST_DATA, config.type,config.lines)
 		end			
 	else	
-		DisplayTable(OVERALL_DATA, CONFIG_TYPE,CONFIG_LINES)
+		DisplayTable(OVERALL_DATA, config.type,config.lines)
 	end
 				
 	GameTooltip:Show()
@@ -322,4 +343,4 @@ E['valueColorUpdateFuncs'][ValueColorUpdate] = true;
 	click - function to fire when clicking the datatext
 	onEnterFunc - function to fire OnEnter
 ]]
-DT:RegisterDatatext(EMO.desc, { "PLAYER_LEAVE_COMBAT", 'PLAYER_REGEN_DISABLED'}, OnEvent, OnUpdate, OnClick,OnEnter,OnLeave) 
+DT:RegisterDatatext(EMO.desc, { "PLAYER_ENTERING_WORLD" }, OnEvent, OnUpdate, OnClick,OnEnter,OnLeave) 
