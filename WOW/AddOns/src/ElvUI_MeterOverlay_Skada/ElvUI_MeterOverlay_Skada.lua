@@ -2,8 +2,13 @@ if not IsAddOnLoaded( "ElvUI" )  then return end
 if not IsAddOnLoaded( "Skada" )  then return end
 if not IsAddOnLoaded( "ElvUI_MeterOverlay" )  then return end
 
+local TYPE_DPS			= "TYPE_DPS"
+local TYPE_HEAL			= "TYPE_HEAL"
+
 local E, L, V, P, G, _ = unpack(ElvUI); --Inport: Engine, Locales, PrivateDB, ProfileDB, GlobalDB, Localize Underscore
 
+	local EMO = _G.EMO
+	
 	local Skada = _G.Skada		
 	
 	function skadaToggle()
@@ -44,7 +49,7 @@ local E, L, V, P, G, _ = unpack(ElvUI); --Inport: Engine, Locales, PrivateDB, Pr
 					
 					local totaltime = Skada:PlayerActiveTime(report_set, player)
 					
-					if (mode=="DPS") then
+					if (mode==TYPE_DPS) then
 						if (templable.damage>0) then
 							templable.dps = templable.damage / math.max(1,totaltime)												
 							totalsum = totalsum + templable.damage
@@ -62,7 +67,7 @@ local E, L, V, P, G, _ = unpack(ElvUI); --Inport: Engine, Locales, PrivateDB, Pr
 					end																												
 				end
 			end		
-			if (mode=="DPS") then
+			if (mode==TYPE_DPS) then
 				table.sort(sumtable, function(a,b) return a.damage > b.damage end)
 			else
 				table.sort(sumtable, function(a,b) return a.healing > b.healing end)
@@ -97,7 +102,7 @@ local E, L, V, P, G, _ = unpack(ElvUI); --Inport: Engine, Locales, PrivateDB, Pr
 					local dps = 0
 					local hps = 0
 					
-					if (mode=="DPS") then
+					if (mode==TYPE_DPS) then
 						if (player.damage>0) then
 							dps = player.damage / math.max(1,totaltime)
 						end						
@@ -111,7 +116,7 @@ local E, L, V, P, G, _ = unpack(ElvUI); --Inport: Engine, Locales, PrivateDB, Pr
 						totalpersec = totalpersec + hps			
 					end																						
 					if E.myname == player.name then	
-						if (mode=="DPS") then					
+						if (mode==TYPE_DPS) then					
 							mydps = dps
 						else
 							mydps = hps

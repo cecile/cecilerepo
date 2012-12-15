@@ -2,6 +2,9 @@ if not IsAddOnLoaded( "ElvUI" )  then return end
 if not IsAddOnLoaded( "Recount" )  then return end
 if not IsAddOnLoaded( "ElvUI_MeterOverlay" )  then return end
 
+local TYPE_DPS			= "TYPE_DPS"
+local TYPE_HEAL			= "TYPE_HEAL"
+
 	local EMO = _G.EMO	
 
 	local Recount = _G.Recount	
@@ -31,9 +34,9 @@ if not IsAddOnLoaded( "ElvUI_MeterOverlay" )  then return end
 		local mydps,dps, curdps, data = 0, 0, nil		
 		for _,data in pairs(Recount.db2.combatants) do
 			if data.Fights and data.Fights[tablename] and (data.type=="Self" or data.type=="Grouped" or data.type=="Pet" or data.type=="Ungrouped") then
-				if mode == "DPS" then
+				if mode == TYPE_DPS then
 					_,curdps = Recount:MergedPetDamageDPS(data,tablename)
-				elseif mode == "Heal" then
+				elseif mode == TYPE_HEAL then
 					_,curdps = Recount:MergedPetHealingDPS(data,tablename)
 				end
 				if data.type ~= "Pet" or (not Recount.db.profile.MergePets and data.Owner and (Recount.db2.combatants[data.Owner].type=="Self" or Recount.db2.combatants[data.Owner].type=="Grouped" or Recount.db2.combatants[data.Owner].type=="Ungrouped")) or (not Recount.db.profile.MergePets and data.Name and data.GUID and self:matchUnitGUID(Recount,data.Name, data.GUID)) then
@@ -54,9 +57,9 @@ if not IsAddOnLoaded( "ElvUI_MeterOverlay" )  then return end
 		local sumtable = {}
 		for _,data in pairs(Recount.db2.combatants) do
 			if data.Fights and data.Fights[tablename] and (data.type=="Self" or data.type=="Grouped" or data.type=="Pet" or data.type=="Ungrouped") then
-				if mode == "DPS" then
+				if mode == TYPE_DPS then
 					cursum,curpersec = Recount:MergedPetDamageDPS(data,tablename)
-				elseif mode == "Heal" then
+				elseif mode == TYPE_HEAL then
 					cursum,curpersec = Recount:MergedPetHealingDPS(data,tablename)
 				end
 				if data.type ~= "Pet" or (not Recount.db.profile.MergePets and data.Owner and (Recount.db2.combatants[data.Owner].type=="Self" or Recount.db2.combatants[data.Owner].type=="Grouped" or Recount.db2.combatants[data.Owner].type=="Ungrouped")) or (not Recount.db.profile.MergePets and data.Name and data.GUID and self:matchUnitGUID(Recount,data.Name, data.GUID)) then
@@ -66,9 +69,9 @@ if not IsAddOnLoaded( "ElvUI_MeterOverlay" )  then return end
 						totalpersec = totalpersec + curpersec
 						fullname = data.Name or _G["UNKNOWN"]
 						if data.type == "Pet" then fullname = data.Name.." <"..data.Owner..">" end
-						if mode == "DPS" then
+						if mode == TYPE_DPS then
 							temptable = {name = fullname, damage = cursum, dps = curpersec, enclass = data.enClass}
-						elseif mode == "Heal" then
+						elseif mode == TYPE_HEAL then
 							temptable = {name = fullname, healing = cursum, hps = curpersec, enclass = data.enClass}
 						end
 						tinsert(sumtable, temptable)
@@ -76,9 +79,9 @@ if not IsAddOnLoaded( "ElvUI_MeterOverlay" )  then return end
 				end
 			end
 		end
-		if mode == "DPS" then
+		if mode == TYPE_DPS then
 			table.sort(sumtable, function(a,b) return a.damage > b.damage end)
-		elseif mode == "Heal" then
+		elseif mode == TYPE_HEAL then
 			table.sort(sumtable, function(a,b) return a.healing > b.healing end)
 		end
 		return sumtable, totalsum, totalpersec
