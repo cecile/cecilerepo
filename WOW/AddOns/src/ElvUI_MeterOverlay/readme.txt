@@ -36,7 +36,7 @@ Datatext Format (Change how the data text its displayed)
 - Raid HPS (Display only the raid HPS) 
 - Own DPS / Own HPS (Display the player DPS & HPS) 
 - Raid DPS / Own DPS (Display the Raid & player DPS) 
-- Raid HPS / OWn HPS (Display the Raid & player HPS) 
+- Raid HPS / Own HPS (Display the Raid & player HPS) 
 
 - Display labels (Toggle this option to display the labels in the datatext, set to off for shorten datatext).
 

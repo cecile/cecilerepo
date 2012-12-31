@@ -1,3 +1,6 @@
+V 1.6
+- Display fight name per current / last fight
+
 V 1.5
 - Options saved ElvUI profile per character specialization.
 

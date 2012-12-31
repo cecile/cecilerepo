@@ -208,11 +208,6 @@ end
 
 E['valueColorUpdateFuncs'][ValueColorUpdate] = true;
 
-local ConvertDataSet={}
-ConvertDataSet[OVERALL_DATA] = "Overall Data"
-ConvertDataSet[CURRENT_DATA]= "Current Fight"
-ConvertDataSet[LAST_DATA] = "Last Fight"
-
 local tthead = {r=0.4,g=0.78,b=1}
 local theal = {r=0,g=1,b=0}
 local tdamage = {r=1,g=0,b=0}
@@ -251,10 +246,13 @@ function DisplayTable(mode,repotType,amount)
 
 	StatsTable,totalsum, totalpersec = EMO.getSumtable(mode, repotType)
 
+
+	name = EMO.getSegmentName(mode)		
+	
 	if repotType == TYPE_DPS then
-		GameTooltip:AddDoubleLine("Damage Done",ConvertDataSet[mode],tdamage.r,tdamage.g,tdamage.b,tthead.r,tthead.g,tthead.b)
+		GameTooltip:AddDoubleLine("Damage Done",name,tdamage.r,tdamage.g,tdamage.b,tthead.r,tthead.g,tthead.b)
 	elseif repotType == TYPE_HEAL then
-		GameTooltip:AddDoubleLine("Healing Done",ConvertDataSet[mode],theal.r,theal.g,theal.b,tthead.r,tthead.g,tthead.b)
+		GameTooltip:AddDoubleLine("Healing Done",name,theal.r,theal.g,theal.b,tthead.r,tthead.g,tthead.b)
 	end
 
 	local numofcombatants = #StatsTable
