@@ -1,3 +1,6 @@
+V 1.6b
+- Fix a small bug for recount
+
 V 1.6
 - Display fight name per current / last fight
 

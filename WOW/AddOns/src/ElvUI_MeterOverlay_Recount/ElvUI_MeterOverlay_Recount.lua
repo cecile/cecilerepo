@@ -48,6 +48,11 @@ function recountGetRaidValuePerSecond(tablename, mode)
 			elseif mode == TYPE_HEAL then
 				_,curdps = Recount:MergedPetHealingDPS(data,tablename)
 			end
+			
+			if curdps==nil then
+				curdps=0
+			end
+			
 			if data.type ~= "Pet" or (not Recount.db.profile.MergePets and data.Owner and (Recount.db2.combatants[data.Owner].type=="Self" or Recount.db2.combatants[data.Owner].type=="Grouped" or Recount.db2.combatants[data.Owner].type=="Ungrouped")) or (not Recount.db.profile.MergePets and data.Name and data.GUID and self:matchUnitGUID(Recount,data.Name, data.GUID)) then
 				dps = dps + 10 * curdps
 				if(data.type=="Self") then
