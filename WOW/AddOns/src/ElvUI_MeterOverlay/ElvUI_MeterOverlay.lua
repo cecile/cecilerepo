@@ -96,6 +96,29 @@ local function OnEvent(self, event, ...)
 	end
 end
 
+
+
+function getRaidValuePerSecond(tablename, mode)		
+	local persec,StatsTable,totalsum,totalpersec=0,nil,0,0
+	
+	StatsTable,totalsum,totalpersec = EMO.getSumtable(tablename, mode)
+	
+	local numofcombatants = #StatsTable
+	
+	for i = 1, numofcombatants do
+		if StatsTable[i].name == E.myname then
+			if mode == TYPE_DPS then
+				persec = StatsTable[i].dps
+			else
+				persec = StatsTable[i].hps
+			end
+			break
+		end
+	end
+
+	return totalpersec,persec
+end
+
 local DTRMenu = CreateFrame("Frame", "DTRMenu", E.UIParent, "UIDropDownMenuTemplate")
 
 local lastSegment=0
@@ -125,7 +148,7 @@ local function OnUpdate(self, t)
 						
 		if (EMO.config.format == FORMAT_OWN_DPS ) then
 		
-			rdps,mydps = EMO.getRaidValuePerSecond(dataset, TYPE_DPS)
+			rdps,mydps = getRaidValuePerSecond(dataset, TYPE_DPS)
 			if EMO.config.labels then
 				self.text:SetFormattedText(displayString, "DPS: ", mydps/1000)
 			else
@@ -134,7 +157,7 @@ local function OnUpdate(self, t)
 			
 		elseif (EMO.config.format == FORMAT_OWN_HPS ) then
 		
-			rhps,myhps = EMO.getRaidValuePerSecond(dataset, TYPE_HPS)
+			rhps,myhps = getRaidValuePerSecond(dataset, TYPE_HEAL)
 			if EMO.config.labels then
 				self.text:SetFormattedText(displayString, "HPS: ", myhps/1000)
 			else
@@ -143,7 +166,7 @@ local function OnUpdate(self, t)
 			
 		elseif (EMO.config.format == FORMAT_RAID_DPS ) then
 		
-			rdps,mydps = EMO.getRaidValuePerSecond(dataset, TYPE_DPS)
+			rdps,mydps = getRaidValuePerSecond(dataset, TYPE_DPS)
 			if EMO.config.labels then
 				self.text:SetFormattedText(displayString, "RDPS: ", rdps/1000)
 			else
@@ -152,7 +175,7 @@ local function OnUpdate(self, t)
 			
 		elseif (EMO.config.format == FORMAT_RAID_HPS ) then
 		
-			rhps,myhps = EMO.getRaidValuePerSecond(dataset, TYPE_HPS)
+			rhps,myhps = getRaidValuePerSecond(dataset, TYPE_HEAL)
 			
 			if EMO.config.labels then
 				self.text:SetFormattedText(displayString, "RHPS: ", rhps/1000)
@@ -162,8 +185,8 @@ local function OnUpdate(self, t)
 			
 		elseif (EMO.config.format == FORMAT_OWN_DPS_OWN_HPS ) then
 		
-			rdps,mydps = EMO.getRaidValuePerSecond(dataset, TYPE_DPS)
-			rhps,myhps = EMO.getRaidValuePerSecond(dataset, TYPE_HPS)
+			rdps,mydps = getRaidValuePerSecond(dataset, TYPE_DPS)
+			rhps,myhps = getRaidValuePerSecond(dataset, TYPE_HEAL)
 			
 			if EMO.config.labels then
 				self.text:SetText(string.join(displayString:format("DPS: ",mydps/1000)," ",displayString:format(" HPS: ",myhps/1000)))			
@@ -173,7 +196,7 @@ local function OnUpdate(self, t)
 			
 		elseif (EMO.config.format == FORMAT_RAID_DPS_OWN_DPS ) then
 		
-			rdps,mydps = EMO.getRaidValuePerSecond(dataset, TYPE_DPS)
+			rdps,mydps = getRaidValuePerSecond(dataset, TYPE_DPS)
 		
 			if EMO.config.labels then
 				self.text:SetText(string.join(displayString:format("RDPS: ",rdps/1000)," ",displayString:format(" DPS: ",mydps/1000)))			
@@ -183,7 +206,7 @@ local function OnUpdate(self, t)
 			
 		elseif (EMO.config.format == FORMAT_RAID_HPS_OWN_HPS ) then
 		
-			rhps,myhps = EMO.getRaidValuePerSecond(dataset, TYPE_HPS)
+			rhps,myhps = getRaidValuePerSecond(dataset, TYPE_HEAL)
 			
 			if EMO.config.labels then
 				self.text:SetText(string.join(displayString:format("RHPS: ",rhps/1000)," ",displayString:format(" HPS: ",myhps/1000)))			
@@ -240,7 +263,6 @@ function FormatNumber(number)
 		return 0
 	end
 end
-
 
 function DisplayTable(mode,repotType,amount)
 
