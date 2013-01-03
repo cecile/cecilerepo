@@ -1,3 +1,7 @@
+V 1.7
+- Adding more DataText formats
+- Adding option for datatext update frequency, control how often the addon request data to the damage meter.
+
 V 1.6c
 - Another fix for hps datatext
 

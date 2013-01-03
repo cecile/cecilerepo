@@ -20,25 +20,31 @@ You could right click on the datatext to popup the configuration menu, the confi
 
 The current options are: 
 
-Segment (Change the segment used by the module) 
-- Current / Last Fight 
-- Overall 
+	Data Segment (Change the segment used by the module) 
+	- Current / Last Fight Data
+	- Overall Data
 
-Overlay Type (Change how the overlay display the information) 
-- DPS (Display the Damage Dealers details for the selected segment) 
-- Healer (Display the Healer details for the selected segment) 
-- DPS & Heal (Display first the Damage Dealers details, and them the Healer details for the selected segment) 
+	Overlay Type (Change how the overlay display the information) 
+	- DPS (Display the Damage Dealers details for the selected segment) 
+	- Healer (Display the Healer details for the selected segment) 
+	- DPS & Heal (Display first the Damage Dealers details, and them the Healer details for the selected segment) 
 
-Datatext Format (Change how the data text its displayed) 
-- Own DPS (Display only the player DPS) 
-- Own HPS (Display only the player HPS) 
-- Raid DPS (Display only the raid DPS) 
-- Raid HPS (Display only the raid HPS) 
-- Own DPS / Own HPS (Display the player DPS & HPS) 
-- Raid DPS / Own DPS (Display the Raid & player DPS) 
-- Raid HPS / Own HPS (Display the Raid & player HPS) 
+	Overlay Lines (Change to see how many lines are shown in the overlay)
 
-- Display labels (Toggle this option to display the labels in the datatext, set to off for shorten datatext).
+	Datatext Format (Change how the data text its displayed) 
+	- Own DPS (Display only the player DPS) 
+	- Own HPS (Display only the player HPS) 
+	- Raid DPS (Display only the raid DPS) 
+	- Raid HPS (Display only the raid HPS) 
+	- Own DPS / Own HPS (Display the player DPS & HPS) 
+	- Raid DPS / Own DPS (Display the Raid & player DPS) 
+	- Raid HPS / Own HPS (Display the Raid & player HPS) 
+	- Raid HPS / Own DPS (Display the Raid HPS & player DPS)
+	- Raid DPS / Own HPS (Display the Raid DPS & player HPS)
+	- Display labels (Toggle this option to display the labels in the datatext, set to off for shorten datatext)
+
+	Datatext Update Frequency (Changes how often the addon request data to the damage meter)
+
 
 Created by Cecile - Zul'Jin - EU
 https://github.com/cecile
