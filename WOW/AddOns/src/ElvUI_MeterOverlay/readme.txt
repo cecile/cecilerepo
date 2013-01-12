@@ -4,7 +4,7 @@ This module show configurable datatext with information from you damage meter, a
 When you mouse over it an overlay will shown with the detail information from you raid/group.
 So you don't need to have open the main window of the damage meter in the screen, just mouse over to see the data.
 
-The damage meters currently support are Recount & Skada. 
+The damage meters currently support are Recount, Skada & TinyDPS. 
 
 Original created during Cataclysm I've recently update and upgrade the code. 
 
@@ -12,7 +12,8 @@ This package contains 3 AddOns, unzip them in the WoW AddOns Folder:
 
 - ElvUI_MeterOverlay : Core application, this must be installed always. 
 - ElvUI_MeterOverlay_Recount : Module for Recount Damage Meter, install if you use Recount as Damage Meter. 
-- ElvUI_MeterOverlay_Skada : Module for Skada Damage Meter, install if you use Skada Damage Meter. 
+- ElvUI_MeterOverlay_Skada : Module for Skada Damage Meter, install if you use Skada Damage Meter.
+- ElvUI_MeterOverlay_TinyDPS : Module for TinyDPS Damage Meter, install if you use TinyDPS as Damage Meter.
 
 Open ElvUI configuration and go to DataText section, select "Damage Meter Overlay" in any datatext that you like to have this module on. 
 

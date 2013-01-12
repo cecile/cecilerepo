@@ -1,15 +1,18 @@
+V 1.8
+- Added TinyDPS support.
+
 V 1.7
-- Adding more DataText formats
-- Adding option for datatext update frequency, control how often the addon request data to the damage meter.
+- Added more DataText formats.
+- Added an option for datatext update frequency, control how often the addon request data to the damage meter.
 
 V 1.6c
-- Another fix for hps datatext
+- Another fix for hps datatext.
 
 V 1.6b
-- Fix a small bug for recount
+- Fix a small bug for recount.
 
 V 1.6
-- Display fight name per current / last fight
+- Display fight name per current / last fight.
 
 V 1.5
 - Options saved ElvUI profile per character specialization.
