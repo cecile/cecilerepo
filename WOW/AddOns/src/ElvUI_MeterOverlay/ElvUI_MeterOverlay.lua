@@ -305,15 +305,15 @@ function DisplayTable(mode,repotType,amount)
 	name = EMO.getSegmentName(mode)		
 	
 	if repotType == TYPE_DPS then
-		GameTooltip:AddDoubleLine("Damage Done",name,tdamage.r,tdamage.g,tdamage.b,tthead.r,tthead.g,tthead.b)
+		DT.tooltip:AddDoubleLine("Damage Done",name,tdamage.r,tdamage.g,tdamage.b,tthead.r,tthead.g,tthead.b)
 	elseif repotType == TYPE_HEAL then
-		GameTooltip:AddDoubleLine("Healing Done",name,theal.r,theal.g,theal.b,tthead.r,tthead.g,tthead.b)
+		DT.tooltip:AddDoubleLine("Healing Done",name,theal.r,theal.g,theal.b,tthead.r,tthead.g,tthead.b)
 	end
 
 	local numofcombatants = #StatsTable
 
 	if numofcombatants == 0 then
-		GameTooltip:AddLine("No data to display")
+		DT.tooltip:AddLine("No data to display")
 	else
 		if numofcombatants > amount then
 			numofcombatants = amount
@@ -323,7 +323,7 @@ function DisplayTable(mode,repotType,amount)
 		local vps = FormatNumber(totalpersec)
 		local percent = 100
 
-		GameTooltip:AddDoubleLine("Total",format("%s (%s) 100.0%%",value,vps))
+		DT.tooltip:AddDoubleLine("Total",format("%s (%s) 100.0%%",value,vps))
 
 		for i = 1, numofcombatants do
 
@@ -343,7 +343,7 @@ function DisplayTable(mode,repotType,amount)
 				percent = math.floor(1000*StatsTable[i].healing/totalsum)/10
 			end
 
-			GameTooltip:AddDoubleLine(StatsTable[i].name,format("%s (%s) %.1f%%",value,vps,percent),classc.r,classc.g,classc.b,classc.r,classc.g,classc.b)
+			DT.tooltip:AddDoubleLine(StatsTable[i].name,format("%s (%s) %.1f%%",value,vps,percent),classc.r,classc.g,classc.b,classc.r,classc.g,classc.b)
 
 		end
 	end
@@ -655,8 +655,8 @@ end
 local function OnEnter(self)
 	DT:SetupTooltip(self)
 
-	GameTooltip:AddLine(EMO.desc,tthead.r,tthead.g,tthead.b)
-	GameTooltip:AddLine(" ")
+	DT.tooltip:AddLine(EMO.desc,tthead.r,tthead.g,tthead.b)
+	DT.tooltip:AddLine(" ")
 
 	local dataset = OVERALL_DATA
 
@@ -671,7 +671,7 @@ local function OnEnter(self)
 	if EMO.config.type==TYPE_BOTH then
 		DisplayTable(dataset, TYPE_DPS,EMO.config.lines)
 
-		GameTooltip:AddLine(" ")
+		DT.tooltip:AddLine(" ")
 
 		DisplayTable(dataset, TYPE_HEAL,EMO.config.lines)		
 	else
@@ -679,17 +679,17 @@ local function OnEnter(self)
 
 	end
 
-	GameTooltip:Show()
+	DT.tooltip:Show()
 	DTRMenu:Hide()
 end
 
 function OnLeave(self)
-	GameTooltip:Hide()
+	DT.tooltip:Hide();
 	DTRMenu:Hide()
 end
 local function OnClick(self,btn)
 	if btn == "RightButton" then
-		GameTooltip:Hide()
+		DT.tooltip:Hide()
 		CreateMenu()
 		EasyMenu(menuList, DTRMenu, "cursor", 0, 0, "MENU",2)
 	else
