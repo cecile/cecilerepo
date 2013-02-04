@@ -1,2 +1,4 @@
+v1.0.1
+- EPGP Sorting included
 v1.0.0
 - Initial release
