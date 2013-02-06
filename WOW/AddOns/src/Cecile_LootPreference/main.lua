@@ -29,9 +29,14 @@ function f:EventHandler(event,arg1,arg2,arg3,arg4)
 		end				
 	end
 	
+	if(event=="CHAT_MSG_LOOT") then
+		C_LP:HandleLoot(arg1);
+	end
+	
 end
 
 f:SetScript("OnEvent",f.EventHandler);
 f:RegisterEvent("ADDON_LOADED");
 f:RegisterEvent("GUILD_ROSTER_UPDATE");
 f:RegisterEvent("PLAYER_ENTERING_WORLD");
+f:RegisterEvent("CHAT_MSG_LOOT");

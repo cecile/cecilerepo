@@ -14,6 +14,7 @@ C_LP.L = {
 	FILTER_GUILD_PREFERENCES = "Preferencias de Hermandad",
 	PLAYER_PREFERENCES = "Preferenciass de |c%s%s|r",
 	LOAD_MESSAGE = "%s (versi\195\179n |cff0070de%s|r) cargado.",
+	LOOT_MESSAGE = "%s - %s obtenido, eliminado de las preferencias.",
 }
 
 

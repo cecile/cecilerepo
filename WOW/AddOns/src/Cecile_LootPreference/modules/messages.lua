@@ -1,6 +1,8 @@
 local C_LP = select( 2, ... )
 local L = C_LP.L;
 
+C_LP.messagesInit = false
+
 C_LP.MESSAGES = {
 	PREFERENCES_REQUEST = { prefix = "C_LP_REQUEST" },
 	PREFERENCES_RESPONSE = { prefix = "C_LP_RESPONSE",max=200 },
@@ -14,12 +16,17 @@ function C_LP:InitMessages()
 		
 		--print("registering prefix:"..v.prefix)
 	end
-	
+
+	C_LP.messagesInit = true
 	C_LP.mainframe:RegisterEvent("CHAT_MSG_ADDON");
 end
 
 function C_LP:SendPreferences()
 
+	if not C_LP.messagesInit then
+		return
+	end
+	
 	local msg = ""
 	
 	local id = ""
@@ -52,7 +59,6 @@ function C_LP:SendPreferences()
 	end
 end
 
-
 function C_LP:PreferencesRecieve(sender,msg)
 	
 	--print("PreferencesRecieve:"..sender.."="..msg)
@@ -84,6 +90,9 @@ end
 
 function C_LP:RequestPreferences()
 	--print("RequestPreferences")
+	if not C_LP.messagesInit then
+		return
+	end	
 	SendAddonMessage(C_LP.MESSAGES.PREFERENCES_REQUEST.prefix,msg,"GUILD")
 end
 

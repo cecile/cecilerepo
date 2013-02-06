@@ -10,4 +10,5 @@ C_LP.L = {
 	FILTER_GUILD_PREFERENCES = "Guild Preferences",
 	PLAYER_PREFERENCES = "|c%s%s|r Preferences",
 	LOAD_MESSAGE = "%s (version |cff0070de%s|r) loaded.",
+	LOOT_MESSAGE = "%s - %s looted, removed from preferences.",
 }
