@@ -2,13 +2,14 @@
 ## Title: |cffffffffCecile|r_|cfffff569LootPreference|r
 ## Notes: Set/Share looot preferences using the dundgeon journal interface
 ## Author: Cecile
-## Version: 1.0.2
+## Version: 1.0.3
 ## SavedVariables: C_LP_DB
 
 locale\english.lua
 locale\spanish.lua
 
 modules\config.lua
+modules\version.lua
 modules\messages.lua
 modules\epgp.lua
 modules\guild.lua

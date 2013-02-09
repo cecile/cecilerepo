@@ -1,13 +1,24 @@
+----------------------------------------------------------------------------------------------------
+-- EPGP module, get values from EPGP, does not require EPGP addon
+--
+
+--get the addon  engine
 local C_LP = select( 2, ... )
 
+--epgp found switch
 C_LP.epgp = false
 
+--find if we have EPGP in our guild  and store the base gp
 function C_LP:FindEPGP()
+
+	--default values
 	C_LP.epgp = false
 	C_LP.epgp_basegp = 1
 	
+	--parse guild info, go to the EPGP config block and get base gp
 	local info = GetGuildInfoText()
 	if info then
+	
 		local lines = {string.split("\n", info)}
 		local in_block = false
 		
@@ -27,7 +38,9 @@ function C_LP:FindEPGP()
 	end
 end
 
+--return EP & GP from a player officer note
 function C_LP:DecodeEPGPNote(note)
+
 	if note then
 		if note == "" then
 			return 0, 0
@@ -38,9 +51,12 @@ function C_LP:DecodeEPGPNote(note)
 			end
 		end
 	end  
+	
 end
 
+--get player PR from an officer note
 function C_LP:GetPRFromNote(note)
+
 	local pr = 0
 	local ep,gp = C_LP:DecodeEPGPNote(note)
  
@@ -51,12 +67,13 @@ function C_LP:GetPRFromNote(note)
 	return pr
 end
 
+--get player PR
 function C_LP:GetPR(player)
 	
 	local pr = 0
 	
-	local numTotalGuildMembers = GetNumGuildMembers(true)
-	
+	--cycle all player (including offline),found our player, get the officer note and calculate pr
+	local numTotalGuildMembers = GetNumGuildMembers(true)	
 	for gm = 1, numTotalGuildMembers do		
 		
 		local name, rank, rankIndex, level, class, zone, note, 
@@ -67,6 +84,8 @@ function C_LP:GetPR(player)
 			pr = C_LP:GetPRFromNote(officernote)						
 			break
 		end
+		
 	end			
+	
 	return pr
 end

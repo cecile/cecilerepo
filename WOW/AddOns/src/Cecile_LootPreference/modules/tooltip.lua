@@ -1,13 +1,26 @@
+----------------------------------------------------------------------------------------------------
+-- Tolltip module, modify items tooltip to show preferences
+--
+
+--get the addon  engine
 local C_LP = select( 2, ... )
+
+--get the locale table from engine
 local L = C_LP.L;
 
+--tooltip hooked switch
 C_LP.TooltipHook = false
 
+--hook function for OnTooltipSetItem in tooltip frames, get the item id, build a list of people in
+-- our guild that have this item as preference, if there its any get the PR value if we are using
+-- EPGP and sort the list by loot priority, as well by PR if we using EPGP, add the list to the 
+-- tooltip
 function C_LP.TooltipHookFunc(tooltip, ...)
 
 	local item, link = tooltip:GetItem()	
 	local itemID = tonumber(link:match("item:(%d+)"))
 	
+	--find preferences for this  item within the guild
 	local results = {}
 	local preference = {}
 		
@@ -25,9 +38,11 @@ function C_LP.TooltipHookFunc(tooltip, ...)
 		end
 	end
 	
+	--if we have preferences
 	local total = #results
 	if not (total==0) then	
 	
+		--if we use EPGP sort by prioty & PR, if not sort by priority
 		if C_LP.epgp then
 			GuildRoster()
 			for i = 1, total do			
@@ -50,6 +65,8 @@ function C_LP.TooltipHookFunc(tooltip, ...)
 		
 		end
 		
+		--add the localized information to the tooltip, using class colors, if we are using EPGP 
+		-- show the PR
 		tooltip:AddLine("")
 		tooltip:AddLine(L["LOOT_PREFERENCES"])
 		
@@ -71,6 +88,8 @@ function C_LP.TooltipHookFunc(tooltip, ...)
 	
 end
 
+--hook all frame windows that are actually a tooltip, this will make it work in no standard tooltip
+-- windows, for example in atlas loot tooltips.
 function C_LP:InitTooltip()
 			
 	if not C_LP.TooltipHook then				
@@ -89,4 +108,3 @@ function C_LP:InitTooltip()
 	end	
 		
 end
-

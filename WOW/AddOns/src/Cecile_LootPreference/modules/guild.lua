@@ -1,7 +1,14 @@
+----------------------------------------------------------------------------------------------------
+-- Guild module, to know our guild name, and guild changes
+--
+
+--get the addon  engine
 local C_LP = select( 2, ... )
 
+--guild init switch
 C_LP.guildinit = false
 
+--find the class of a giving player, only called when we dont have it stored
 function C_LP:FindClass(player)	
 
 	if C_LP.guildinit then
@@ -24,6 +31,9 @@ function C_LP:FindClass(player)
 	
 end
 
+--init guild module, and send items database for our guild, remove from database unguiled data
+-- when we init our guil data we register to recieve the addon messages since they will only work
+-- in the guild channel
 function C_LP:InitGuild()
 
 	local myrealm = GetRealmName();
@@ -64,6 +74,9 @@ function C_LP:InitGuild()
 	
 end
 
+-- when the guild its updated (event), we check if we have EPGP and update values,
+-- this olso will make that if the EPGP config values change we are updated.
+-- additionally the first time that we get our guild name we set our items databases for our guild
 function C_LP:OnGuildUpdate()
 	
 	if(GetGuildInfo("player")) then

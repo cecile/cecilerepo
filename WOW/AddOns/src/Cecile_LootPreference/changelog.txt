@@ -1,3 +1,5 @@
+v1.0.3
+- The addon will notify the player when he has a outdated version.
 v1.0.2
 - Auto remove preference for an item if its looted.
 v1.0.1

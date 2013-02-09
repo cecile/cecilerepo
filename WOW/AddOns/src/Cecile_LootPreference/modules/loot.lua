@@ -1,6 +1,14 @@
+----------------------------------------------------------------------------------------------------
+-- Loot handling module, for auto remove preferences after looted them
+--
+
+--get the addon  engine
 local C_LP = select( 2, ... )
+
+--get the locale table from engine
 local L = C_LP.L;
 
+--returm the iten id (numeric) from a item link
 function C_LP:GetIDFromLink(link)
 	if not link then
 		return
@@ -15,10 +23,14 @@ function C_LP:GetIDFromLink(link)
 	return tonumber(id)
 end
 
+--helper function to see if a loot message contain a pattern
 function C_LP:MatchLootFormat(msg, pattern)
 	return msg:match(pattern:gsub("(%%s)", "(.+)"):gsub("(%%d)", "(.+)"))
 end
 
+--handle loot message event, get the item link from the localized string using the global localized
+-- format for self loot messages, them get the id from the link and check if its on our own
+-- preferences, if its so delete it from preferences and send our preference to the guild
 function C_LP:HandleLoot(msg)
 
 	local item, quantity = C_LP:MatchLootFormat(msg, _G.LOOT_ITEM_SELF_MULTIPLE)

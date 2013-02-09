@@ -1,9 +1,23 @@
+----------------------------------------------------------------------------------------------------
+-- Dungeon journal module, modify the dungeon journal to our needs
+--
+
+--get the addon  engine
 local C_LP = select( 2, ... )
+
+--get the locale table from engine
 local L = C_LP.L;
 
+--flags for the dungeon journal, controls if its hooked, if we have add the dropdowns for items, 
+-- if we have a custom item filter (my preferences, guild preferences or player preferences),
+-- and if we have change our preferences but our guild its not yet updated
 C_LP.HookJournal = false
 C_LP.DropDownsCreated = false
+C_LP.CustomFilter = false
+C_LP.Updated = false
 
+--when we click in a option in the item preference dropdown, we set the preference in our item
+--- database and we mark that we need to send updates to the guild
 function C_LP.ItemDropDown_OnClick(self, arg1, arg2, checked)
 	
 	C_LP.myitems[arg1.itemID] = arg2;
@@ -14,6 +28,8 @@ function C_LP.ItemDropDown_OnClick(self, arg1, arg2, checked)
 		
 end
 
+--create our options for the preferences dropdown per item, we as well set to selected the
+-- current preference for that item in our item database
 function C_LP.ItemDropDown_Menu(frame)		
 	
 	local info = UIDropDownMenu_CreateInfo()
@@ -39,6 +55,8 @@ function C_LP.ItemDropDown_Menu(frame)
 	end
 end
 
+--if one of our custom filters its clicked we close the dropdow menu, store
+-- the custom filter and them update the loot window
 function C_LP.LootFilter_Click(self, arg1, arg2)
     
 	C_LP.CustomFilter = arg1
@@ -50,12 +68,20 @@ function C_LP.LootFilter_Click(self, arg1, arg2)
     EncounterJournal_LootUpdate();
 end
 
+--build our custom filters list, this will add "my preferences","guild preferences", and players that
+-- have items preferences in the list
 function C_LP.LootFilter(self, level)
 
+	--call default function for compability
 	EncounterJournal_InitLootFilter(self,level)
+	
+	--has items flag
 	local hasitems = false
 	
+	--we modify only the fist menu level in the filter dropwdown
 	if (level == 1) then
+	
+		--create the to options for "My Preferences" & "Guild Preferences"
 		local info = UIDropDownMenu_CreateInfo()
 
 		info.text = L["FILTER_MY_PREFERENCES"]
@@ -73,6 +99,8 @@ function C_LP.LootFilter(self, level)
 		info.func = C_LP.LootFilter_Click;
 		UIDropDownMenu_AddButton(info, level)
 		
+		--cycle all people in the guild to see if actually they have any preference, if they have
+		-- we add him to the list, using class color.
 		for k,v in pairs(C_LP.guilditems) do				
 			
 			if (v.items) then
@@ -99,11 +127,16 @@ function C_LP.LootFilter(self, level)
 	
 end
 
+--when the cross for remove filter its click just clear our custom filter
 function C_LP.ClearFilter(self,arg1,arg2)
 	C_LP.CustomFilter = false
 	EncounterJournal_LootUpdate()
 end
 
+--help function that will filter an item id with our filter, if the filter its our own we check
+-- if the item its on our list, if the filter its the guild we check for every player in the guild
+-- until we found one player that has a preference on it, if its a player just check that player 
+-- items
 function C_LP.FilterItem(filter,itemID)
 
 	if (filter=="MY") then	
@@ -124,8 +157,11 @@ function C_LP.FilterItem(filter,itemID)
 	return false
 end
 
+--callback from dungeon journal when updated the items it the list its need it, thats its happen
+-- not only when we filter, as well when we scrool the list
 function C_LP.DoFilter()
 	
+	--get current values from dungeon journal, including the clear filter button
 	local Content = EncounterJournal.encounter
 	local Instance = Content.instance
 	local Info = Content.info
@@ -138,27 +174,32 @@ function C_LP.DoFilter()
 	local Filter = Loot.classClearFilter
 	local FilterClear = _G[Filter:GetName() .. 'ExitButton'] 	
 	
+	--if we have a custom filter do our logic, if not default dungeon journal logic
 	if (C_LP.CustomFilter) then		
 		
+		--set the update function to be this function
 		Loot.update = C_LP.DoFilter
 		
+		--hook the on click on clear filter button to actual remove any filter, including custom
 		FilterClear:SetScript('OnClick', function()
 			C_LP.ClearFilter(nil,nil,nil)
 			EncounterJournal_LootUpdate()
 		end)
 		
-		Loot:SetHeight(357)
+		--set filter localized type and with class color if its a player, and display it
+		Loot:SetHeight(357)				
 		if(C_LP.CustomFilter=="MY") then
 			Filter.text:SetText(L["FILTER_MY_PREFERENCES"])
 		elseif(C_LP.CustomFilter=="GUILD") then
 			Filter.text:SetText(L["FILTER_GUILD_PREFERENCES"])
 		else
 			class = C_LP.guilditems[C_LP.CustomFilter].class
-			Filter.text:SetText(string.format(L["PLAYER_PREFERENCES"],RAID_CLASS_COLORS[class].colorStr,C_LP.CustomFilter))
+			Filter.text:SetText(string.format(L["PLAYER_PREFERENCES"],
+				RAID_CLASS_COLORS[class].colorStr,C_LP.CustomFilter))
 		end
 		Filter:Show()
 
-		-- Update items
+		-- calculate how many items we going to display
 		local offset = HybridScrollFrame_GetOffset(Loot)
 		local items = Loot.buttons
 		
@@ -167,6 +208,7 @@ function C_LP.DoFilter()
 		local buttonHeight = items[1]:GetHeight()
 		local index = 0
 
+		--for each button see if we filter in our custom filter, and if not set the data and display
 		for i = 1, EJ_GetNumLoot() do
 			local name, icon, slot, armorType, itemID, link, encounter = EJ_GetLootInfoByIndex(i)
 
@@ -193,19 +235,23 @@ function C_LP.DoFilter()
 			end
 		end
 
+		--hide not used buttons and update the frame
 		for i = (index - offset + 1), numButtons do
 			if items[i] then
 				items[i]:Hide()
 			end
 		end
-
 		HybridScrollFrame_Update(Loot, index * buttonHeight, Loot:GetHeight())		
+		
 	else
+	
 		Loot.update = EncounterJournal_LootUpdate
+		
 	end
 	
 end
 
+--if we close the frame and we have updated the preferences send it to the guild
 function C_LP.EncounterJournal_OnHide()
 
 	if C_LP.Updated then
@@ -214,19 +260,25 @@ function C_LP.EncounterJournal_OnHide()
 	end
 end
 
-function C_LP.EncounterJournal_OnShow()
-
+--when we open the dungeon journal we request updated from the guild, so we see updated information
+-- if we haven yet add the dropdown to the items we add in this point, as well we set that we do not
+-- need to send our preferences on close, until we change some preference
+function C_LP.EncounterJournal_OnShow()	
+	
 	C_LP.Updated = false
 			
 	C_LP:RequestPreferences()
 	
+	--if we have not create the dropdowns
 	if not C_LP.DropDownsCreated then
 			
+		--create the dropdown for the filter button
 		UIDropDownMenu_Initialize(EncounterJournal.encounter.info.lootScroll.lootFilter, C_LP.LootFilter, "MENU");
 	
 		buttons = EncounterJournal.encounter.info.lootScroll.buttons
 		numButtons = #buttons
 		
+		--go trought all the buttons and create a dropdown for each item
 		for i = 1 , numButtons do
 		
 			width = 155
@@ -239,6 +291,8 @@ function C_LP.EncounterJournal_OnShow()
 			
 			buttons[i].DD = dropDown;
 			
+			--hook the show method for each button so we update the options when we the journal
+			-- change the items for each button since allways Show() its called for each one
 			hooksecurefunc(buttons[i],"Show",function (object,text)
 				if(object.itemID) then
 					object.DD.itemID = object.itemID
@@ -251,10 +305,12 @@ function C_LP.EncounterJournal_OnShow()
 	end
 end
 
+--not in use, on load the main frame for dungeon journal
 function C_LP.EncounterJournal_OnLoad()
-	
+		
 end
 
+--init our dungeon journal hooks methods and scripts
 function C_LP:InitDungeonJournal()
 
 	if not C_LP.HookJournal then

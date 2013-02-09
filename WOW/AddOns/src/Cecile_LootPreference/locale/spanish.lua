@@ -1,9 +1,16 @@
-if ( GetLocale() ~= "esES" ) then
+----------------------------------------------------------------------------------------------------
+-- localized Spanish strings
+--
+
+--get the addon  engine
+local C_LP = select( 2, ... )
+
+--check spanish locale
+if not ( ( GetLocale() == "esES" ) or ( GetLocale() == "esMX" ) ) then
 	return;
 end
 
-local C_LP = select( 2, ... );
-
+--set the localized strings in the engine
 C_LP.L = {
 	LOOT_NONE = "Sin Preferencia",
 	LOOT_MAIN = "Especializaci\195\179n principal",
@@ -15,6 +22,8 @@ C_LP.L = {
 	PLAYER_PREFERENCES = "Preferenciass de |c%s%s|r",
 	LOAD_MESSAGE = "%s (versi\195\179n |cff0070de%s|r) cargado.",
 	LOOT_MESSAGE = "%s - %s obtenido, eliminado de las preferencias.",
+	WRONG_VERSION = "%s - Una nueva versi\195\179n (|cff0070de%s|r) de este addon esta disponible, por favor actualice su versi\195\179n.",
+	PLAYER_VERSION = "%s - El jugador %s tiene una versi\195\179n(|cff0070de%s|r) del addon desactualizada.",
 }
 
 
