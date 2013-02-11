@@ -51,14 +51,15 @@ function f:EventHandler(event,arg1,arg2,arg3,arg4)
 		if ((arg1=="Cecile_LootPreference" or arg1=="Blizzard_EncounterJournal")) then	
 		
 			if(arg1=="Cecile_LootPreference") then					
-				C_LP:InitConfig()			
+				C_LP:InitConfig()
+				C_LP:InitBoss()				
 			end			
 			
 			--only hook dungeon journal when both addons are loaded, them unregister event
 			if (	IsAddOnLoaded("Blizzard_EncounterJournal") and 
 					IsAddOnLoaded("Cecile_LootPreference") ) then	
 				
-				C_LP:InitDungeonJournal()	
+				C_LP:InitDungeonJournal()				
 				
 				f:UnregisterEvent("ADDON_LOADED");
 				

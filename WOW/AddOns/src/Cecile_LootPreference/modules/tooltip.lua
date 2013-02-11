@@ -18,74 +18,77 @@ C_LP.TooltipHook = false
 function C_LP.TooltipHookFunc(tooltip, ...)
 
 	local item, link = tooltip:GetItem()	
-	local itemID = tonumber(link:match("item:(%d+)"))
 	
-	--find preferences for this  item within the guild
-	local results = {}
-	local preference = {}
+	if (link) then
+	
+		local itemID = tonumber(link:match("item:(%d+)"))
 		
-	for k,v in pairs(C_LP.guilditems) do	
+		--find preferences for this  item within the guild
+		local results = {}
+		local preference = {}
 			
-		if v.items[itemID] and (not (v.items[itemID]=="")) then					
-			
-			preference = {}
-			preference.player = k
-			preference.class = v.class
-			preference.priority = v.items[itemID]
-			
-			tinsert(results,preference)
-			
-		end
-	end
-	
-	--if we have preferences
-	local total = #results
-	if not (total==0) then	
-	
-		--if we use EPGP sort by prioty & PR, if not sort by priority
-		if C_LP.epgp then
-			GuildRoster()
-			for i = 1, total do			
-				results[i].epgp_pr = C_LP:GetPR(results[i].player)
+		for k,v in pairs(C_LP.guilditems) do	
+				
+			if v.items[itemID] and (not (v.items[itemID]=="")) then					
+				
+				preference = {}
+				preference.player = k
+				preference.class = v.class
+				preference.priority = v.items[itemID]
+				
+				tinsert(results,preference)
+				
 			end
-			
-			table.sort(results, function(a,b) 		
-				if (a.priority == b.priority) then
-					return a.epgp_pr>b.epgp_pr
-				else
-					return C_LP.PRIORITY_SORT[a.priority] > C_LP.PRIORITY_SORT[b.priority]
-				end
-			end)
-			
-		else
-		
-			table.sort(results, function(a,b) 		
-				return C_LP.PRIORITY_SORT[a.priority] > C_LP.PRIORITY_SORT[b.priority]
-			end)
-		
 		end
 		
-		--add the localized information to the tooltip, using class colors, if we are using EPGP 
-		-- show the PR
-		tooltip:AddLine("")
-		tooltip:AddLine(L["LOOT_PREFERENCES"])
+		--if we have preferences
+		local total = #results
+		if not (total==0) then	
 		
-		local priority_text = ""
-		
-		for i = 1, total do	
-			classcolor = RAID_CLASS_COLORS[results[i].class]
-			
-			priority_text = L[results[i].priority]
-			
+			--if we use EPGP sort by prioty & PR, if not sort by priority
 			if C_LP.epgp then
-				priority_text = priority_text .. " (PR:" .. string.format("%.4g",results[i].epgp_pr)..")"
+				GuildRoster()
+				for i = 1, total do			
+					results[i].epgp_pr = C_LP:GetPR(results[i].player)
+				end
+				
+				table.sort(results, function(a,b) 		
+					if (a.priority == b.priority) then
+						return a.epgp_pr>b.epgp_pr
+					else
+						return C_LP.PRIORITY_SORT[a.priority] > C_LP.PRIORITY_SORT[b.priority]
+					end
+				end)
+				
+			else
+			
+				table.sort(results, function(a,b) 		
+					return C_LP.PRIORITY_SORT[a.priority] > C_LP.PRIORITY_SORT[b.priority]
+				end)
+			
 			end
 			
-			tooltip:AddDoubleLine(results[i].player,priority_text,classcolor.r,classcolor.g,classcolor.b)
+			--add the localized information to the tooltip, using class colors, if we are using EPGP 
+			-- show the PR
+			tooltip:AddLine("")
+			tooltip:AddLine(L["LOOT_PREFERENCES"])
+			
+			local priority_text = ""
+			
+			for i = 1, total do	
+				classcolor = RAID_CLASS_COLORS[results[i].class]
+				
+				priority_text = L[results[i].priority]
+				
+				if C_LP.epgp then
+					priority_text = priority_text .. " (PR:" .. string.format("%.4g",results[i].epgp_pr)..")"
+				end
+				
+				tooltip:AddDoubleLine(results[i].player,priority_text,classcolor.r,classcolor.g,classcolor.b)
+			end
 		end
-	end
 
-	
+	end
 end
 
 --hook all frame windows that are actually a tooltip, this will make it work in no standard tooltip
