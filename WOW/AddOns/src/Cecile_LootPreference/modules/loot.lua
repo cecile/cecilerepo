@@ -36,25 +36,40 @@ function C_LP:HandleLoot(msg)
 	local item, quantity = C_LP:MatchLootFormat(msg, _G.LOOT_ITEM_SELF_MULTIPLE)
 	
 	if(not item) then
-		quantity = 1
-		item = C_LP:MatchLootFormat(msg, _G.LOOT_ITEM_SELF)
-	end
 	
-	if item then
-		local itemID = C_LP:GetIDFromLink(item)
+		item, quantity = C_LP:MatchLootFormat(msg, _G.LOOT_ITEM_PUSHED_SELF_MULTIPLE)
 		
-		if itemID then
+		if(not item) then			
+			quantity = 1
+			item = C_LP:MatchLootFormat(msg, _G.LOOT_ITEM_SELF)
 			
-			if C_LP.myitems[itemID] then
-				
+			if(not item) then		
+				item = C_LP:MatchLootFormat(msg, _G.LOOT_ITEM_PUSHED_SELF)
+			end
+			
+		end
+		
+	end
+		
+	if item then
+	
+		local itemID = C_LP:GetIDFromLink(item)
+		if itemID then			
+		
+			if C_LP.myitems[itemID] then				
+			
 				if not (C_LP.myitems[itemID]=="") then
+				
 					C_LP.myitems[itemID] = ""
 					C_LP:SendPreferences()
 					print(string.format(L["LOOT_MESSAGE"],C_LP.title,item))
+					
 				end
 				
-			end
+			end			
+			
 		end		
+		
 	end
 	
 end

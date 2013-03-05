@@ -149,15 +149,15 @@ function C_LP:MessageRecieve(message,sender,data)
 		
 	elseif message==C_LP.MESSAGES.ADDON_VERSION.prefix then
 	
-		--if not (C_LP.myname==sender) then
+		if not (C_LP.myname==sender) then
 			C_LP:OtherPlayerVersion(sender,data)
-		--end
+		end
 		
 	elseif message==C_LP.MESSAGES.WRONG_VERSION.prefix then
 	
-		--if not (C_LP.myname==sender) then
+		if not (C_LP.myname==sender) then
 			C_LP:MyWrongVersion(sender,data)
-		--end		
+		end		
 		
 	end	
 end
