@@ -11,17 +11,18 @@ local L = C_LP.L;
 --switch to know if we have hook allready map boss buttons
 C_LP.mapBoosButtonsHooked = false
 
---GetInstanceDifficulty
--- 1 = None
--- 2 = 5 Player & Scenario
--- 3 = 5 Player (Heroic)
--- 4 = 10 Player
--- 5 = 25 Player
--- 6 = 10 Player (Heroic)
--- 7 = 25 Player (Heroic)
--- 8 = Raid Finder
--- 9 = Challenge Mode
---10 = 40 Player
+--name, instanceType, difficultyIndex, difficultyName, maxPlayers, dynamicDifficulty, isDynamic, instanceMapID = GetInstanceInfo()
+--difficultyIndex:
+-- 0 = None
+-- 1 = 5 Player & Scenario
+-- 2 = 5 Player (Heroic)
+-- 3 = 10 Player
+-- 4 = 25 Player
+-- 5 = 10 Player (Heroic)
+-- 6 = 25 Player (Heroic)
+-- 7 = Raid Finder
+-- 8 = Challenge Mode
+-- 9 = 40 Player
 --
 local DJ_DIFF_5MAN              = 1
 local DJ_DIFF_5MAN_HEROIC       = 2
@@ -33,15 +34,15 @@ local DJ_DIFF_25MAN_HEROIC      = 4
 local DJ_DIFF_LFRAID            = 5
 
 C_LP.difficultToDJ = {
-	[2]  	= DJ_DIFF_5MAN,
-	[3]  	= DJ_DIFF_5MAN_HEROIC,
-	[4]  	= DJ_DIFF_10MAN,
-	[5]  	= DJ_DIFF_25MAN,
-	[6]  	= DJ_DIFF_10MAN_HEROIC,
-	[7]  	= DJ_DIFF_25MAN_HEROIC,
-	[8]  	= DJ_DIFF_LFRAID,
-	[9]  	= DJ_DIFF_5MAN_HEROIC,
-	[10] 	= DJ_DIFF_25MAN,
+	[1]  	= DJ_DIFF_5MAN,
+	[2]  	= DJ_DIFF_5MAN_HEROIC,
+	[3]  	= DJ_DIFF_10MAN,
+	[4]  	= DJ_DIFF_25MAN,
+	[5]  	= DJ_DIFF_10MAN_HEROIC,
+	[6]  	= DJ_DIFF_25MAN_HEROIC,
+	[7]  	= DJ_DIFF_LFRAID,
+	[8]  	= DJ_DIFF_5MAN_HEROIC,
+	[9] 	= DJ_DIFF_25MAN,
 }
 
 local DJ_DIFF_DUNGEON_TBL = 
@@ -66,9 +67,10 @@ function C_LP.MapBossButton_OnEnter(button)
 	
 	--get current difficult from raid, if not from dungeon journal
 	local difficultyIndex = DJ_DIFF_LFRAID;
-	local difficultyValue = GetInstanceDifficulty()	
+	--Path 5.2 remove GetInstanceDifficulty(), using GetInstanceInfo instead
+	local difficultyValue = select(3,GetInstanceInfo())
 	
-	if difficultyValue == nil or difficultyValue == 0 or difficultyValue == 1 then
+	if difficultyValue == nil or difficultyValue == 0 then
 		difficultyIndex = EJ_GetDifficulty()
 	else
 		difficultyIndex = C_LP.difficultToDJ[difficultyValue];
