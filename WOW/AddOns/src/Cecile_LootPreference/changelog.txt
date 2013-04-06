@@ -1,3 +1,6 @@
+v1.0.7
+- Unintended globals, minor string garbage & optimization by Dridzt
+- Delete old data after 14 day without getting data for that player
 v1.0.6
 - Fix GetInstanceDifficulty been removed in 5.2, now using GetInstanceInfo
 v1.0.5
