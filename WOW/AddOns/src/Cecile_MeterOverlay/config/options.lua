@@ -406,7 +406,7 @@ Engine.Options = {
 					name = L["EXAMPLE"],
 					width = "full",
 					get = function()
-						meter = Engine.AddOn:GetModule("meter");
+						local meter = Engine.AddOn:GetModule("meter");
 												
 						meter:SetNumberValue( "dps",		random(10000,100000),		RED_FONT_COLOR_CODE);
 						meter:SetNumberValue( "rdps",		random(100000,1000000),		RED_FONT_COLOR_CODE);

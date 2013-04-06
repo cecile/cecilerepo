@@ -43,10 +43,16 @@ function mod.EngageBoss(...)
 	local victim = UnitName("boss1");
 	
 	if victim then		
+	
+		--get the localized difficult name
+		local name, instanceType, difficultyID, difficultyName, maxPlayers, dynamicDifficulty, isDynamic, instanceMapID = GetInstanceInfo();
+	
+		if not difficultyName then
+			difficultyName = ""
+		end
+		
 		--if we are not in combat the next combat event will set the boss name, ifnot set it now
-		if not mod.combat then
-			--get the localized difficult name
-			local name, instanceType, difficultyID, difficultyName, maxPlayers, dynamicDifficulty, isDynamic, instanceMapID = GetInstanceInfo();
+		if not mod.combat then		
 			mod.NextCombatBoss = victim.." - "..difficultyName;		
 		else
 			mod.NextCombatBoss = ""
@@ -86,7 +92,7 @@ end
 
 --get the sum table, and perform sorting
 function mod.getSumtable(dataset, mode, sortData)
-	sumtable, totalsum, totalpersec = mod.getMeterSumtable(dataset, mode);
+	local sumtable, totalsum, totalpersec = mod.getMeterSumtable(dataset, mode);
 	
 	--sort the results
 	if sortData then	
@@ -118,7 +124,7 @@ function mod:OnInitialize()
 	
 	--get player and non localized class for latter use
 	mod.myname = GetUnitName("player");
-	_,mod.myclass = UnitClass("player");
+	mod.localclass,mod.myclass = UnitClass("player");
 	
 	--this will store the values for the tags
 	mod.values = {};

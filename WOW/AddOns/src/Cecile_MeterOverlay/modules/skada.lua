@@ -28,14 +28,13 @@ function mod.GetSumtable(tablename, mode)
 	local totalsum=0;
 	local totalpersec=0;
 	local sumtable={};
+	local report_set = nil;
 	
 	--get the set
 	if(tablename==Engine.CURRENT_DATA) then
 		report_set = Skada:find_set("current");
 	elseif(tablename==Engine.OVERALL_DATA) then
 		report_set = Skada:find_set("total");
-	else
-		report_set = nil;
 	end
 			
 	if(report_set) then		
@@ -47,10 +46,10 @@ function mod.GetSumtable(tablename, mode)
 			if player.id then			
 			
 				--get the data from the player
-				templable = {enclass=player.class,name=player.name,damage=player.damage,healing=player.healing,dps=0,hps=0};										
+				templable = {enclass=player.class,name=player.name,damage=player.damage or 0,healing=player.healing or 0,dps=0,hps=0};										
 				
 				--get the player active time
-				local totaltime = Skada:PlayerActiveTime(report_set, player);
+				local totaltime = Skada:PlayerActiveTime(report_set, player) or 0;
 				
 				--calculate hps or dps
 				if (mode==Engine.TYPE_DPS) then
@@ -58,16 +57,20 @@ function mod.GetSumtable(tablename, mode)
 						templable.dps = templable.damage / math.max(1,totaltime);
 						totalsum = totalsum + templable.damage;
 						totalpersec = totalpersec + templable.dps;
+						
+						--insert the player
+						table.insert(sumtable,templable);						
 					end
 				else
 					if (templable.healing>0) then
 						templable.hps = templable.healing / math.max(1,totaltime);					
 						totalsum = totalsum + templable.healing;
 						totalpersec = totalpersec + templable.hps;
+						
+						--insert the player
+						table.insert(sumtable,templable);						
 					end
 				end
-				--insert the player
-				table.insert(sumtable,templable);
 			end
 		end
 	end						

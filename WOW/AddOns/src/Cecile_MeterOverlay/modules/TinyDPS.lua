@@ -29,18 +29,17 @@ function mod.GetSumtable(tablename, mode)
 	local totalsum=0;
 	local totalpersec=0	;
 	local sumtable={};
-		
+	local report_set = nil;		
+	
 	--get the set
 	if(tablename==Engine.CURRENT_DATA) then
 		report_set = 2;
 	elseif(tablename==Engine.OVERALL_DATA) then
 		report_set = 1;
-	else
-		report_set = nil;
 	end
 
 	--check the set
-	if not tdpsFight[report_set] then
+	if report_set and (not tdpsFight[report_set]) then
 		report_set = nil;
 	end 	
 	local data = nil;

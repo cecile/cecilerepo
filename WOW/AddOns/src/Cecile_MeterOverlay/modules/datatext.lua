@@ -51,7 +51,7 @@ end
 function mod:DisplayTable(tooltip,mode,repotType,amount)
 
 	--get the sorted result
-	StatsTable,totalsum, totalpersec = mod.meter.getSumtable(mode, repotType,true);
+	local StatsTable,totalsum, totalpersec = mod.meter.getSumtable(mode, repotType,true);
 
 	--get the segment name
 	local name = mod.meter.getSegmentName(mode);
@@ -88,6 +88,7 @@ function mod:DisplayTable(tooltip,mode,repotType,amount)
 		local value = mod.meter:FormatNumber(totalsum);
 		local vps = mod.meter:FormatNumber(totalpersec);
 		local percent = 100;
+		local classc = nil;
 		
 		--display total if is required
 		if Engine.Profile.overlay.totals then
