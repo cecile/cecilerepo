@@ -42,7 +42,12 @@ function mod.OutOfCombat()
 	
 	--hide out of combat	
 	mod.datatext.ControlVisibility();	
-		
+	
+	--ONLY FOR TESTING ENCOUNTER RECORDS
+	--local encounters = Engine.AddOn:GetModule("encounters");	
+	--local encounterName = mod.getSegmentName(Engine.CURRENT_DATA);
+	--encounters:recordEncounter(encounterName);
+	
 end
 
 --event when we engage a boss
@@ -214,7 +219,7 @@ function mod:ValuePerSecond(tablename, mode)
 	--default values
 	local value,persec,StatsTable,totalsum,totalpersec,mypos=0,0,nil,0,0,1;
 	
-	--get the table and totals, we do not need sorting the table
+	--get the table and totals, we do need sorting the table
 	StatsTable,totalsum,totalpersec = mod.getSumtable(tablename, mode,true);
 	
 	--loop the table
@@ -237,8 +242,54 @@ function mod:ValuePerSecond(tablename, mode)
 		end
 		
 	end
-
+	
 	return totalsum,totalpersec,persec,value,mypos;
+end
+
+--return top player data using a table set and mode
+function mod:GetTopPlayerData(tablename, mode)
+	
+	
+	--default values
+	local result = nil;
+	
+	--get the table and totals, we need sorting the table
+	StatsTable,totalsum,totalpersec = mod.getSumtable(tablename, mode, true);
+	
+	--loop the table
+	local numofcombatants = #StatsTable;
+	
+	if numofcombatants>0 then
+		result = StatsTable[1];
+	end
+		
+	
+	return result;
+end
+
+--return the player data using a table set and mode
+function mod:GetPlayerData(tablename,mode)
+	
+	--default values
+	local result = nil;
+	
+	--get the table and totals, we don't need sorting the table
+	StatsTable,totalsum,totalpersec = mod.getSumtable(tablename, mode, false);
+	
+	--loop the table
+	local numofcombatants = #StatsTable;
+	
+	for i = 1, numofcombatants do
+	
+		--until we found our player data
+		if StatsTable[i].name == mod.myname then
+			result = StatsTable[i];
+			break;
+		end
+		
+	end
+	
+	return result;
 end
 
 -- Formats a number into human readable format

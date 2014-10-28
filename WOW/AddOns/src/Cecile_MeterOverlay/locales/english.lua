@@ -61,7 +61,7 @@ L["EXAMPLE"] = "Example"
 L["SEGMENT"] = "Data Segment"
 L["SEGMENT_DESC"] = "Set the source data segment."
 L["TAGS"] = "Tags"
-L.tags = [[
+L["TAGS_LIST"] = [[
 This are the liste for the supported tags.
 
 |cff0070de[dps]|r - Your current |cffff2020DPS|r.
@@ -131,6 +131,22 @@ L["DATATEXT_HIDE_TYPE"] = "Hide Mode"
 L["DATATEXT_HIDE_TYPE_DESC"] = "Change the datatext hide mode."
 L["DATATEXT_HIDE_NORMAL"] = "Hide"
 L["DATATEXT_HIDE_FADE"] = "Fade Out"
+L["ENCOUNTERS_SETTINGS"] = "Ecounters Records"
+L["ENCOUNTERS_WARNING"] = [[
+To use this options you need to have a Boss Encounter Module.
+
+Current supported modules:
+
+- |cff0070deDeadly Boss Mods|r
+- |cff0070deBigWigs|r
+]]
+L["REPORT_SELF"]="Report to self";
+L["REPORT_GUILD"]="Report to guild chat";
+L["REPORT_INSTANCE"]="Report to intsance chat";
+L["ENCOUNTERS_STORE"]="Store boss encounters"
+L["ENCOUNTERS_STORE_DESC"]="Enable to store boss encounters records"
+L["ENCOUNTERS_WIPE"]="Wipe data"
+L["ENCOUNTERS_WIPE_DESC"]="Clean all stored information for encounters"
 
 --get ordinal sufix for a number (1st,2nd,3rd,4th...) (english locale)
 function Engine:OrdinalSuffix(number)

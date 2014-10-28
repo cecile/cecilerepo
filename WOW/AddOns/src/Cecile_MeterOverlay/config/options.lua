@@ -107,6 +107,19 @@ for key, format in pairs(Engine.formatlist) do
  Engine.formatdesc[key] = L[key];
 end
 
+--report types
+Engine.REPORT_SELF 		= "REPORT_SELF";
+Engine.REPORT_GUILD 	= "REPORT_GUILD";
+Engine.REPORT_INSTANCE 	= "REPORT_INSTANCE";
+
+--list of reports for options ui
+Engine.ReportTypeList={}
+
+Engine.ReportTypeList[Engine.REPORT_SELF ] 		= L["REPORT_SELF"];
+Engine.ReportTypeList[Engine.REPORT_GUILD ] 	= L["REPORT_GUILD"];
+Engine.ReportTypeList[Engine.REPORT_INSTANCE ] 	= L["REPORT_INSTANCE"];
+
+
 --defaults
 Engine.Defaults = {
 	profile = {
@@ -134,6 +147,17 @@ Engine.Defaults = {
 			},
 			hideOOC = false,
 			hideOCCMode = Engine.DATATEXT_HIDE_FADE
+		},
+		encounters = {
+			store = false,
+			dps = {
+				report =  false,
+				type = Engine.REPORT_SELF,				
+			},
+			hps = {
+				report = false,
+				type = Engine.REPORT_SELF,
+			},
 		},
 		interval = 1,
 		segment = Engine.CURRENT_DATA,
@@ -442,7 +466,7 @@ Engine.Options = {
 				tagsHelp = {
 					order = 6,
 					type = "description",
-					name = L.tags,
+					name = L["TAGS_LIST"],
 					width = "full",
 				},					
 			
@@ -660,8 +684,52 @@ Engine.Options = {
 				},				
 			}
 		},		
-		developer = {
+		encounters = {
 			order = 6,
+			type = "group",
+			name = L["ENCOUNTERS_SETTINGS"],
+			cmdInline = true,
+			args = {
+				Frames_Header = {
+				  type = "description",
+				  order = 0,
+				  name = L["ENCOUNTERS_SETTINGS"],
+				  fontSize = "large",
+				},
+				warning = {
+					order = 1,
+					type = "description",
+					name = L["ENCOUNTERS_WARNING"],
+					width = "full",
+				},
+				store = {
+					order = 2,
+					type = "toggle",
+					name = L["ENCOUNTERS_STORE"],
+					desc = L["ENCOUNTERS_STORE_DESC"],					
+					get = function()
+						return Engine.Profile.encounters.store;
+					end,
+					set = function(key, value)
+						Engine.Profile.encounters.store = value;
+					end,					
+				},
+				wipe = {
+				  order = 3,
+				  type = 'execute',
+				  name = L["ENCOUNTERS_WIPE"],
+				  desc = L["ENCOUNTERS_WIPE_DESC"],
+				  func = function()
+					Engine.GLOBAL.encounters = nil;
+				  end,
+					disabled = function()
+						return not (Engine.GLOBAL.encounters);
+					end,
+				},				
+			},
+		},				
+		developer = {
+			order = 7,
 			type = "group",
 			name = L["DEV_SETTINGS"],
 			cmdInline = true,

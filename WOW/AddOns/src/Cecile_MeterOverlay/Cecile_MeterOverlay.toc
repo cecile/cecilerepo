@@ -4,7 +4,7 @@
 ## Author: Cecile
 ## Version: 1.0.5
 ## SavedVariables: Cecile_MeterOverlayDB
-## OptionalDeps: ElvUI,Tukui,Skada,Recount,TinyDPS
+## OptionalDeps: ElvUI,Tukui,Skada,Recount,TinyDPS,DBM-Core,BigWigs
 
 libs\load_libs.xml
 locales\load_locales.xml

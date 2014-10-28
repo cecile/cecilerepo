@@ -63,7 +63,7 @@ L["EXAMPLE"] = "Ejemplo"
 L["SEGMENT"] = "Segmento de datos"
 L["SEGMENT_DESC"] = "Establece el segmento de datos."
 L["TAGS"] = "Etiquetas"
-L.tags = [[
+L["TAGS_LIST"] = [[
 Esta es la lista de etiquetas disponibles.
 
 |cff0070de[dps]|r - Tu |cffff2020DPS|r actual.
