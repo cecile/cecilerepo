@@ -133,6 +133,50 @@ L["DATATEXT_HIDE_TYPE"] = "Modo ocultación fuera de combate"
 L["DATATEXT_HIDE_TYPE_DESC"] = "Cambia como se oculta la ventana flotante fuera de combate."
 L["DATATEXT_HIDE_NORMAL"] = "Ocultar"
 L["DATATEXT_HIDE_FADE"] = "Desvanecer"
+L["ENCOUNTERS_SETTINGS"] = "Récors de Encuentros"
+L["ENCOUNTERS_WARNING"] = [[
+Para usar estas opciones debes de tener instalado un AddOn para encuentros de jefes.
+
+Los AddOns que se soportan son:
+
+- |cff0070deDeadly Boss Mods|r
+- |cff0070deBigWigs|r
+]]
+L["REPORT_SELF"]="A mi mismo";
+L["REPORT_GUILD"]="El chat de hermandad";
+L["REPORT_INSTANCE"]="El chat de instancia";
+L["ENCOUNTERS_STORE"]="Almacenar encuentros"
+L["ENCOUNTERS_STORE_DESC"]="Activa el almacenar los encuentros con jefes"
+L["ENCOUNTERS_WIPE"]="Borrar datos"
+L["ENCOUNTERS_WIPE_DESC"]="Borra todos los datos almacenados de los encuentros"
+L["ENCOUNTERS_INSTANCE"]="Instancia"
+L["ENCOUNTERS_INSTANCE_DESC"]="Selecciona instancia"
+L["ENCOUNTERS_DIFFICULTY"]="Dificultad"
+L["ENCOUNTERS_DIFFICULTY_DESC"]="Selecciona dificultad"
+L["ENCOUNTERS_CHOOSE"]="Encuentro"
+L["ENCOUNTERS_CHOOSE_DESC"]="Selecciona encuentro"
+L["ENCOUNTERS_BROWSE"]="Explorar encuentros salvados"
+L["ENCOUNTERS_TOP_RECORDS_DESC"]="Récords máximos"
+L["ENCOUNTERS_PLAYER_RECORDS_DESC"]="Récords del Jugador"
+L["ENCOUNTERS_RECORD_DPS_LINE"]="|c%s%s|r |cffff2020%s DPS |r el |cff0070de%s|r con un grupo de |cff0070de%s|r"
+L["ENCOUNTERS_RECORD_HPS_LINE"]="|c%s%s|r |cff44ff44%s HPS |r el |cff0070de%s|r con un grupo de |cff0070de%s|r"
+L["REPORT_NOW"]="Reportar ahora"
+L["REPORT_NOW_TOP_DESC"]="Reportar los récords máximos ahora"
+L["REPORT_NOW_PLAYER_DESC"]="Reportar los récords del jugador ahora"
+L["REPORT_NOW_TO"]="Report ahora en.."
+L["REPORT_TO_DESC"]="Selecciona el canal a reportar"
+L["REPORT_ENCOUNTER_RECORDS_TOP"]="|cfffff569%s|r máximos récords para |cff0070de%s|r (%s):"
+L["REPORT_ENCOUNTER_RECORDS_PLAYER"]="|cfffff569%s|r récords del jugador para |cff0070de%s|r (%s):"
+L["ENCOUNTERS_AUTO_REPORT_TOP"]="Autoreportar récords máximos"
+L["ENCOUNTERS_AUTO_REPORT_TOP_DESC"]="Activar el autoreportar los récords máximos"
+L["ENCOUNTERS_AUTO_REPORT_PLAYER"]="Autoreportar récords del jugador"
+L["ENCOUNTERS_AUTO_REPORT_PLAYER_DESC"]="Activar el autoreportar los récords del jugador"
+L["ENCOUNTERS_AUTO_REPORT_TYPE"]="Autoreportar en.."
+L["ENCOUNTERS_AUTO_REPORT_TYPE_DESC"]="Selecciona el canal a autoreportar"
+L["ENCOUNTERS_NEW_TOP_DPS"]="|cfffff569%s|r nuevo record para |cff0070de%s|r (%s): |c%s%s|r |cffff2020%s DPS"
+L["ENCOUNTERS_NEW_TOP_HPS"]="|cfffff569%s|r nuevo record para |cff0070de%s|r (%s): |c%s%s|r |cff44ff44%s HPS"
+L["ENCOUNTERS_NEW_PLAYER_DPS"]="|cfffff569%s|r nuevo record del jugador para |cff0070de%s|r (%s): |c%s%s|r |cffff2020%s DPS"
+L["ENCOUNTERS_NEW_PLAYER_HPS"]="|cfffff569%s|r nuevo record del jugador para |cff0070de%s|r (%s): |c%s%s|r |cff44ff44%s HPS"
 
 --get ordinal sufix for a number (1o,2o,3o,4o...) (spanish locale)
 function Engine:OrdinalSuffix(number)    

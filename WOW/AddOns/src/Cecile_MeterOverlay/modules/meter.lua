@@ -104,7 +104,7 @@ function mod.getSegmentName(tablename)
 end
 
 --get the sum table, and perform sorting
-function mod.getSumtable(dataset, mode, sortData)
+function mod.getSumtable(dataset, mode, sortData, sortType)
 	local sumtable, totalsum, totalpersec = mod.getMeterSumtable(dataset, mode);
 	
 	--sort the results
@@ -112,11 +112,19 @@ function mod.getSumtable(dataset, mode, sortData)
 		
 		if mode == Engine.TYPE_DPS then
 		
-			table.sort(sumtable, function(a,b) return a.damage > b.damage end);
+			if(sortType==Engine.SORT_PERSEC) then
+				table.sort(sumtable, function(a,b) return a.dps > b.dps end);
+			else
+				table.sort(sumtable, function(a,b) return a.damage > b.damage end);
+			end
 			
 		elseif mode == Engine.TYPE_HEAL then
 		
-			table.sort(sumtable, function(a,b) return a.healing > b.healing end);
+			if(sortType==Engine.SORT_PERSEC) then
+				table.sort(sumtable, function(a,b) return a.hps > b.hps end);
+			else
+				table.sort(sumtable, function(a,b) return a.healing > b.healing end);
+			end
 		end	
 		
 	end
@@ -220,7 +228,7 @@ function mod:ValuePerSecond(tablename, mode)
 	local value,persec,StatsTable,totalsum,totalpersec,mypos=0,0,nil,0,0,1;
 	
 	--get the table and totals, we do need sorting the table
-	StatsTable,totalsum,totalpersec = mod.getSumtable(tablename, mode,true);
+	StatsTable,totalsum,totalpersec = mod.getSumtable(tablename, mode,true,Engine.SORT_RAW);
 	
 	--loop the table
 	local numofcombatants = #StatsTable;
@@ -253,8 +261,8 @@ function mod:GetTopPlayerData(tablename, mode)
 	--default values
 	local result = nil;
 	
-	--get the table and totals, we need sorting the table
-	StatsTable,totalsum,totalpersec = mod.getSumtable(tablename, mode, true);
+	--get the table and totals, we need sorting the table by persec not raw
+	StatsTable,totalsum,totalpersec = mod.getSumtable(tablename, mode, true,Engine.SORT_PERSEC);
 	
 	--loop the table
 	local numofcombatants = #StatsTable;
