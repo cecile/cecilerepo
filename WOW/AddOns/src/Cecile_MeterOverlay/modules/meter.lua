@@ -261,8 +261,8 @@ function mod:GetTopPlayerData(tablename, mode)
 	--default values
 	local result = nil;
 	
-	--get the table and totals, we need sorting the table by persec not raw
-	StatsTable,totalsum,totalpersec = mod.getSumtable(tablename, mode, true,Engine.SORT_PERSEC);
+	--get the table and totals, we need sorting
+	StatsTable,totalsum,totalpersec = mod.getSumtable(tablename, mode, true, Engine.SORT_RAW);
 	
 	--loop the table
 	local numofcombatants = #StatsTable;

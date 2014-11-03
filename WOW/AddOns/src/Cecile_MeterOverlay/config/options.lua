@@ -21,7 +21,7 @@ function mod:getRecordsString(records,top)
 				_G.RAID_CLASS_COLORS[records.DPS.enclass].colorStr,
 				records.DPS.name,
 				mod.encounters.meter:FormatNumber(records.DPS.dps),
-				date("%m/%d/%y %H:%M:%S",records.DPS.timestamp),
+				date("%d/%m/%y %H:%M:%S",records.DPS.timestamp),
 				records.DPS.groupSize
 			);
 			
@@ -35,7 +35,7 @@ function mod:getRecordsString(records,top)
 				_G.RAID_CLASS_COLORS[records.HPS.enclass].colorStr,
 				records.HPS.name,
 				mod.encounters.meter:FormatNumber(records.HPS.hps),
-				date("%m/%d/%y %H:%M:%S",records.HPS.timestamp),
+				date("%d/%m/%y %H:%M:%S",records.HPS.timestamp),
 				records.HPS.groupSize
 			);
 			
@@ -50,7 +50,7 @@ function mod:getRecordsString(records,top)
 				_G.RAID_CLASS_COLORS[records.playerDPS.enclass].colorStr,
 				records.playerDPS.name,
 				mod.encounters.meter:FormatNumber(records.playerDPS.dps),
-				date("%m/%d/%y %H:%M:%S",records.playerDPS.timestamp),
+				date("%d/%m/%y %H:%M:%S",records.playerDPS.timestamp),
 				records.playerDPS.groupSize
 			);
 			
@@ -64,7 +64,7 @@ function mod:getRecordsString(records,top)
 				_G.RAID_CLASS_COLORS[records.playerHPS.enclass].colorStr,
 				records.playerHPS.name,
 				mod.encounters.meter:FormatNumber(records.playerHPS.hps),
-				date("%m/%d/%y %H:%M:%S",records.playerHPS.timestamp),
+				date("%d/%m/%y %H:%M:%S",records.playerHPS.timestamp),
 				records.playerHPS.groupSize
 			);
 			

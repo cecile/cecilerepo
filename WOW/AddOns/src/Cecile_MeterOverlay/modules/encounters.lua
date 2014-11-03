@@ -99,102 +99,88 @@ function mod:getEncounterDB(encounter,instanceName,difficultyName)
 end
 
 function mod:notifyNewRecord(current, new, mode,isPlayer)
-
+	
+	local formatStr = "";
+	local channel = "";
 	local line = "";
 	
-	if(current.name == "") then
-		debug("new %s %s record %s (%s) '%s': %s",
-			isPlayer and 'player' or 'top',
-			(mode == Engine.TYPE_DPS) and 'DPS' or 'HPS',
-			mod.encounterDB.name, mod.encounterDB.difficultyName,
-			new.name,
-			(mode == Engine.TYPE_DPS) and new.dps or new.hps
-		);
-	else
-		debug("new %s %s record %s (%s) '%s': %s. Previous was '%s' : %s",
-			isPlayer and 'player' or 'top',
-			(mode == Engine.TYPE_DPS) and 'DPS' or 'HPS',
-			mod.encounterDB.name, mod.encounterDB.difficultyName,
-			new.name,
-			(mode == Engine.TYPE_DPS) and new.dps or new.hps,
-			current.name,
-			(mode == Engine.TYPE_DPS) and current.dps or current.hps
-		);
-		
-	end
+	if(mode == Engine.TYPE_DPS) then			
+		formatStr = "ENCOUNTERS_NEW_RECORD_DPS";		
+	else			
+		formatStr = "ENCOUNTERS_NEW_RECORD_HPS";						
+	end	
 	
-	if not isPlayer then
+	if not isPlayer then					
+		if Engine.Profile.encounters.autoReportTop then		
+			channel = Engine.Profile.encounters.autoReportTopType;								
+		end		
+	else				
+		if Engine.Profile.encounters.autoReportPlayer then		
+			channel = Engine.Profile.encounters.autoReportPlayerType;		
+		end											
+	end 
 	
-		if Engine.Profile.encounters.autoReportTop then
-		
-			if(mode == Engine.TYPE_DPS) then
-				line = string.format(L["ENCOUNTERS_NEW_TOP_DPS"],
-					Engine.Name,
-					mod.encounterDB.name, 
-					mod.encounterDB.difficultyName,					
-					_G.RAID_CLASS_COLORS[new.enclass].colorStr,
-					new.name,
-					mod.meter:FormatNumber(new.dps)
-				);
-			else
-				line = string.format(L["ENCOUNTERS_NEW_TOP_HPS"],
-					Engine.Name,
-					mod.encounterDB.name, 
-					mod.encounterDB.difficultyName,					
-					_G.RAID_CLASS_COLORS[new.enclass].colorStr,					
-					new.name,
-					mod.meter:FormatNumber(new.hps)
-				);
-			
-			end
-			
-			mod:reportLine(line,Engine.Profile.encounters.autoReportTopType);		
-		
+	if not (channel == "") then
+	
+		if not (current.name == "") then
+			formatStr = formatStr.."_OVER";
 		end
 		
-	else
-		if Engine.Profile.encounters.autoReportPlayer then
-		
-			if(mode == Engine.TYPE_DPS) then
-				line = string.format(L["ENCOUNTERS_NEW_PLAYER_DPS"],
-					Engine.Name,
-					mod.encounterDB.name, 
-					mod.encounterDB.difficultyName,					
-					_G.RAID_CLASS_COLORS[new.enclass].colorStr,					
-					new.name,
-					mod.meter:FormatNumber(new.dps)
-				);
-			else
-				line = string.format(L["ENCOUNTERS_NEW_PLAYER_HPS"],
-					Engine.Name,
-					mod.encounterDB.name, 
-					mod.encounterDB.difficultyName,					
-					_G.RAID_CLASS_COLORS[new.enclass].colorStr,					
-					new.name,
-					mod.meter:FormatNumber(new.hps)
-				);
-			
-			end
-			
-			mod:reportLine(line,Engine.Profile.encounters.autoReportPlayerType);			
-		
-		
-		end	
-	end 
+		line = string.format(L[formatStr],			
+			_G.RAID_CLASS_COLORS[new.enclass].colorStr,
+			new.name,
+			(mode == Engine.TYPE_DPS) and mod.meter:FormatNumber(new.dps) or mod.meter:FormatNumber(new.hps),
+			_G.RAID_CLASS_COLORS[ (current.enclass == "") and "PRIEST" or current.enclass ].colorStr,
+			current.name,
+			(mode == Engine.TYPE_DPS) and mod.meter:FormatNumber(current.dps) or mod.meter:FormatNumber(current.hps)
+		);	
 
+		mod:reportLine(line,channel);
+	end
+	
 end
 
 function mod:notifyNotRecord(current, new, mode,isPlayer)
 
-	debug("%s %s record retained %s (%s) '%s': %s. Attempt was '%s' : %s",
-		isPlayer and 'player' or 'top',
-		(mode == Engine.TYPE_DPS) and 'DPS' or 'HPS',
-		mod.encounterDB.name, mod.encounterDB.difficultyName,
-		current.name,
-		(mode == Engine.TYPE_DPS) and current.dps or current.hps,
-		new.name,
-		(mode == Engine.TYPE_DPS) and new.dps or new.hps
-	);
+	local formatStr = "";
+	local channel = "";
+	local line = "";
+	
+	if(mode == Engine.TYPE_DPS) then			
+		formatStr = "ENCOUNTERS_FAIL_RECORD_DPS";		
+	else			
+		formatStr = "ENCOUNTERS_FAIL_RECORD_HPS";						
+	end	
+	
+	if not isPlayer then					
+		if Engine.Profile.encounters.autoReportTop then		
+			channel = Engine.Profile.encounters.autoReportTopType;								
+		end		
+	else				
+		if Engine.Profile.encounters.autoReportPlayer then		
+			channel = Engine.Profile.encounters.autoReportPlayerType;		
+		end											
+	end 
+	
+	if not (channel == "") then
+	
+		if(current.name == "") then
+			formatStr = formatStr.."_OVER";
+		end
+		
+		line = string.format(L[formatStr],			
+			_G.RAID_CLASS_COLORS[current.enclass].colorStr,
+			current.name,
+			(mode == Engine.TYPE_DPS) and mod.meter:FormatNumber(current.dps) or mod.meter:FormatNumber(current.hps),
+			_G.RAID_CLASS_COLORS[new.enclass].colorStr,
+			new.name,
+			(mode == Engine.TYPE_DPS) and mod.meter:FormatNumber(new.dps) or mod.meter:FormatNumber(new.hps)
+		);	
+
+		mod:reportLine(line,channel);
+	end	
+	
+	
 
 end
 
@@ -302,10 +288,27 @@ function mod:recordEncounter(encounter)
 	local currentPlayerDPS 	= mod.encounterDB.records.playerDPS;
 	local currentPlayerHPS 	= mod.encounterDB.records.playerHPS;
 
+	local line=""
+	local channel = ""
+	
+	--display top records header
+	if Engine.Profile.encounters.autoReportTop then		
+		channel = Engine.Profile.encounters.autoReportTopType;								
+		line = string.format(L["REPORT_ENCOUNTER_RECORDS_TOP"],Engine.Name,encounter,difficultyName);
+		mod:reportLine(line,channel);
+	end		
+	
 	--analyse top records
 	mod.encounterDB.records.DPS = mod:analyseRecord(currentTopDPS, topDPS, Engine.TYPE_DPS,false);
 	mod.encounterDB.records.HPS = mod:analyseRecord(currentTopHPS, topHPS, Engine.TYPE_HEAL,false);
-
+	
+	--display player records header
+	if Engine.Profile.encounters.autoReportPlayer then		
+		channel = Engine.Profile.encounters.autoReportPlayerType;	
+		line = string.format(L["REPORT_ENCOUNTER_RECORDS_PLAYER"],Engine.Name,encounter,difficultyName);
+		mod:reportLine(line,channel);			
+	end											
+	
 	--analyse player records
 	mod.encounterDB.records.playerDPS = mod:analyseRecord(currentPlayerDPS, playerDPS, Engine.TYPE_DPS,true);
 	mod.encounterDB.records.playerHPS = mod:analyseRecord(currentPlayerHPS, playerHPS, Engine.TYPE_HEAL,true);
@@ -551,7 +554,7 @@ function mod:reportRecordsItem(records,top,channel)
 				_G.RAID_CLASS_COLORS[records.DPS.enclass].colorStr,
 				records.DPS.name,
 				mod.meter:FormatNumber(records.DPS.dps),
-				date("%m/%d/%y %H:%M:%S",records.DPS.timestamp),
+				date("%d/%m/%y %H:%M:%S",records.DPS.timestamp),
 				records.DPS.groupSize
 			);
 
@@ -565,7 +568,7 @@ function mod:reportRecordsItem(records,top,channel)
 				_G.RAID_CLASS_COLORS[records.HPS.enclass].colorStr,
 				records.HPS.name,
 				mod.meter:FormatNumber(records.HPS.hps),
-				date("%m/%d/%y %H:%M:%S",records.HPS.timestamp),
+				date("%d/%m/%y %H:%M:%S",records.HPS.timestamp),
 				records.HPS.groupSize
 			);
 
@@ -580,7 +583,7 @@ function mod:reportRecordsItem(records,top,channel)
 				_G.RAID_CLASS_COLORS[records.playerDPS.enclass].colorStr,
 				records.playerDPS.name,
 				mod.meter:FormatNumber(records.playerDPS.dps),
-				date("%m/%d/%y %H:%M:%S",records.playerDPS.timestamp),
+				date("%d/%m/%y %H:%M:%S",records.playerDPS.timestamp),
 				records.playerDPS.groupSize
 			);
 
@@ -594,7 +597,7 @@ function mod:reportRecordsItem(records,top,channel)
 				_G.RAID_CLASS_COLORS[records.playerHPS.enclass].colorStr,
 				records.playerHPS.name,
 				mod.meter:FormatNumber(records.playerHPS.hps),
-				date("%m/%d/%y %H:%M:%S",records.playerHPS.timestamp),
+				date("%d/%m/%y %H:%M:%S",records.playerHPS.timestamp),
 				records.playerHPS.groupSize
 			);
 

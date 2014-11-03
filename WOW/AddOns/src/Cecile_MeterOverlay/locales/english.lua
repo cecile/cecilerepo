@@ -131,7 +131,7 @@ L["DATATEXT_HIDE_TYPE"] = "Hide Mode"
 L["DATATEXT_HIDE_TYPE_DESC"] = "Change the datatext hide mode."
 L["DATATEXT_HIDE_NORMAL"] = "Hide"
 L["DATATEXT_HIDE_FADE"] = "Fade Out"
-L["ENCOUNTERS_SETTINGS"] = "Ecounters Records"
+L["ENCOUNTERS_SETTINGS"] = "Encounters Records"
 L["ENCOUNTERS_WARNING"] = [[
 To use this options you need to have a Boss Encounter Module.
 
@@ -171,10 +171,12 @@ L["ENCOUNTERS_AUTO_REPORT_PLAYER"]="Auto report player records"
 L["ENCOUNTERS_AUTO_REPORT_PLAYER_DESC"]="Enable to auto report new player records"
 L["ENCOUNTERS_AUTO_REPORT_TYPE"]="Auto report to.."
 L["ENCOUNTERS_AUTO_REPORT_TYPE_DESC"]="Select which channel to auto report"
-L["ENCOUNTERS_NEW_TOP_DPS"]="|cfffff569%s|r new record for |cff0070de%s|r (%s): |c%s%s|r |cffff2020%s DPS"
-L["ENCOUNTERS_NEW_TOP_HPS"]="|cfffff569%s|r new record for |cff0070de%s|r (%s): |c%s%s|r |cff44ff44%s HPS"
-L["ENCOUNTERS_NEW_PLAYER_DPS"]="|cfffff569%s|r new player record for |cff0070de%s|r (%s): |c%s%s|r |cffff2020%s DPS"
-L["ENCOUNTERS_NEW_PLAYER_HPS"]="|cfffff569%s|r new player record for |cff0070de%s|r (%s): |c%s%s|r |cff44ff44%s HPS"
+L["ENCOUNTERS_NEW_RECORD_DPS"]="- new |c%s%s|r |cffff2020%s DPS|r"
+L["ENCOUNTERS_NEW_RECORD_HPS"]="- new |c%s%s|r |cff44ff44%s HPS|r"
+L["ENCOUNTERS_NEW_RECORD_DPS_OVER"]="- new |c%s%s|r |cffff2020%s DPS|r, was |c%s%s|r |cffff2020%s DPS|r"
+L["ENCOUNTERS_NEW_RECORD_HPS_OVER"]="- new |c%s%s|r |cff44ff44%s HPS|r, was |c%s%s|r |cff44ff44%s HPS|r"
+L["ENCOUNTERS_FAIL_RECORD_DPS"]="- retained |c%s%s|r |cffff2020%s DPS|r, attempt |c%s%s|r |cffff2020%s DPS|r"
+L["ENCOUNTERS_FAIL_RECORD_HPS"]="- retained |c%s%s|r |cff44ff44%s HPS|r, attempt |c%s%s|r |cff44ff44%s HPS|r"
 
 --get ordinal sufix for a number (1st,2nd,3rd,4th...) (english locale)
 function Engine:OrdinalSuffix(number)

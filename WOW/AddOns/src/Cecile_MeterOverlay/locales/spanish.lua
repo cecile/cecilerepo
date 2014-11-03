@@ -173,10 +173,12 @@ L["ENCOUNTERS_AUTO_REPORT_PLAYER"]="Autoreportar récords del jugador"
 L["ENCOUNTERS_AUTO_REPORT_PLAYER_DESC"]="Activar el autoreportar los récords del jugador"
 L["ENCOUNTERS_AUTO_REPORT_TYPE"]="Autoreportar en.."
 L["ENCOUNTERS_AUTO_REPORT_TYPE_DESC"]="Selecciona el canal a autoreportar"
-L["ENCOUNTERS_NEW_TOP_DPS"]="|cfffff569%s|r nuevo record para |cff0070de%s|r (%s): |c%s%s|r |cffff2020%s DPS"
-L["ENCOUNTERS_NEW_TOP_HPS"]="|cfffff569%s|r nuevo record para |cff0070de%s|r (%s): |c%s%s|r |cff44ff44%s HPS"
-L["ENCOUNTERS_NEW_PLAYER_DPS"]="|cfffff569%s|r nuevo record del jugador para |cff0070de%s|r (%s): |c%s%s|r |cffff2020%s DPS"
-L["ENCOUNTERS_NEW_PLAYER_HPS"]="|cfffff569%s|r nuevo record del jugador para |cff0070de%s|r (%s): |c%s%s|r |cff44ff44%s HPS"
+L["ENCOUNTERS_NEW_RECORD_DPS"]="- nuevo |c%s%s|r |cffff2020%s DPS|r"
+L["ENCOUNTERS_NEW_RECORD_HPS"]="- nuevo |c%s%s|r |cff44ff44%s HPS|r"
+L["ENCOUNTERS_NEW_RECORD_DPS_OVER"]="- nuevo |c%s%s|r |cffff2020%s DPS|r, era |c%s%s|r |cffff2020%s DPS|r"
+L["ENCOUNTERS_NEW_RECORD_HPS_OVER"]="- nuevo |c%s%s|r |cff44ff44%s HPS|r, era |c%s%s|r |cff44ff44%s HPS|r"
+L["ENCOUNTERS_FAIL_RECORD_DPS"]="- mantenido |c%s%s|r |cffff2020%s DPS|r, intento |c%s%s|r |cffff2020%s DPS|r"
+L["ENCOUNTERS_FAIL_RECORD_HPS"]="- mantenido |c%s%s|r |cff44ff44%s HPS|r, intento |c%s%s|r |cff44ff44%s HPS|r"
 
 --get ordinal sufix for a number (1o,2o,3o,4o...) (spanish locale)
 function Engine:OrdinalSuffix(number)    
