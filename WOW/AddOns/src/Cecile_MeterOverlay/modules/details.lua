@@ -1,6 +1,6 @@
 ----------------------------------------------------------------------------------------------------
 -- details module
---
+--  original code by shadowphoenix : https://github.com/shadowphoenix
 
 --if Details its not present, dont use this module
 if not IsAddOnLoaded( "Details" )  then return; end
@@ -12,21 +12,23 @@ local mod = Engine.AddOn:NewModule("details");
 --debug
 local debug = Engine.AddOn:GetModule("debug");
 
---toggle skada window
+--toggle details window
 function mod.Toggle()
 	local Details = _G._detalhes;
 
-	for _, instance in Details:ListInstances() do
-		if (instance.baseframe) then
-			instance.baseframe:SetShown(not instance.baseframe:IsShown())
-		end
+	local opened = Details:GetOpenedWindowsAmount()
+	
+	if (opened == 0) then
+		Details:ReabrirTodasInstancias()
+	else
+		Details:ShutDownAllInstances()
 	end
 end
 
 --get sum table
 function mod.GetSumtable(tablename, mode)
 	
-	--get skada
+	--get details
 	local Details = _G._detalhes;
 	
 	--default values
@@ -61,8 +63,15 @@ function mod.GetSumtable(tablename, mode)
 				--get the data from the player
 				templable = {enclass=player:Class(),name=player:GetDisplayName(),damage= mode == Engine.TYPE_DPS and player.total or 0,healing= mode == Engine.TYPE_HEAL and player.total or 0,dps=0,hps=0};										
 				
-				--get the player active time
-				local totaltime = player:Tempo() or 0;
+				--time for DPS/HPS calculation
+				local totaltime = 0;
+				
+				--get the player active time or elapsed time
+				if (Details.time_type == 1) then
+					totaltime = player:Tempo() or 0;
+				else
+					totaltime = report_set:GetCombatTime() or 0;
+				end				
 				
 				--calculate hps or dps
 				if (mode==Engine.TYPE_DPS) then
@@ -95,7 +104,10 @@ end
 --return segment name
 function mod.GetSegmentName()
 
-	--return skada
+	--final value
+	local result = ""
+	
+	--return details
 	local Details = _G._detalhes;
 	
 	--find the set
@@ -103,8 +115,10 @@ function mod.GetSegmentName()
 	
 	--get the name
 	if(report_set) then	
-		return report_set:GetCombatName(true);
+		result = report_set:GetCombatName(true);
 	end	
+	
+	return result;
 	
 end
 
