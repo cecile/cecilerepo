@@ -58,10 +58,10 @@ function mod.GetSumtable(tablename, mode)
 
 		local container = report_set:GetContainer(attribute)
 		for i, player in container:ListActors() do
-			if player:IsPlayer() then			
+			if player:IsPlayer() and player:IsGroupPlayer() then			
 			
 				--get the data from the player
-				templable = {enclass=player:Class(),name=player:GetDisplayName(),damage= mode == Engine.TYPE_DPS and player.total or 0,healing= mode == Engine.TYPE_HEAL and player.total or 0,dps=0,hps=0};										
+				templable = {enclass=player:Class() or "UNKNOWN",name=player:GetDisplayName(),damage = 0 , mode == mode, healing = 0,dps=0,hps=0};										
 				
 				--time for DPS/HPS calculation
 				local totaltime = 0;
@@ -75,6 +75,7 @@ function mod.GetSumtable(tablename, mode)
 				
 				--calculate hps or dps
 				if (mode==Engine.TYPE_DPS) then
+					templable.damage =  player.total or 0;
 					if (templable.damage>0) then
 						templable.dps = templable.damage / math.max(1,totaltime);
 						totalsum = totalsum + templable.damage;
@@ -84,6 +85,7 @@ function mod.GetSumtable(tablename, mode)
 						table.insert(sumtable,templable);						
 					end
 				else
+					templable.healing =  player.total or 0;				
 					if (templable.healing>0) then
 						templable.hps = templable.healing / math.max(1,totaltime);					
 						totalsum = totalsum + templable.healing;
