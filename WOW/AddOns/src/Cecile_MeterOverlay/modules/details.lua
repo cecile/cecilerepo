@@ -61,7 +61,7 @@ function mod.GetSumtable(tablename, mode)
 			if player:IsPlayer() and player:IsGroupPlayer() then			
 			
 				--get the data from the player
-				templable = {enclass=player:Class() or "UNKNOWN",name=player:GetDisplayName(),damage = 0 , mode == mode, healing = 0,dps=0,hps=0};										
+				templable = {enclass=player:Class() or "UNKNOWN",name=player:Name(),damage = 0 , mode == mode, healing = 0,dps=0,hps=0};										
 				
 				--time for DPS/HPS calculation
 				local totaltime = 0;
