@@ -1,7 +1,7 @@
 #ifndef  _APP_DELEGATE_H_
 #define  _APP_DELEGATE_H_
 
-#include "cocos2d.h"
+#include "utils/utils.h"
 
 /**
 @brief    The cocos2d Application.
@@ -34,6 +34,10 @@ public:
     @param  the pointer of the application
     */
     virtual void applicationWillEnterForeground();
+    
+private:
+    static const int designWith    = 1920;
+    static const int designHeight  = 1080;
 };
 
 #endif // _APP_DELEGATE_H_
