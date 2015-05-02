@@ -1,5 +1,5 @@
 //
-//  GameScene.h
+//  IntroScene.h
 //  Pipes
 //
 
@@ -8,6 +8,13 @@
 
 #import <SpriteKit/SpriteKit.h>
 
-@interface GameScene : SKScene
+@interface IntroScene : SKScene
+
+
+    // Start time
+    @property float startTime;
+
+    // Controls if we are in transtion
+    @property bool inTransition;
 
 @end

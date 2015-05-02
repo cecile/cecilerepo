@@ -7,10 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E081CE561AF4C93B00EE3B60 /* MenuScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = E081CE551AF4C93B00EE3B60 /* MenuScene.sks */; };
+		E081CE591AF4CB6800EE3B60 /* MenuScene.m in Sources */ = {isa = PBXBuildFile; fileRef = E081CE581AF4CB6800EE3B60 /* MenuScene.m */; };
+		E081CE5D1AF4D1B900EE3B60 /* IntroScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = E081CE5A1AF4CF7600EE3B60 /* IntroScene.sks */; };
+		E09CB61D1AF4E08E00437EB8 /* Evil_Laugh_Male_6.caf in Resources */ = {isa = PBXBuildFile; fileRef = E09CB61C1AF4E08E00437EB8 /* Evil_Laugh_Male_6.caf */; };
 		E0DAE4921AF42C7900F72B01 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = E0DAE4911AF42C7900F72B01 /* main.m */; };
 		E0DAE4951AF42C7900F72B01 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E0DAE4941AF42C7900F72B01 /* AppDelegate.m */; };
-		E0DAE4981AF42C7900F72B01 /* GameScene.m in Sources */ = {isa = PBXBuildFile; fileRef = E0DAE4971AF42C7900F72B01 /* GameScene.m */; };
-		E0DAE49A1AF42C7900F72B01 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = E0DAE4991AF42C7900F72B01 /* GameScene.sks */; };
+		E0DAE4981AF42C7900F72B01 /* IntroScene.m in Sources */ = {isa = PBXBuildFile; fileRef = E0DAE4971AF42C7900F72B01 /* IntroScene.m */; };
 		E0DAE49D1AF42C7A00F72B01 /* GameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E0DAE49C1AF42C7A00F72B01 /* GameViewController.m */; };
 		E0DAE4A01AF42C7A00F72B01 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E0DAE49E1AF42C7A00F72B01 /* Main.storyboard */; };
 		E0DAE4A21AF42C7A00F72B01 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E0DAE4A11AF42C7A00F72B01 /* Images.xcassets */; };
@@ -29,14 +32,18 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		E081CE551AF4C93B00EE3B60 /* MenuScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = MenuScene.sks; sourceTree = "<group>"; };
+		E081CE571AF4CB6800EE3B60 /* MenuScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuScene.h; sourceTree = "<group>"; };
+		E081CE581AF4CB6800EE3B60 /* MenuScene.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MenuScene.m; sourceTree = "<group>"; };
+		E081CE5A1AF4CF7600EE3B60 /* IntroScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = IntroScene.sks; sourceTree = "<group>"; };
+		E09CB61C1AF4E08E00437EB8 /* Evil_Laugh_Male_6.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Evil_Laugh_Male_6.caf; sourceTree = "<group>"; };
 		E0DAE48C1AF42C7900F72B01 /* Pipes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Pipes.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E0DAE4901AF42C7900F72B01 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E0DAE4911AF42C7900F72B01 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		E0DAE4931AF42C7900F72B01 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		E0DAE4941AF42C7900F72B01 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		E0DAE4961AF42C7900F72B01 /* GameScene.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameScene.h; sourceTree = "<group>"; };
-		E0DAE4971AF42C7900F72B01 /* GameScene.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GameScene.m; sourceTree = "<group>"; };
-		E0DAE4991AF42C7900F72B01 /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
+		E0DAE4961AF42C7900F72B01 /* IntroScene.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IntroScene.h; sourceTree = "<group>"; };
+		E0DAE4971AF42C7900F72B01 /* IntroScene.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = IntroScene.m; sourceTree = "<group>"; };
 		E0DAE49B1AF42C7A00F72B01 /* GameViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameViewController.h; sourceTree = "<group>"; };
 		E0DAE49C1AF42C7A00F72B01 /* GameViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GameViewController.m; sourceTree = "<group>"; };
 		E0DAE49F1AF42C7A00F72B01 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -65,6 +72,27 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		E081CE5C1AF4D01600EE3B60 /* Scenes */ = {
+			isa = PBXGroup;
+			children = (
+				E0DAE4961AF42C7900F72B01 /* IntroScene.h */,
+				E0DAE4971AF42C7900F72B01 /* IntroScene.m */,
+				E081CE5A1AF4CF7600EE3B60 /* IntroScene.sks */,
+				E081CE571AF4CB6800EE3B60 /* MenuScene.h */,
+				E081CE581AF4CB6800EE3B60 /* MenuScene.m */,
+				E081CE551AF4C93B00EE3B60 /* MenuScene.sks */,
+			);
+			name = Scenes;
+			sourceTree = "<group>";
+		};
+		E09CB61B1AF4E08E00437EB8 /* Sounds */ = {
+			isa = PBXGroup;
+			children = (
+				E09CB61C1AF4E08E00437EB8 /* Evil_Laugh_Male_6.caf */,
+			);
+			path = Sounds;
+			sourceTree = "<group>";
+		};
 		E0DAE4831AF42C7900F72B01 = {
 			isa = PBXGroup;
 			children = (
@@ -86,11 +114,10 @@
 		E0DAE48E1AF42C7900F72B01 /* Pipes */ = {
 			isa = PBXGroup;
 			children = (
+				E09CB61B1AF4E08E00437EB8 /* Sounds */,
+				E081CE5C1AF4D01600EE3B60 /* Scenes */,
 				E0DAE4931AF42C7900F72B01 /* AppDelegate.h */,
 				E0DAE4941AF42C7900F72B01 /* AppDelegate.m */,
-				E0DAE4961AF42C7900F72B01 /* GameScene.h */,
-				E0DAE4971AF42C7900F72B01 /* GameScene.m */,
-				E0DAE4991AF42C7900F72B01 /* GameScene.sks */,
 				E0DAE49B1AF42C7A00F72B01 /* GameViewController.h */,
 				E0DAE49C1AF42C7A00F72B01 /* GameViewController.m */,
 				E0DAE49E1AF42C7A00F72B01 /* Main.storyboard */,
@@ -207,10 +234,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E09CB61D1AF4E08E00437EB8 /* Evil_Laugh_Male_6.caf in Resources */,
 				E0DAE4A51AF42C7A00F72B01 /* LaunchScreen.xib in Resources */,
 				E0DAE4A21AF42C7A00F72B01 /* Images.xcassets in Resources */,
-				E0DAE49A1AF42C7900F72B01 /* GameScene.sks in Resources */,
+				E081CE561AF4C93B00EE3B60 /* MenuScene.sks in Resources */,
 				E0DAE4A01AF42C7A00F72B01 /* Main.storyboard in Resources */,
+				E081CE5D1AF4D1B900EE3B60 /* IntroScene.sks in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -229,8 +258,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				E0DAE49D1AF42C7A00F72B01 /* GameViewController.m in Sources */,
+				E081CE591AF4CB6800EE3B60 /* MenuScene.m in Sources */,
 				E0DAE4951AF42C7900F72B01 /* AppDelegate.m in Sources */,
-				E0DAE4981AF42C7900F72B01 /* GameScene.m in Sources */,
+				E0DAE4981AF42C7900F72B01 /* IntroScene.m in Sources */,
 				E0DAE4921AF42C7900F72B01 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -307,7 +337,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -343,7 +373,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -356,8 +386,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = Pipes/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -366,8 +398,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = Pipes/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
@@ -424,6 +458,7 @@
 				E0DAE4B61AF42C7A00F72B01 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		E0DAE4B71AF42C7A00F72B01 /* Build configuration list for PBXNativeTarget "PipesTests" */ = {
 			isa = XCConfigurationList;
@@ -432,6 +467,7 @@
 				E0DAE4B91AF42C7A00F72B01 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

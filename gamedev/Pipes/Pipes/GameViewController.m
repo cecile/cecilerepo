@@ -7,7 +7,7 @@
 //
 
 #import "GameViewController.h"
-#import "GameScene.h"
+#import "IntroScene.h"
 
 @implementation SKScene (Unarchive)
 
@@ -30,23 +30,29 @@
 
 @implementation GameViewController
 
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
 
+- (void)viewWillLayoutSubviews
+{
+    [super viewWillLayoutSubviews];
+    
     // Configure the view.
     SKView * skView = (SKView *)self.view;
-    skView.showsFPS = YES;
-    skView.showsNodeCount = YES;
-    /* Sprite Kit applies additional optimizations to improve rendering performance */
-    skView.ignoresSiblingOrder = YES;
-    
-    // Create and configure the scene.
-    GameScene *scene = [GameScene unarchiveFromFile:@"GameScene"];
-    scene.scaleMode = SKSceneScaleModeAspectFill;
-    
-    // Present the scene.
-    [skView presentScene:scene];
+    if(!skView.scene) {
+        skView.showsFPS = YES;
+        skView.showsNodeCount = YES;
+        /* Sprite Kit applies additional optimizations to improve rendering performance */
+        skView.ignoresSiblingOrder = YES;
+        
+        // Create and configure the scene.
+        IntroScene *scene = [IntroScene unarchiveFromFile:@"IntroScene"];
+        scene.scaleMode = SKSceneScaleModeAspectFill;
+
+        // Create a cross fade transition
+        SKTransition *crossFade = [SKTransition crossFadeWithDuration:1.0];
+        
+        // Present the scene.
+        [skView presentScene:scene transition: crossFade];
+    }
 }
 
 - (BOOL)shouldAutorotate
