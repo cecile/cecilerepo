@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E00F51AB1AF5132D001E0FB1 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = E00F51AA1AF5132D001E0FB1 /* GameScene.sks */; };
+		E00F51AE1AF5134A001E0FB1 /* GameScene.m in Sources */ = {isa = PBXBuildFile; fileRef = E00F51AD1AF5134A001E0FB1 /* GameScene.m */; };
+		E00F51B01AF514EF001E0FB1 /* Button.caf in Resources */ = {isa = PBXBuildFile; fileRef = E00F51AF1AF514EF001E0FB1 /* Button.caf */; };
 		E081CE561AF4C93B00EE3B60 /* MenuScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = E081CE551AF4C93B00EE3B60 /* MenuScene.sks */; };
 		E081CE591AF4CB6800EE3B60 /* MenuScene.m in Sources */ = {isa = PBXBuildFile; fileRef = E081CE581AF4CB6800EE3B60 /* MenuScene.m */; };
 		E081CE5D1AF4D1B900EE3B60 /* IntroScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = E081CE5A1AF4CF7600EE3B60 /* IntroScene.sks */; };
@@ -32,6 +35,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		E00F51AA1AF5132D001E0FB1 /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
+		E00F51AC1AF5134A001E0FB1 /* GameScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameScene.h; sourceTree = "<group>"; };
+		E00F51AD1AF5134A001E0FB1 /* GameScene.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameScene.m; sourceTree = "<group>"; };
+		E00F51AF1AF514EF001E0FB1 /* Button.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Button.caf; sourceTree = "<group>"; };
 		E081CE551AF4C93B00EE3B60 /* MenuScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = MenuScene.sks; sourceTree = "<group>"; };
 		E081CE571AF4CB6800EE3B60 /* MenuScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuScene.h; sourceTree = "<group>"; };
 		E081CE581AF4CB6800EE3B60 /* MenuScene.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MenuScene.m; sourceTree = "<group>"; };
@@ -81,6 +88,9 @@
 				E081CE571AF4CB6800EE3B60 /* MenuScene.h */,
 				E081CE581AF4CB6800EE3B60 /* MenuScene.m */,
 				E081CE551AF4C93B00EE3B60 /* MenuScene.sks */,
+				E00F51AA1AF5132D001E0FB1 /* GameScene.sks */,
+				E00F51AC1AF5134A001E0FB1 /* GameScene.h */,
+				E00F51AD1AF5134A001E0FB1 /* GameScene.m */,
 			);
 			name = Scenes;
 			sourceTree = "<group>";
@@ -88,6 +98,7 @@
 		E09CB61B1AF4E08E00437EB8 /* Sounds */ = {
 			isa = PBXGroup;
 			children = (
+				E00F51AF1AF514EF001E0FB1 /* Button.caf */,
 				E09CB61C1AF4E08E00437EB8 /* Evil_Laugh_Male_6.caf */,
 			);
 			path = Sounds;
@@ -239,7 +250,9 @@
 				E0DAE4A51AF42C7A00F72B01 /* LaunchScreen.xib in Resources */,
 				E0DAE4A21AF42C7A00F72B01 /* Images.xcassets in Resources */,
 				E081CE561AF4C93B00EE3B60 /* MenuScene.sks in Resources */,
+				E00F51AB1AF5132D001E0FB1 /* GameScene.sks in Resources */,
 				E0DAE4A01AF42C7A00F72B01 /* Main.storyboard in Resources */,
+				E00F51B01AF514EF001E0FB1 /* Button.caf in Resources */,
 				E081CE5D1AF4D1B900EE3B60 /* IntroScene.sks in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -262,6 +275,7 @@
 				E081CE591AF4CB6800EE3B60 /* MenuScene.m in Sources */,
 				E0DAE4951AF42C7900F72B01 /* AppDelegate.m in Sources */,
 				E0DAE4981AF42C7900F72B01 /* IntroScene.m in Sources */,
+				E00F51AE1AF5134A001E0FB1 /* GameScene.m in Sources */,
 				E0DAE4921AF42C7900F72B01 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
