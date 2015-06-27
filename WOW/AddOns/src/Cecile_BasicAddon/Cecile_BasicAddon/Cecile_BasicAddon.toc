@@ -1,0 +1,16 @@
+## Interface: 60100
+## Title: |cffffffffCecile|r_|cfffff569BasicAddon|r
+## Notes: Basic AddOn template
+## Author: Cecile
+## Version: 1.0.0
+## SavedVariables: Cecile_BasicAddonDB
+## OptionalDeps: 
+
+libs\load_libs.xml
+locales\load_locales.xml
+media\load_media.xml
+
+main.lua
+
+modules\load_modules.xml
+config\load_config.xml
