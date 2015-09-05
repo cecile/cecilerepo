@@ -10,4 +10,5 @@
 	<Script file="elvui.lua"/>
 	<Script file="Tukui.lua"/>
 	<Script file="encounters.lua"/>
+	<Script file="ldb.lua"/>
 </Ui>

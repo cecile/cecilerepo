@@ -175,9 +175,9 @@ function mod:OnLeave(self,tooltip)
 	
 end
 
---update the datatext text
-function mod:UpdateText(self,t)
-	
+--update the text value
+function mod:UpdateTextValue()
+
 	--if we have a damage meter
 	if(mod.meter and mod.meter.registered) then
 
@@ -198,11 +198,21 @@ function mod:UpdateText(self,t)
 	else
 		mod.lastValue = L["NO_DATA"];
 	end		
+
+end
+
+--update the datatext text
+function mod:UpdateText(self,t)
 	
+	--update the text value
+	mod:UpdateTextValue()
+
 	--update the text
 	self:SetText(mod.lastValue);
 		
 end
+
+
 
 --control visibility
 function mod:ControlVisibility()
@@ -210,6 +220,7 @@ function mod:ControlVisibility()
 	if Engine.Profile.datatext.enable then		
 		mod.frame:SetAlpha(1);
 		mod.frame:Show();
+		mod.frame:SetFrameStrata(Engine.Profile.datatext.strata);
 		debug("floating datatext show");
 		
 		
@@ -356,7 +367,7 @@ function mod:OnInitialize()
 	frame:SetHeight(Engine.Profile.datatext.h);
 
 	frame:SetPoint("CENTER", UIParent);
-	frame:SetFrameStrata("TOOLTIP")	;
+	frame:SetFrameStrata(Engine.Profile.datatext.strata);
 	frame:SetBackdropColor(0, 0, 0, 1);
 
 	-- The titlebar/drag bar.
