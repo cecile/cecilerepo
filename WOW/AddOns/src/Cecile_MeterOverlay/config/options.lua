@@ -8,15 +8,15 @@ local L = Engine.Locale;
 
 --create the module
 local mod = Engine.AddOn:NewModule("options");
-	
+
 function mod:getRecordsString(records,top)
 	local result="";
 	local line="";
-	
+
 	if (top) then
-	
+
 		if(records.DPS and records.DPS.dps) then
-		
+
 			line = string.format(L["ENCOUNTERS_RECORD_DPS_LINE"],
 				_G.RAID_CLASS_COLORS[records.DPS.enclass].colorStr,
 				records.DPS.name,
@@ -24,13 +24,13 @@ function mod:getRecordsString(records,top)
 				date("%d/%m/%y %H:%M:%S",records.DPS.timestamp),
 				records.DPS.groupSize
 			);
-			
+
 			result = result .. line .. "\n";
-			
+
 		end
 
 		if(records.HPS and records.HPS.hps) then
-		
+
 			line = string.format(L["ENCOUNTERS_RECORD_HPS_LINE"],
 				_G.RAID_CLASS_COLORS[records.HPS.enclass].colorStr,
 				records.HPS.name,
@@ -38,14 +38,14 @@ function mod:getRecordsString(records,top)
 				date("%d/%m/%y %H:%M:%S",records.HPS.timestamp),
 				records.HPS.groupSize
 			);
-			
+
 			result = result .. line .. "\n";
-			
-		end		
+
+		end
 	else
-		
+
 		if(records.playerDPS and records.playerDPS.dps) then
-		
+
 			line = string.format(L["ENCOUNTERS_RECORD_DPS_LINE"],
 				_G.RAID_CLASS_COLORS[records.playerDPS.enclass].colorStr,
 				records.playerDPS.name,
@@ -53,13 +53,13 @@ function mod:getRecordsString(records,top)
 				date("%d/%m/%y %H:%M:%S",records.playerDPS.timestamp),
 				records.playerDPS.groupSize
 			);
-			
+
 			result = result .. line .. "\n";
-			
+
 		end
 
 		if(records.playerHPS and records.playerHPS.hps) then
-		
+
 			line = string.format(L["ENCOUNTERS_RECORD_HPS_LINE"],
 				_G.RAID_CLASS_COLORS[records.playerHPS.enclass].colorStr,
 				records.playerHPS.name,
@@ -67,13 +67,13 @@ function mod:getRecordsString(records,top)
 				date("%d/%m/%y %H:%M:%S",records.playerHPS.timestamp),
 				records.playerHPS.groupSize
 			);
-			
+
 			result = result .. line .. "\n";
-			
-		end				
-		
+
+		end
+
 	end
-	
+
 	return result;
 end
 
@@ -165,8 +165,8 @@ Engine.formatlist["FORMAT_RAID_DPS_RAID_HPS"] = "RDPS: [rdps] - RHPS: [rhps]";
 
 Engine.formatlist["FORMAT_OWN_DPS_RAID_DPS_OWN_HPS_RAID_HPS"] = "DPS: [dps] - RDPS: [rdps] - HPS: [hps] - RDPS: [rhps]";
 
-Engine.formatlist["FORMAT_DEFAULT_DPS"] = "[ndps] [player] [damage] ([dps])"; 
-Engine.formatlist["FORMAT_DEFAULT_HEALER"] = "[nhealer] [player] [healing] ([hps])"; 
+Engine.formatlist["FORMAT_DEFAULT_DPS"] = "[ndps] [player] [damage] ([dps])";
+Engine.formatlist["FORMAT_DEFAULT_HEALER"] = "[nhealer] [player] [healing] ([hps])";
 
 Engine.formatlist["FORMAT_CUSTOM"] = "";
 
@@ -237,18 +237,18 @@ Engine.Defaults = {
 					g = 0,
 					b = 0,
 					a = 0.75,
-				},			
+				},
 			},
 			hideOOC = false,
 			hideOCCMode = Engine.DATATEXT_HIDE_FADE,
-			strata = Engine.STRATA_TOOLTIP,			
+			strata = Engine.STRATA_TOOLTIP,
 		},
 		encounters = {
 			store = false,
 			autoReportTop = false,
 			autoReportTopType = Engine.REPORT_SELF,
 			autoReportPlayer = false,
-			autoReportPlayerType = Engine.REPORT_SELF,			
+			autoReportPlayerType = Engine.REPORT_SELF,
 		},
 		interval = 1,
 		segment = Engine.CURRENT_DATA,
@@ -266,17 +266,17 @@ Engine.Defaults = {
 				b = 0,
 				a = 0.65,
 			},
-			hide = Engine.OVERLAY_HIDE_FADE,			
-		}		
+			hide = Engine.OVERLAY_HIDE_FADE,
+		}
 	}
 }
-	
+
 --options table for the options ui
 Engine.Options = {
 	type = "group",
 	name = L["CONFIG_NAME"],
 	args = {
-	
+
     Title = {
       order = 0,
       type = "description",
@@ -288,7 +288,7 @@ Engine.Options = {
       type = "header",
       name = "",
       width = "full",
-    },	
+    },
 		general = {
 			order = 2,
 			type = "group",
@@ -300,7 +300,7 @@ Engine.Options = {
 				  order = 0,
 				  name = L["GENERAL_SETTINGS"],
 				  fontSize = "large",
-				},			
+				},
 				interval = {
 					order = 1,
 					min = 1,
@@ -316,7 +316,7 @@ Engine.Options = {
 					set = function(key, value)
 						Engine.Profile.interval = value;
 					end,
-				},	
+				},
 				dataset = {
 					order = 2,
 					type = "select",
@@ -329,7 +329,7 @@ Engine.Options = {
 					set = function(key, value)
 						Engine.Profile.segment = value;
 					end,
-				},				
+				},
 			}
 		},
 		overlay = {
@@ -343,7 +343,7 @@ Engine.Options = {
 				  order = 0,
 				  name = L["OVERLAY_SETTINGS"],
 				  fontSize = "large",
-				},	
+				},
 				overlaytype = {
 					order = 1,
 					type = "select",
@@ -356,7 +356,7 @@ Engine.Options = {
 					set = function(key, value)
 						Engine.Profile.overlay.type = value;
 					end,
-				},	
+				},
 				lines = {
 					order = 2,
 					min = 5,
@@ -372,7 +372,7 @@ Engine.Options = {
 					set = function(key, value)
 						Engine.Profile.overlay.lines = value;
 					end,
-				},						
+				},
 				tip = {
 					order = 3,
 					type = "toggle",
@@ -381,7 +381,7 @@ Engine.Options = {
 					get = function()
 						return Engine.Profile.overlay.tip;
 					end,
-					set = function(key, value)					
+					set = function(key, value)
 						Engine.Profile.overlay.tip = value;
 					end,
 					disabled = function()
@@ -396,8 +396,8 @@ Engine.Options = {
 					get = function()
 						return Engine.Profile.overlay.totals;
 					end,
-					set = function(key, value)					
-						Engine.Profile.overlay.totals = value;						
+					set = function(key, value)
+						Engine.Profile.overlay.totals = value;
 					end,
 				},
 				font = {
@@ -405,24 +405,24 @@ Engine.Options = {
 					order = 5,
 					name = L["FONT_NAME"],
 					desc = L["FONT_NAME_DESC"],
-					values = AceGUIWidgetLSMlists.font,	
+					values = AceGUIWidgetLSMlists.font,
 					get = function()
 						return Engine.Profile.overlay.font;
-					end,					
+					end,
 					set = function(key, value)
 						Engine.Profile.overlay.font = value;
-						
+
 						local datatext = Engine.AddOn:GetModule("datatext");
 						datatext:ChangeFont();
 					end,
-				},		
+				},
 				fontSize = {
 					order = 6,
 					name = L["FONT_SIZE"],
 					desc = L["FONT_SIZE_DESC"],
 					type = "range",
-					min = 6, 
-					max = 22, 
+					min = 6,
+					max = 22,
 					step = 1,
 					bigStep = 2,
 					get = function()
@@ -430,10 +430,10 @@ Engine.Options = {
 					end,
 					set = function(key, value)
 						Engine.Profile.overlay.fontSize = value;
-						
+
 						local datatext = Engine.AddOn:GetModule("datatext");
 						datatext:ChangeFont();
-					end,					
+					end,
 				},
 				color = {
 					order = 7,
@@ -466,7 +466,7 @@ Engine.Options = {
 					set = function(key, value)
 						Engine.Profile.overlay.hide = value;
 					end,
-				},							
+				},
 				elvtukoverride = {
 					order = 10,
 					type = "toggle",
@@ -481,9 +481,9 @@ Engine.Options = {
 					disabled = function()
 						return not (mod.encounters)
 					end
-				},	
-				
-			}			
+				},
+
+			}
 		},
 		format = {
 			order = 4,
@@ -496,7 +496,7 @@ Engine.Options = {
 				  order = 0,
 				  name = L["FORMAT"],
 				  fontSize = "large",
-				},				
+				},
 				format = {
 					order = 3,
 					type = "select",
@@ -513,7 +513,7 @@ Engine.Options = {
 							Engine.Profile.datatext.customformat = Engine.formatlist[value];
 						end
 					end,
-				},							
+				},
 				customformat = {
 					order = 4,
 					type = "input",
@@ -529,7 +529,7 @@ Engine.Options = {
 					disabled = function()
 						return not (Engine.Profile.datatext.format == "FORMAT_CUSTOM");
 					end,
-				},					
+				},
 				exampleformat = {
 					order = 5,
 					type = "input",
@@ -537,31 +537,31 @@ Engine.Options = {
 					width = "full",
 					get = function()
 						local meter = Engine.AddOn:GetModule("meter");
-												
+
 						meter:SetNumberValue( "dps",		random(10000,100000),		RED_FONT_COLOR_CODE);
 						meter:SetNumberValue( "rdps",		random(100000,1000000),		RED_FONT_COLOR_CODE);
-						meter:SetNumberValue( "damage",		random(100000,1000000),		RED_FONT_COLOR_CODE);	
+						meter:SetNumberValue( "damage",		random(100000,1000000),		RED_FONT_COLOR_CODE);
 						meter:SetNumberValue( "rdamage",	random(1000000,10000000),	RED_FONT_COLOR_CODE);
 						meter:SetOrdinalValue( "ndps",		random(1,10),				RED_FONT_COLOR_CODE);
-						
+
 						meter:SetNumberValue( "hps",		random(10000,100000),		GREEN_FONT_COLOR_CODE);
 						meter:SetNumberValue( "rhps",		random(100000,1000000),		GREEN_FONT_COLOR_CODE);
 						meter:SetNumberValue( "healing",	random(100000,1000000),		GREEN_FONT_COLOR_CODE);
 						meter:SetNumberValue( "rhealing",	random(1000000,10000000),	GREEN_FONT_COLOR_CODE);
-						meter:SetOrdinalValue( "nhealer",	random(1,10),				GREEN_FONT_COLOR_CODE);									
-						
-						return meter:PaseString(Engine.Profile.datatext.customformat);								
+						meter:SetOrdinalValue( "nhealer",	random(1,10),				GREEN_FONT_COLOR_CODE);
+
+						return meter:PaseString(Engine.Profile.datatext.customformat);
 					end,
 					disabled = true,
-				},		
+				},
 				tagsHelp = {
 					order = 6,
 					type = "description",
 					name = L["TAGS_LIST"],
 					width = "full",
-				},					
-			
-			},			
+				},
+
+			},
 		},
 		datatext = {
 			order = 5,
@@ -574,7 +574,7 @@ Engine.Options = {
 				  order = 0,
 				  name = L["DATATEXT"],
 				  fontSize = "large",
-				},			
+				},
 				enable = {
 					order = 1,
 					type = "toggle",
@@ -583,18 +583,18 @@ Engine.Options = {
 					get = function()
 						return Engine.Profile.datatext.enable;
 					end,
-					set = function(key, value)					
+					set = function(key, value)
 						Engine.Profile.datatext.enable = value;
-						
+
 						local datatext = Engine.AddOn:GetModule("datatext");
-						
+
 						if (value) then
 							datatext:Enable();
 						else
 							datatext:Disable();
-						end						
+						end
 					end,
-				},				
+				},
 				LockDatatext = {
 					order = 2,
 					type = "toggle",
@@ -605,14 +605,14 @@ Engine.Options = {
 					end,
 					set = function(key, value)
 						Engine.Profile.datatext.lock = value;
-						
+
 						local datatext = Engine.AddOn:GetModule("datatext");
-						datatext:Lock(value);						
+						datatext:Lock(value);
 					end,
 					disabled = function()
 						return not Engine.Profile.datatext.enable;
 					end,
-				},			
+				},
 				width = {
 					order = 3,
 					min = 50,
@@ -627,13 +627,13 @@ Engine.Options = {
 					end,
 					set = function(key, value)
 						Engine.Profile.datatext.w = value;
-						
+
 						local datatext = Engine.AddOn:GetModule("datatext");
 						datatext:Reset();
 					end,
 					disabled = function()
 						return not Engine.Profile.datatext.enable;
-					end,					
+					end,
 				},
 				height = {
 					order = 4,
@@ -649,33 +649,33 @@ Engine.Options = {
 					end,
 					set = function(key, value)
 						Engine.Profile.datatext.h = value;
-						
+
 						local datatext = Engine.AddOn:GetModule("datatext");
 						datatext:Reset();
 					end,
 					disabled = function()
 						return not Engine.Profile.datatext.enable;
-					end,					
+					end,
 				},
 				font = {
 					type = "select", dialogControl = 'LSM30_Font',
 					order = 5,
 					name = L["FONT_NAME"],
 					desc = L["FONT_NAME_DESC"],
-					values = AceGUIWidgetLSMlists.font,	
+					values = AceGUIWidgetLSMlists.font,
 					get = function()
 						return Engine.Profile.datatext.font;
-					end,					
+					end,
 					set = function(key, value)
 						Engine.Profile.datatext.font = value;
-						
+
 						local datatext = Engine.AddOn:GetModule("datatext");
 						datatext:ChangeFont();
 					end,
 					disabled = function()
 						return not Engine.Profile.datatext.enable;
-					end,					
-				},		
+					end,
+				},
 				fontSize = {
 					order = 6,
 					name = L["FONT_SIZE"],
@@ -687,13 +687,13 @@ Engine.Options = {
 					end,
 					set = function(key, value)
 						Engine.Profile.datatext.fontSize = value;
-						
+
 						local datatext = Engine.AddOn:GetModule("datatext");
 						datatext:ChangeFont();
 					end,
 					disabled = function()
 						return not Engine.Profile.datatext.enable;
-					end,					
+					end,
 				},
 				background = {
 					order = 7,
@@ -703,16 +703,16 @@ Engine.Options = {
 					get = function()
 						return Engine.Profile.datatext.background.enable;
 					end,
-					set = function(key, value)					
+					set = function(key, value)
 						Engine.Profile.datatext.background.enable = value;
-						
+
 						local datatext = Engine.AddOn:GetModule("datatext");
-						datatext:Reset();					
+						datatext:Reset();
 					end,
 					disabled = function()
 						return not Engine.Profile.datatext.enable;
-					end,					
-				},					
+					end,
+				},
 				bgcolor = {
 					order = 8,
 					type = "color",
@@ -731,13 +731,13 @@ Engine.Options = {
 						Engine.Profile.datatext.background.color.g = g;
 						Engine.Profile.datatext.background.color.b = b;
 						Engine.Profile.datatext.background.color.a = a;
-						
+
 						local datatext = Engine.AddOn:GetModule("datatext");
 						datatext:Reset();
 					end,
 					disabled = function()
 						return not (Engine.Profile.datatext.enable and Engine.Profile.datatext.background.enable);
-					end,					
+					end,
 				},
 				hideOOC = {
 					order = 8,
@@ -747,15 +747,15 @@ Engine.Options = {
 					get = function()
 						return Engine.Profile.datatext.hideOOC;
 					end,
-					set = function(key, value)					
+					set = function(key, value)
 						Engine.Profile.datatext.hideOOC = value;
-						
+
 						local datatext = Engine.AddOn:GetModule("datatext");
-						datatext:ControlVisibility();					
+						datatext:ControlVisibility();
 					end,
 					disabled = function()
 						return not Engine.Profile.datatext.enable;
-					end,					
+					end,
 				},
 				hidetype = {
 					order = 9,
@@ -771,8 +771,8 @@ Engine.Options = {
 					end,
 					disabled = function()
 						return not (Engine.Profile.datatext.enable and Engine.Profile.datatext.hideOOC);
-					end,						
-				},	
+					end,
+				},
 				strata = {
 					order = 10,
 					type = "select",
@@ -790,10 +790,10 @@ Engine.Options = {
 					end,
 					disabled = function()
 						return not (Engine.Profile.datatext.enable);
-					end,						
-				},				
+					end,
+				},
 			}
-		},		
+		},
 		encounters = {
 			order = 6,
 			type = "group",
@@ -811,22 +811,22 @@ Engine.Options = {
 					type = "description",
 					name = L["ENCOUNTERS_WARNING"],
 					width = "full",
-					hidden = function() 
+					hidden = function()
 						return mod.encounters.hasBossMod;
-					end,					
+					end,
 				},
 				store = {
 					order = 2,
 					type = "toggle",
 					name = L["ENCOUNTERS_STORE"],
-					desc = L["ENCOUNTERS_STORE_DESC"],					
+					desc = L["ENCOUNTERS_STORE_DESC"],
 					get = function()
-						return Engine.Profile.encounters.store;
+						return Engine.Profile.encounters.store and mod.encounters.hasBossMod;
 					end,
 					set = function(key, value)
 						Engine.Profile.encounters.store = value;
 					end,
-					disabled = function() 
+					disabled = function()
 						return not mod.encounters.hasBossMod;
 					end,
 				},
@@ -839,7 +839,7 @@ Engine.Options = {
 					Engine.GLOBAL.encounters = nil;
 					mod.selectedInstance = nil;
 					mod.selectedDifficulty = nil;
-					mod.selectedEncounter = nil;					
+					mod.selectedEncounter = nil;
 					GameTooltip:Hide();
 				  end,
 				  hidden = function()
@@ -850,18 +850,18 @@ Engine.Options = {
 					order = 4,
 					type = "toggle",
 					name = L["ENCOUNTERS_AUTO_REPORT_TOP"],
-					desc = L["ENCOUNTERS_AUTO_REPORT_TOP_DESC"],					
+					desc = L["ENCOUNTERS_AUTO_REPORT_TOP_DESC"],
 					get = function()
 						return Engine.Profile.encounters.autoReportTop;
 					end,
 					set = function(key, value)
 						Engine.Profile.encounters.autoReportTop = value;
 					end,
-					disabled = function() 
+					disabled = function()
 						return not Engine.Profile.encounters.store;
 					end,
-				},								
-				autoReportTopType = {				  
+				},
+				autoReportTopType = {
 				  order = 5,
 				  type = "select",
 				  name = L["ENCOUNTERS_AUTO_REPORT_TYPE"],
@@ -875,24 +875,24 @@ Engine.Options = {
 				  end,
 				  set = function(key, value)
 					Engine.Profile.encounters.autoReportTopType = value;
-				  end,				  
-				},		
+				  end,
+				},
 				autoReportPlayer = {
 					order = 6,
 					type = "toggle",
 					name = L["ENCOUNTERS_AUTO_REPORT_PLAYER"],
-					desc = L["ENCOUNTERS_AUTO_REPORT_PLAYER_DESC"],					
+					desc = L["ENCOUNTERS_AUTO_REPORT_PLAYER_DESC"],
 					get = function()
 						return Engine.Profile.encounters.autoReportPlayer;
 					end,
 					set = function(key, value)
 						Engine.Profile.encounters.autoReportPlayer = value;
 					end,
-					disabled = function() 
+					disabled = function()
 						return not Engine.Profile.encounters.store;
 					end,
-				},								
-				autoReportPlayerType = {				  
+				},
+				autoReportPlayerType = {
 				  order = 7,
 				  type = "select",
 				  name = L["ENCOUNTERS_AUTO_REPORT_TYPE"],
@@ -906,14 +906,14 @@ Engine.Options = {
 				  end,
 				  set = function(key, value)
 					Engine.Profile.encounters.autoReportPlayerType = value;
-				  end,				  
-				},				
+				  end,
+				},
 				Browse_Header = {
 				  type = "description",
 				  order = 10,
 				  name = L["ENCOUNTERS_BROWSE"],
 				  fontSize = "medium",
-				},	
+				},
 				Browse_No_Data = {
 				  type = "description",
 				  order = 11,
@@ -921,8 +921,8 @@ Engine.Options = {
 				  fontSize = "small",
 				  hidden = function()
 					return (Engine.GLOBAL.encounters);
-				  end,				  
-				},					
+				  end,
+				},
 				instances = {
 					order = 12,
 					type = "select",
@@ -930,14 +930,14 @@ Engine.Options = {
 					desc = L["ENCOUNTERS_INSTANCE_DESC"],
 					hidden = function()
 						return not (Engine.GLOBAL.encounters);
-					end,					
+					end,
 					values = function()
 						local result = {};
-						
+
 						if (mod.encounters) then
 							result = mod.encounters:GetInstances();
 						end
-						
+
 						return result;
 					end,
 					get = function()
@@ -963,7 +963,7 @@ Engine.Options = {
 						if (mod.encounters) then
 							result = mod.encounters:getDifficultyList(mod.selectedInstance);
 						end
-						
+
 						return result;
 					end,
 					get = function()
@@ -973,7 +973,7 @@ Engine.Options = {
 						mod.selectedDifficulty = value;
 						mod.selectedEncounter = nil;
 					end,
-				},		
+				},
 				encounter = {
 					order = 14,
 					type = "select",
@@ -984,11 +984,11 @@ Engine.Options = {
 					end,
 					values = function()
 						local result = {};
-				
+
 						if (mod.encounters) then
 							result = mod.encounters:getEncounterList(mod.selectedInstance,mod.selectedDifficulty);
-						end				
-						
+						end
+
 						return result;
 					end,
 					get = function()
@@ -997,7 +997,7 @@ Engine.Options = {
 					set = function(key, value)
 						mod.selectedEncounter = value;
 					end,
-				},	
+				},
 				topRecords_Header = {
 				  type = "description",
 				  order = 15,
@@ -1005,58 +1005,58 @@ Engine.Options = {
 				  fontSize = "medium",
 				  hidden = function()
 					return not (mod.selectedEncounter);
-				  end,				  
-				},					
+				  end,
+				},
 				topRecords = {
 					order = 16,
 					type = "description",
 					name = function()
 						local result = "";
-						
+
 						if(mod.encounters and mod.selectedEncounter) then
-						
+
 							local records = mod.encounters:getRecords(	mod.selectedInstance,
 																		mod.selectedDifficulty,
 																		mod.selectedEncounter);
-																		
+
 							if (records) then
-							
+
 								result = mod:getRecordsString(records,true);
-								
+
 							end;
-							
+
 						end
-						
-						
+
+
 						return result;
 					end,
 					hidden = function()
 						return not (mod.selectedEncounter);
-					end,					
+					end,
 					width = "full",
-				},	
-				reportTopButton = {				  
+				},
+				reportTopButton = {
 				  order = 17,
 				  type = "execute",
 				  name = L["REPORT_NOW"],
 				  desc = L["REPORT_NOW_TOP_DESC"],
-				  func = function()			
-				  
+				  func = function()
+
 					if(mod.encounters and mod.selectedEncounter) then
 						mod.encounters:reportRecords(	mod.selectedInstance,
 														mod.selectedDifficulty,
 														mod.selectedEncounter,
 														true,
-														mod.reportTopType);					
+														mod.reportTopType);
 					end
-				  
+
 					GameTooltip:Hide();
-				  end,				  
+				  end,
 				  hidden = function()
 					return not (mod.selectedEncounter);
-				  end,				  
-				},					
-				reportTopType = {				  
+				  end,
+				},
+				reportTopType = {
 				  order = 18,
 				  type = "select",
 				  name = L["REPORT_NOW_TO"],
@@ -1070,8 +1070,8 @@ Engine.Options = {
 				  end,
 				  set = function(key, value)
 					mod.reportTopType = value;
-				  end,				  
-				},					
+				  end,
+				},
 				playerRecords_Header = {
 				  type = "description",
 				  order = 19,
@@ -1079,58 +1079,58 @@ Engine.Options = {
 				  fontSize = "medium",
 				  hidden = function()
 					return not (mod.selectedEncounter);
-				  end,				  
-				},					
+				  end,
+				},
 				playerRecords = {
 					order = 20,
 					type = "description",
 					name = function()
 						local result = "";
-						
+
 						if(mod.encounters and mod.selectedEncounter) then
-						
+
 							local records = mod.encounters:getRecords(	mod.selectedInstance,
 																		mod.selectedDifficulty,
 																		mod.selectedEncounter);
-																		
+
 							if (records) then
-							
+
 								result = mod:getRecordsString(records,false);
-								
+
 							end;
-							
+
 						end
-						
-						
+
+
 						return result;
 					end,
 					hidden = function()
 						return not (mod.selectedEncounter);
-					end,					
+					end,
 					width = "full",
-				},	
-				reportPlayerButton = {				  
+				},
+				reportPlayerButton = {
 				  order = 21,
 				  type = "execute",
 				  name = L["REPORT_NOW"],
 				  desc = L["REPORT_NOW_PLAYER_DESC"],
-				  func = function()					
-				  
+				  func = function()
+
 					if(mod.encounters and mod.selectedEncounter) then
 						mod.encounters:reportRecords(	mod.selectedInstance,
 														mod.selectedDifficulty,
 														mod.selectedEncounter,
 														false,
-														mod.reportPlayerType);					
+														mod.reportPlayerType);
 					end
-					
+
 					GameTooltip:Hide();
-				  end,				  
+				  end,
 				  hidden = function()
 					return not (mod.selectedEncounter);
-				  end,				  
-				},	
-				reportPlayerType = {				  
+				  end,
+				},
+				reportPlayerType = {
 				  order = 22,
 				  type = "select",
 				  name = L["REPORT_NOW_TO"],
@@ -1138,16 +1138,16 @@ Engine.Options = {
 				  values = Engine.ReportTypeList,
 				  hidden = function()
 					return not (mod.selectedEncounter);
-				  end,	
+				  end,
 				  get = function()
 					return mod.reportPlayerType;
 				  end,
 				  set = function(key, value)
 					mod.reportPlayerType = value;
-				  end,					  
-				},					
+				  end,
+				},
 			},
-		},				
+		},
 		developer = {
 			order = 7,
 			type = "group",
@@ -1159,26 +1159,26 @@ Engine.Options = {
 				  order = 0,
 				  name = L["DEV_SETTINGS"],
 				  fontSize = "large",
-				},				
+				},
 				debug = {
 					order = 1,
 					type = "toggle",
 					name = L["DEBUGGING"],
 					desc = L["DEBUGGING_DESC"],
-					get = function()										
+					get = function()
 						return Engine.Profile.debug
 					end,
-					set = function(key, value)		
+					set = function(key, value)
 						local debug = Engine.AddOn:GetModule("debug");
-						
+
 						debug:EnableDebugging(value);
 						debug:Show(value);
-						
+
 						Engine.Profile.debug = value;
 					end,
 				},
 			}
-		},		
+		},
 	}
 }
 
@@ -1194,8 +1194,8 @@ Engine.blizzardOptions = {
       name = L["OPEN_CONFIG"],
 	  desc = L["OPEN_CONFIG_DESC"],
       func = function() InterfaceOptionsFrameOkay:Click();
-		LibStub("AceConfigDialog-3.0"):Open(AddOnName); 
-		GameMenuButtonContinue:Click() 
+		LibStub("AceConfigDialog-3.0"):Open(AddOnName);
+		GameMenuButtonContinue:Click()
 	  end,
     },
   },
