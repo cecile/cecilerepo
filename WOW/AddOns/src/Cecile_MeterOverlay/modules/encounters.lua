@@ -2,9 +2,6 @@
 -- Encounters module : Handle different boss encounters AddOns
 --
 
-
-
-
 --get the engine and create the module
 local Engine = select(2,...);
 local mod = Engine.AddOn:NewModule("encounters");
@@ -99,45 +96,45 @@ function mod:getEncounterDB(encounter,instanceName,difficultyName)
 end
 
 function mod:notifyNewRecord(current, new, mode,isPlayer)
-	
+
 	local formatStr = "";
 	local channel = "";
 	local line = "";
-	
-	if(mode == Engine.TYPE_DPS) then			
-		formatStr = "ENCOUNTERS_NEW_RECORD_DPS";		
-	else			
-		formatStr = "ENCOUNTERS_NEW_RECORD_HPS";						
-	end	
-	
-	if not isPlayer then					
-		if Engine.Profile.encounters.autoReportTop then		
-			channel = Engine.Profile.encounters.autoReportTopType;								
-		end		
-	else				
-		if Engine.Profile.encounters.autoReportPlayer then		
-			channel = Engine.Profile.encounters.autoReportPlayerType;		
-		end											
-	end 
-	
+
+	if(mode == Engine.TYPE_DPS) then
+		formatStr = "ENCOUNTERS_NEW_RECORD_DPS";
+	else
+		formatStr = "ENCOUNTERS_NEW_RECORD_HPS";
+	end
+
+	if not isPlayer then
+		if Engine.Profile.encounters.autoReportTop then
+			channel = Engine.Profile.encounters.autoReportTopType;
+		end
+	else
+		if Engine.Profile.encounters.autoReportPlayer then
+			channel = Engine.Profile.encounters.autoReportPlayerType;
+		end
+	end
+
 	if not (channel == "") then
-	
+
 		if not (current.name == "") then
 			formatStr = formatStr.."_OVER";
 		end
-		
-		line = string.format(L[formatStr],			
+
+		line = string.format(L[formatStr],
 			_G.RAID_CLASS_COLORS[new.enclass].colorStr,
 			new.name,
 			(mode == Engine.TYPE_DPS) and mod.meter:FormatNumber(new.dps) or mod.meter:FormatNumber(new.hps),
 			_G.RAID_CLASS_COLORS[ (current.enclass == "") and "PRIEST" or current.enclass ].colorStr,
 			current.name,
 			(mode == Engine.TYPE_DPS) and mod.meter:FormatNumber(current.dps) or mod.meter:FormatNumber(current.hps)
-		);	
+		);
 
 		mod:reportLine(line,channel);
 	end
-	
+
 end
 
 function mod:notifyNotRecord(current, new, mode,isPlayer)
@@ -145,42 +142,42 @@ function mod:notifyNotRecord(current, new, mode,isPlayer)
 	local formatStr = "";
 	local channel = "";
 	local line = "";
-	
-	if(mode == Engine.TYPE_DPS) then			
-		formatStr = "ENCOUNTERS_FAIL_RECORD_DPS";		
-	else			
-		formatStr = "ENCOUNTERS_FAIL_RECORD_HPS";						
-	end	
-	
-	if not isPlayer then					
-		if Engine.Profile.encounters.autoReportTop then		
-			channel = Engine.Profile.encounters.autoReportTopType;								
-		end		
-	else				
-		if Engine.Profile.encounters.autoReportPlayer then		
-			channel = Engine.Profile.encounters.autoReportPlayerType;		
-		end											
-	end 
-	
+
+	if(mode == Engine.TYPE_DPS) then
+		formatStr = "ENCOUNTERS_FAIL_RECORD_DPS";
+	else
+		formatStr = "ENCOUNTERS_FAIL_RECORD_HPS";
+	end
+
+	if not isPlayer then
+		if Engine.Profile.encounters.autoReportTop then
+			channel = Engine.Profile.encounters.autoReportTopType;
+		end
+	else
+		if Engine.Profile.encounters.autoReportPlayer then
+			channel = Engine.Profile.encounters.autoReportPlayerType;
+		end
+	end
+
 	if not (channel == "") then
-	
+
 		if(current.name == "") then
 			formatStr = formatStr.."_OVER";
 		end
-		
-		line = string.format(L[formatStr],			
+
+		line = string.format(L[formatStr],
 			_G.RAID_CLASS_COLORS[current.enclass].colorStr,
 			current.name,
 			(mode == Engine.TYPE_DPS) and mod.meter:FormatNumber(current.dps) or mod.meter:FormatNumber(current.hps),
 			_G.RAID_CLASS_COLORS[new.enclass].colorStr,
 			new.name,
 			(mode == Engine.TYPE_DPS) and mod.meter:FormatNumber(new.dps) or mod.meter:FormatNumber(new.hps)
-		);	
+		);
 
 		mod:reportLine(line,channel);
-	end	
-	
-	
+	end
+
+
 
 end
 
@@ -246,6 +243,9 @@ end
 
 function mod:recordEncounter(encounter)
 
+	--if we dont want to store records exit
+	if (not Engine.Profile.encounters.store) then return; end
+
 	debug("recordEncounter: '%s'", encounter);
 
 	--get the localized difficult name
@@ -290,76 +290,40 @@ function mod:recordEncounter(encounter)
 
 	local line=""
 	local channel = ""
-	
+
 	--display top records header
-	if Engine.Profile.encounters.autoReportTop then		
-		channel = Engine.Profile.encounters.autoReportTopType;								
+	if Engine.Profile.encounters.autoReportTop then
+		channel = Engine.Profile.encounters.autoReportTopType;
 		line = string.format(L["REPORT_ENCOUNTER_RECORDS_TOP"],Engine.Name,encounter,difficultyName);
 		mod:reportLine(line,channel);
-	end		
-	
+	end
+
 	--analyse top records
 	mod.encounterDB.records.DPS = mod:analyseRecord(currentTopDPS, topDPS, Engine.TYPE_DPS,false);
 	mod.encounterDB.records.HPS = mod:analyseRecord(currentTopHPS, topHPS, Engine.TYPE_HEAL,false);
-	
+
 	--display player records header
-	if Engine.Profile.encounters.autoReportPlayer then		
-		channel = Engine.Profile.encounters.autoReportPlayerType;	
+	if Engine.Profile.encounters.autoReportPlayer then
+		channel = Engine.Profile.encounters.autoReportPlayerType;
 		line = string.format(L["REPORT_ENCOUNTER_RECORDS_PLAYER"],Engine.Name,encounter,difficultyName);
-		mod:reportLine(line,channel);			
-	end											
-	
+		mod:reportLine(line,channel);
+	end
+
 	--analyse player records
 	mod.encounterDB.records.playerDPS = mod:analyseRecord(currentPlayerDPS, playerDPS, Engine.TYPE_DPS,true);
 	mod.encounterDB.records.playerHPS = mod:analyseRecord(currentPlayerHPS, playerHPS, Engine.TYPE_HEAL,true);
 
 end
 
-function mod.dbmCallback(event, dbmModule)
-
-	debug("dbmCallback: %s %s", event, dbmModule.combatInfo.name);
-
-	mod:recordEncounter(dbmModule.combatInfo.name);
-
-end
-
-function mod.bwCallback(event, bwModule)
-
-	debug("bwCallback: %s %s", event, bwModule.displayName);
-
-	mod:recordEncounter(bwModule.displayName);
-
-end
 
 --initialize module
 function mod:OnInitialize()
 
 	--store the meter
 	mod.meter = Engine.AddOn:GetModule("meter");
-	
-	--check boss mods
-	mod.hasDBM 		= IsAddOnLoaded( "DBM-Core" );
-	mod.hasBigWigs 	= IsAddOnLoaded( "BigWigs" );
-	
-	mod.hasBossMod = mod.hasDBM or mod.hasBigWigs;
 
-	if (mod.hasBossMod and Engine.Profile.encounters.store) then
-	
-		-- register DBM callbacks
-		if mod.hasDBM then
-
-			DBM:RegisterCallback("kill", mod.dbmCallback);
-			debug("DBM callback registered");
-
-		-- register BigWigs callbacks
-		elseif mod.hasBigWigs then
-			
-			BigWigsLoader.RegisterMessage(mod, "BigWigs_OnBossWin", mod.bwCallback)
-			debug("BigWigs message listener registered");
-
-		end
-		
-	end
+	--we don't have boss mod by default
+	mod.hasBossMod = false;
 
 	debug("Encounters module loaded");
 end
@@ -499,7 +463,7 @@ function mod:removeColors(line)
 end
 
 function mod:reportLine(line,channel)
-	
+
 	if(channel==Engine.REPORT_SELF) then
 
 		print(line);
@@ -532,6 +496,10 @@ function mod:reportLine(line,channel)
 				instanceChannel = "PARTY";
 
 			end
+
+		else
+
+			print(line)
 
 		end
 
