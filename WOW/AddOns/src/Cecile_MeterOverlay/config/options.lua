@@ -214,6 +214,12 @@ Engine.StrataModesList[Engine.STRATA_FULLSCREEN_DIALOG] = L["STRATA_FULLSCREEN_D
 Engine.StrataModesList[Engine.STRATA_TOOLTIP] 			= L["STRATA_TOOLTIP"]
 
 
+--configuration colors
+Engine.CONFIG_COLOR_GENERAL 	= "general"
+Engine.CONFIG_COLOR_DAMAGE 		= "damage"
+Engine.CONFIG_COLOR_HEALING 	= "healing"
+Engine.CONFIG_COLOR_OTHER 		= "other"
+
 --defaults
 Engine.Defaults = {
 	profile = {
@@ -242,6 +248,12 @@ Engine.Defaults = {
 			hideOOC = false,
 			hideOCCMode = Engine.DATATEXT_HIDE_FADE,
 			strata = Engine.STRATA_TOOLTIP,
+			colors = {
+				general = Engine.colors["PRIEST"],
+				damage = Engine.colors["DAMAGE"],
+				healing = Engine.colors["HEAL"],
+				other = Engine.colors["HEADER"],
+			},
 		},
 		encounters = {
 			store = false,
@@ -485,82 +497,171 @@ Engine.Options = {
 
 			}
 		},
-		format = {
-			order = 4,
+		formatOptioss={
 			type = "group",
 			name = L["FORMAT"],
-			cmdInline = true,
-			args = {
-				Frames_Header = {
-				  type = "description",
-				  order = 0,
-				  name = L["FORMAT"],
-				  fontSize = "large",
-				},
+			desc = L["FORMAT_DESC"],
+			childGroups = 'tab',
+			order = 4,
+			args ={
 				format = {
-					order = 3,
-					type = "select",
+					order = 1,
+					type = "group",
 					name = L["FORMAT"],
 					desc = L["FORMAT_DESC"],
-					width = "full",
-					values = Engine.formatdesc,
-					get = function()
-						return Engine.Profile.datatext.format;
-					end,
-					set = function(key, value)
-						Engine.Profile.datatext.format = value;
-						if not (value=="FORMAT_CUSTOM") then
-							Engine.Profile.datatext.customformat = Engine.formatlist[value];
-						end
-					end,
-				},
-				customformat = {
-					order = 4,
-					type = "input",
-					name = L["FORMAT_CUSTOM"],
-					desc = L["FORMAT_CUSTOM_DESC"],
-					width = "full",
-					get = function()
-						return Engine.Profile.datatext.customformat;
-					end,
-					set = function(key, value)
-						Engine.Profile.datatext.customformat = value;
-					end,
-					disabled = function()
-						return not (Engine.Profile.datatext.format == "FORMAT_CUSTOM");
-					end,
-				},
-				exampleformat = {
-					order = 5,
-					type = "input",
-					name = L["EXAMPLE"],
-					width = "full",
-					get = function()
-						local meter = Engine.AddOn:GetModule("meter");
+					cmdInline = true,
+					args = {
+						format = {
+							order = 3,
+							type = "select",
+							name = L["FORMAT"],
+							desc = L["FORMAT_DESC"],
+							width = "full",
+							values = Engine.formatdesc,
+							get = function()
+								return Engine.Profile.datatext.format;
+							end,
+							set = function(key, value)
+								Engine.Profile.datatext.format = value;
+								if not (value=="FORMAT_CUSTOM") then
+									Engine.Profile.datatext.customformat = Engine.formatlist[value];
+								end
+							end,
+						},
+						customformat = {
+							order = 4,
+							type = "input",
+							name = L["FORMAT_CUSTOM"],
+							desc = L["FORMAT_CUSTOM_DESC"],
+							width = "full",
+							get = function()
+								return Engine.Profile.datatext.customformat;
+							end,
+							set = function(key, value)
+								Engine.Profile.datatext.customformat = value;
+							end,
+							disabled = function()
+								return not (Engine.Profile.datatext.format == "FORMAT_CUSTOM");
+							end,
+						},
+						exampleformat = {
+							order = 5,
+							type = "input",
+							name = L["EXAMPLE"],
+							width = "full",
+							get = function()
+								local meter = Engine.AddOn:GetModule("meter");
 
-						meter:SetNumberValue( "dps",		random(10000,100000),		RED_FONT_COLOR_CODE);
-						meter:SetNumberValue( "rdps",		random(100000,1000000),		RED_FONT_COLOR_CODE);
-						meter:SetNumberValue( "damage",		random(100000,1000000),		RED_FONT_COLOR_CODE);
-						meter:SetNumberValue( "rdamage",	random(1000000,10000000),	RED_FONT_COLOR_CODE);
-						meter:SetOrdinalValue( "ndps",		random(1,10),				RED_FONT_COLOR_CODE);
+								meter:SetNumberValue( "dps",		random(10000,100000),		Engine.CONFIG_COLOR_DAMAGE);
+								meter:SetNumberValue( "rdps",		random(100000,1000000),		Engine.CONFIG_COLOR_DAMAGE);
+								meter:SetNumberValue( "damage",		random(100000,1000000),		Engine.CONFIG_COLOR_DAMAGE);
+								meter:SetNumberValue( "rdamage",	random(1000000,10000000),	Engine.CONFIG_COLOR_DAMAGE);
+								meter:SetOrdinalValue( "ndps",		random(1,10),				Engine.CONFIG_COLOR_DAMAGE);
 
-						meter:SetNumberValue( "hps",		random(10000,100000),		GREEN_FONT_COLOR_CODE);
-						meter:SetNumberValue( "rhps",		random(100000,1000000),		GREEN_FONT_COLOR_CODE);
-						meter:SetNumberValue( "healing",	random(100000,1000000),		GREEN_FONT_COLOR_CODE);
-						meter:SetNumberValue( "rhealing",	random(1000000,10000000),	GREEN_FONT_COLOR_CODE);
-						meter:SetOrdinalValue( "nhealer",	random(1,10),				GREEN_FONT_COLOR_CODE);
+								meter:SetNumberValue( "hps",		random(10000,100000),		Engine.CONFIG_COLOR_HEALING);
+								meter:SetNumberValue( "rhps",		random(100000,1000000),		Engine.CONFIG_COLOR_HEALING);
+								meter:SetNumberValue( "healing",	random(100000,1000000),		Engine.CONFIG_COLOR_HEALING);
+								meter:SetNumberValue( "rhealing",	random(1000000,10000000),	Engine.CONFIG_COLOR_HEALING);
+								meter:SetOrdinalValue( "nhealer",	random(1,10),				Engine.CONFIG_COLOR_HEALING);
 
-						return meter:PaseString(Engine.Profile.datatext.customformat);
-					end,
-					disabled = true,
+								return meter:PaseString(Engine.Profile.datatext.customformat);
+							end,
+							disabled = true,
+						},
+						tagsHelp = {
+							order = 6,
+							type = "description",
+							name = L["TAGS_LIST"],
+							width = "full",
+						},
+
+					},
 				},
-				tagsHelp = {
-					order = 6,
-					type = "description",
-					name = L["TAGS_LIST"],
-					width = "full",
+				colors = {
+					order = 2,
+					type = "group",
+					name = L["COLOR"],
+					desc = L["COLOR_DESC"],
+					cmdInline = true,
+					args = {
+						general = {
+							order = 1,
+							type = "color",
+							name = L["DATATEXT_GENERAL_COLOR"],
+							desc = L["DATATEXT_GENERAL_COLOR_DESC"],
+							hasAlpha = false,
+							get = function()
+								return 	Engine.Profile.datatext.colors.general.r,
+										Engine.Profile.datatext.colors.general.g,
+										Engine.Profile.datatext.colors.general.b,
+										Engine.Profile.datatext.colors.general.a
+							end,
+							set = function(key,r,g,b,a)
+								Engine.Profile.datatext.colors.general.r = r;
+								Engine.Profile.datatext.colors.general.g = g;
+								Engine.Profile.datatext.colors.general.b = b;
+								Engine.Profile.datatext.colors.general.a = a;
+							end,
+						},
+						damage = {
+							order = 2,
+							type = "color",
+							name = L["DATATEXT_DAMAGE_COLOR"],
+							desc = L["DATATEXT_DAMAGE_COLOR_DESC"],
+							hasAlpha = false,
+							get = function()
+								return 	Engine.Profile.datatext.colors.damage.r,
+										Engine.Profile.datatext.colors.damage.g,
+										Engine.Profile.datatext.colors.damage.b,
+										Engine.Profile.datatext.colors.damage.a
+							end,
+							set = function(key,r,g,b,a)
+								Engine.Profile.datatext.colors.damage.r = r;
+								Engine.Profile.datatext.colors.damage.g = g;
+								Engine.Profile.datatext.colors.damage.b = b;
+								Engine.Profile.datatext.colors.damage.a = a;
+							end,
+						},
+						healing = {
+							order = 3,
+							type = "color",
+							name = L["DATATEXT_HEALING_COLOR"],
+							desc = L["DATATEXT_HEALING_COLOR_DESC"],
+							hasAlpha = false,
+							get = function()
+								return 	Engine.Profile.datatext.colors.healing.r,
+										Engine.Profile.datatext.colors.healing.g,
+										Engine.Profile.datatext.colors.healing.b,
+										Engine.Profile.datatext.colors.healing.a
+							end,
+							set = function(key,r,g,b,a)
+								Engine.Profile.datatext.colors.healing.r = r;
+								Engine.Profile.datatext.colors.healing.g = g;
+								Engine.Profile.datatext.colors.healing.b = b;
+								Engine.Profile.datatext.colors.healing.a = a;
+							end,
+						},
+						other = {
+							order = 4,
+							type = "color",
+							name = L["DATATEXT_OTHER_COLOR"],
+							desc = L["DATATEXT_OTHER_COLOR_DESC"],
+							hasAlpha = false,
+							get = function()
+								return 	Engine.Profile.datatext.colors.other.r,
+										Engine.Profile.datatext.colors.other.g,
+										Engine.Profile.datatext.colors.other.b,
+										Engine.Profile.datatext.colors.other.a
+							end,
+							set = function(key,r,g,b,a)
+								Engine.Profile.datatext.colors.other.r = r;
+								Engine.Profile.datatext.colors.other.g = g;
+								Engine.Profile.datatext.colors.other.b = b;
+								Engine.Profile.datatext.colors.other.a = a;
+							end,
+						},
+					},
 				},
-
 			},
 		},
 		datatext = {

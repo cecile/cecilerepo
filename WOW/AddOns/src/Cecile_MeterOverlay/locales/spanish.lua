@@ -9,9 +9,9 @@ local AddOnName, Engine = ...;
 local L = LibStub("AceLocale-3.0"):NewLocale(AddOnName, "esES")
 if not L then
 	L = LibStub("AceLocale-3.0"):NewLocale(AddOnName, "esMX");
-	if not L then 
-		return; 
-	end 
+	if not L then
+		return;
+	end
 end
 
 --set the localized strings
@@ -189,8 +189,18 @@ L["STRATA_FULLSCREEN_DIALOG"] = "Dialog sobre Pantalla Completa"
 L["STRATA_TOOLTIP"] = "Flotante"
 L["STRATA_TYPE"] = "Prioridad Visual"
 L["STRATA_TYPE_DESC"] = "Cambia la prioridad visual del texto flotante"
+L["COLOR"] = "Colores del texto de datos"
+L["COLOR_DESC"] = "Cambia los colores del texto de datos"
+L["DATATEXT_GENERAL_COLOR"] = "Color general"
+L["DATATEXT_GENERAL_COLOR_DESC"] = "Cambia el color del texto general"
+L["DATATEXT_DAMAGE_COLOR"] = "Color de etiquetas de daño"
+L["DATATEXT_DAMAGE_COLOR_DESC"] = "Cambia el color de las etiquetas de daño"
+L["DATATEXT_HEALING_COLOR"] = "Color de etiquetas de sanación"
+L["DATATEXT_HEALING_COLOR_DESC"] = "Cambia el color de las etiquetas de sanación"
+L["DATATEXT_OTHER_COLOR"] = "Color para otras etiquetas"
+L["DATATEXT_OTHER_COLOR_DESC"] = "Cambia el color para otras etiquetas"
 
 --get ordinal sufix for a number (1o,2o,3o,4o...) (spanish locale)
-function Engine:OrdinalSuffix(number)    
+function Engine:OrdinalSuffix(number)
        return "o";
 end

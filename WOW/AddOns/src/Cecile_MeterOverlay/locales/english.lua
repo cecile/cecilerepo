@@ -10,7 +10,7 @@ local AddOnName, Engine = ...;
 
 --prepare locale
 local L = LibStub("AceLocale-3.0"):NewLocale(AddOnName, "enUS", true);
-if not L then return; end 
+if not L then return; end
 
 --set the localized strings
 L["LOAD_MESSAGE"] = "%s (version |cff0070de%s|r) loaded, type /%s or /%s for options."
@@ -187,6 +187,16 @@ L["STRATA_FULLSCREEN_DIALOG"] = "Full Screen Dialog"
 L["STRATA_TOOLTIP"] = "Tooltip"
 L["STRATA_TYPE"] = "Frame Strata"
 L["STRATA_TYPE_DESC"] = "Change the datatext frame strata"
+L["COLOR"] = "Datatext Colors"
+L["COLOR_DESC"] = "Change the datatext colors"
+L["DATATEXT_GENERAL_COLOR"] = "General Text Color"
+L["DATATEXT_GENERAL_COLOR_DESC"] = "Change the color for general text"
+L["DATATEXT_DAMAGE_COLOR"] = "Damage Tags Color"
+L["DATATEXT_DAMAGE_COLOR_DESC"] = "Change the color for damage tags"
+L["DATATEXT_HEALING_COLOR"] = "Healing Tags Color"
+L["DATATEXT_HEALING_COLOR_DESC"] = "Change the color for healing tags"
+L["DATATEXT_OTHER_COLOR"] = "Other Tags Color"
+L["DATATEXT_OTHER_COLOR_DESC"] = "Change the color for other tags"
 
 --get ordinal sufix for a number (1st,2nd,3rd,4th...) (english locale)
 function Engine:OrdinalSuffix(number)
