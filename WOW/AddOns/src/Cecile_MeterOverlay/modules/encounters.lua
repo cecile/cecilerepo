@@ -20,6 +20,38 @@ function mod.OnEvent()
 
 end
 
+--ask a question and perform a function
+function mod:question(question,okFunction)
+
+	--set the ok function
+	StaticPopupDialogs[mod.popupName].OnAccept = okFunction;
+
+	--show the popup
+	_G.StaticPopup_Show(mod.popupName,question);
+
+end
+
+--wipe all data
+function mod.wipeAllData()
+
+	--remove the data
+	Engine.GLOBAL.encounters=nil;
+
+	--remove all objects
+	mod.browseRecordsFrame:ReleaseChildren();
+
+	--create the widgets
+	mod:createWidgets();
+end
+
+--
+function mod.askWipeAllData()
+
+	--ass to wipe all data
+	mod:question(L["RECORD_WARNING_WIPE_ALL"],mod.wipeAllData);
+
+end
+
 --returns the encounter DB
 function mod:getEncounterDB(encounter,instanceName,difficultyName)
 
@@ -347,6 +379,24 @@ function mod:OnInitialize()
 
 	--we don't have boss mod by default
 	mod.hasBossMod = false;
+
+	--calculate a unique popup name
+	mod.popupName = Engine.Name.."_QUESTION";
+
+	StaticPopupDialogs[mod.popupName] = {
+		text = "%s",
+		button1 = _G.YES,
+		button2 = _G.NO,
+		OnAccept = function()
+		print("hello world");
+		end,
+		timeout = 0,
+		whileDead = true,
+		hideOnEscape = true,
+		preferredIndex = 3,
+		showAlert = true,
+	}
+
 
 	debug("Encounters module loaded");
 end
@@ -1058,17 +1108,17 @@ function mod.treeSelected(object,event,path)
 
 			if(encounter) then
 
-				mod:encounterSelected(instance,difficulty,encounter)
+				mod:encounterSelected(instance,difficulty,encounter);
 
 			else
 
-				mod:difficultySelected(instance,difficulty)
+				mod:difficultySelected(instance,difficulty);
 
 			end
 
 		else
 
-				mod:instanceSelected(path)
+				mod:instanceSelected(path);
 
 		end
 
@@ -1082,14 +1132,11 @@ function mod:createRecordsTree(frame)
 	local tree = mod:buildTreeTable();
 
 	local treewidget = AceGUI:Create("TreeGroup")
-	treewidget:SetTree(tree)
+	treewidget:SetTree(tree);
 	treewidget:SetFullWidth(true);
 	treewidget:SetFullHeight(true);
 	treewidget:EnableButtonTooltips(false);
-
-	frame:AddChild(treewidget);
-
-	treewidget:SetCallback("OnGroupSelected", mod.treeSelected)
+	treewidget:SetCallback("OnGroupSelected", mod.treeSelected);
 
 	return treewidget;
 end
@@ -1106,11 +1153,8 @@ function mod.closeRecordsWindow(object,event)
 	debug("browse records frame closed")
 end
 
---create the browse records window
-function mod:browseRecords()
-
-	--create frame
-	mod.browseRecordsFrame = AceGUI:Create("Frame");
+--create the widgets
+function mod:createWidgets()
 
 	--status or not data
 	local status = Engine.GLOBAL.encounters and L["BROWSE_RECORDS_STATUS"] or L["NO_DATA"];
@@ -1122,25 +1166,34 @@ function mod:browseRecords()
 
 	--create tree
 	mod.treeWidget = mod:createRecordsTree(mod.browseRecordsFrame);
+	mod.browseRecordsFrame:AddChild(mod.treeWidget);
 
 	--create header widget
 	mod.headerWidget = AceGUI:Create("Label");
 	mod.headerWidget:SetText(status);
 	mod.headerWidget:SetFullWidth(true);
-	mod.headerWidget:SetFontObject(_G.GameFontHighlightLarge)
+	mod.headerWidget:SetFontObject(_G.GameFontHighlightLarge);
 	mod.treeWidget:AddChild(mod.headerWidget);
-
-	--line break
-	mod.lineBreak = AceGUI:Create("Heading");
-	mod.lineBreak:SetText("")
-	mod.lineBreak:SetFullWidth(true);
-	mod.treeWidget:AddChild(mod.lineBreak);
 
 	--create desc widget
 	mod.descWidget = AceGUI:Create("Label");
 	mod.descWidget:SetText("");
 	mod.descWidget:SetFullWidth(true);
 	mod.treeWidget:AddChild(mod.descWidget);
+
+	--create wipe All Widget
+	mod.wippeAllButton = AceGUI:Create("Button");
+	mod.wippeAllButton:SetText(L["ENCOUNTERS_WIPE"]);
+	mod:addTooltip(mod.wippeAllButton,L["ENCOUNTERS_WIPE_DESC"]);
+	mod.wippeAllButton:SetCallback("OnClick", mod.askWipeAllData);
+	mod.wippeAllButton:SetDisabled(not (Engine.GLOBAL.encounters));
+	mod.treeWidget:AddChild(mod.wippeAllButton);
+
+	--line break
+	mod.lineBreak = AceGUI:Create("Heading");
+	mod.lineBreak:SetText("");
+	mod.lineBreak:SetFullWidth(true);
+	mod.treeWidget:AddChild(mod.lineBreak);
 
 	--create container widget
 	mod.containerWidget = AceGUI:Create("SimpleGroup");
@@ -1151,6 +1204,17 @@ function mod:browseRecords()
 	--we dont have record details
 	mod.hasRecordDetailsWidgets = false;
 
-	debug("browse records frame created")
+end
+
+--create the browse records window
+function mod:browseRecords()
+
+	--create frame
+	mod.browseRecordsFrame = AceGUI:Create("Frame");
+
+	--create the widgets
+	mod:createWidgets();
+
+	debug("browse records frame created");
 
 end

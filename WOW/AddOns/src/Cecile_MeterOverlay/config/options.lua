@@ -854,6 +854,7 @@ Engine.Options = {
 				store = {
 					order = 2,
 					type = "toggle",
+					width = "full",
 					name = L["ENCOUNTERS_STORE"],
 					desc = L["ENCOUNTERS_STORE_DESC"],
 					get = function()
@@ -865,22 +866,6 @@ Engine.Options = {
 					disabled = function()
 						return not mod.encounters.hasBossMod;
 					end,
-				},
-				wipe = {
-				  order = 3,
-				  type = 'execute',
-				  name = L["ENCOUNTERS_WIPE"],
-				  desc = L["ENCOUNTERS_WIPE_DESC"],
-				  func = function()
-					Engine.GLOBAL.encounters = nil;
-					mod.selectedInstance = nil;
-					mod.selectedDifficulty = nil;
-					mod.selectedEncounter = nil;
-					GameTooltip:Hide();
-				  end,
-				  hidden = function()
-					return not (Engine.GLOBAL.encounters);
-				  end,
 				},
 				autoReportTop = {
 					order = 4,
@@ -950,15 +935,6 @@ Engine.Options = {
 				  name = L["ENCOUNTERS_BROWSE"],
 				  fontSize = "medium",
 				},
-				Browse_No_Data = {
-				  type = "description",
-				  order = 11,
-				  name = L["NO_DATA"],
-				  fontSize = "small",
-				  hidden = function()
-					return (Engine.GLOBAL.encounters);
-				  end,
-				},
 				browse = {
 				  order = 11,
 				  type = 'execute',
@@ -968,9 +944,6 @@ Engine.Options = {
 				  	GameTooltip:Hide();
 				  	AceConfigDialog:Close(Engine.Name);
 					mod.encounters:browseRecords();
-				  end,
-				  hidden = function()
-					return not (Engine.GLOBAL.encounters);
 				  end,
 				},
 			},
