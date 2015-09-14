@@ -351,6 +351,7 @@ function mod:OnInitialize()
 	debug("Encounters module loaded");
 end
 
+
 --return the list of stored instances
 function mod:GetInstances()
 
@@ -361,10 +362,12 @@ function mod:GetInstances()
 
 		for key,value in pairs(Engine.GLOBAL.encounters) do
 
-			result[key] = key;
+			table.insert(result,key);
 
 		end
 	end
+
+	table.sort(result);
 
 	return result;
 end
@@ -386,7 +389,7 @@ function mod:getDifficultyList(instance)
 
 				for key,value in pairs(difficultyList) do
 
-					result[key] = key;
+					table.insert(result,key);
 
 				end
 
@@ -394,6 +397,8 @@ function mod:getDifficultyList(instance)
 
 		end
 	end
+
+	table.sort(result);
 
 	return result;
 
@@ -420,7 +425,7 @@ function mod:getEncounterList(instance,difficulty)
 						if ( encounterList ) then
 							for key,value in pairs(encounterList) do
 
-								result[key] = key;
+								table.insert(result,key);
 
 							end
 						end
@@ -432,6 +437,8 @@ function mod:getEncounterList(instance,difficulty)
 			end
 
 		end
+
+	table.sort(result);
 
 	return result;
 
@@ -678,19 +685,19 @@ function mod:buildTreeTable()
 
 	for instanceKey,instanceValue in pairs(instancesList) do
 
-		instanceItem = { text = string.format(L["RECORDS_TREE_INSTANCE_FORMAT"],instanceKey), value = instanceValue, children = {} };
+		instanceItem = { text = string.format(L["RECORDS_TREE_INSTANCE_FORMAT"],instanceValue), value = instanceValue, children = {} };
 
-		difficultyList = mod:getDifficultyList(instanceKey);
+		difficultyList = mod:getDifficultyList(instanceValue);
 
 		for difficultKey,difficultValue in pairs(difficultyList) do
 
-			difficultyItem = { text = string.format(L["RECORDS_TREE_DIFFICULT_FORMAT"],difficultKey), value = difficultValue, children = {} };
+			difficultyItem = { text = string.format(L["RECORDS_TREE_DIFFICULT_FORMAT"],difficultValue), value = difficultValue, children = {} };
 
-			encounterList = mod:getEncounterList(instanceKey,difficultKey);
+			encounterList = mod:getEncounterList(instanceValue,difficultValue);
 
 			for encounterKey,encounterValue in pairs(encounterList) do
 
-				encounterItem = { text = string.format(L["RECORDS_TREE_ENCOUNTER_FORMAT"],encounterKey), value = encounterValue };
+				encounterItem = { text = string.format(L["RECORDS_TREE_ENCOUNTER_FORMAT"],encounterValue), value = encounterValue };
 
 				table.insert(difficultyItem.children,encounterItem);
 
@@ -730,7 +737,7 @@ function mod:getEncountersInInstance(instance)
 
 	for difficultKey,difficultValue in pairs(difficultyList) do
 
-		count = count + mod:getEncountersCount(instance,difficultKey);
+		count = count + mod:getEncountersCount(instance,difficultValue);
 
 	end
 
@@ -1105,8 +1112,11 @@ function mod:browseRecords()
 	--create frame
 	mod.browseRecordsFrame = AceGUI:Create("Frame");
 
+	--status or not data
+	local status = Engine.GLOBAL.encounters and L["BROWSE_RECORDS_STATUS"] or L["NO_DATA"];
+
 	mod.browseRecordsFrame:SetTitle(L["BROWSE_RECORDS_WINDOW"]);
-	mod.browseRecordsFrame:SetStatusText(L["BROWSE_RECORDS_STATUS"]);
+	mod.browseRecordsFrame:SetStatusText(status);
 	mod.browseRecordsFrame:SetCallback("OnClose", mod.closeRecordsWindow);
 	mod.browseRecordsFrame:SetLayout("Flow");
 
@@ -1115,7 +1125,7 @@ function mod:browseRecords()
 
 	--create header widget
 	mod.headerWidget = AceGUI:Create("Label");
-	mod.headerWidget:SetText(L["BROWSE_RECORDS_STATUS"]);
+	mod.headerWidget:SetText(status);
 	mod.headerWidget:SetFullWidth(true);
 	mod.headerWidget:SetFontObject(_G.GameFontHighlightLarge)
 	mod.treeWidget:AddChild(mod.headerWidget);
