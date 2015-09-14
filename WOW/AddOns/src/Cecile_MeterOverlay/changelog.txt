@@ -1,6 +1,7 @@
 v1.1.7
 - Code cleanup
 - Added options to configure datatext colors
+- Browse store records now has a separate window
 v1.1.6
 - Added Numeration support
 - Update Libraries
