@@ -18,7 +18,7 @@ function mod:GetVersion(versionStr)
 	local Version = {};
 
 	Version.Label = versionStr;
-	Version.Major,Version.Minor,Version.Release = strsplit(".",versionStr);
+	Version.Major,Version.Minor,Version.Release,Version.type = strsplit(".",versionStr);
 
 	return Version;
 end
@@ -144,6 +144,7 @@ function mod:OnInitialize()
 	mod.Major = 0;
 	mod.Minor = 0;
 	mod.Release = 0;
+	mod.type = "alpha";
 
 	--get the version from meta-data
 	local versionStr = GetAddOnMetadata(Engine.Name, "Version");
@@ -157,6 +158,7 @@ function mod:OnInitialize()
 		mod.Major 	= Version.Major;
 		mod.Minor 	= Version.Minor;
 		mod.Release = Version.Release;
+		mod.type 	= Version.type;
 
 	end
 
