@@ -1,8 +1,8 @@
 ----------------------------------------------------------------------------------------------------
--- Handle addon configuration
+-- Handle add-on configuration
 --
 
---get the engine & Addon
+--get the engine & Add-on
 local Engine = select(2,...)
 local AddOn = Engine.AddOn
 
@@ -20,26 +20,26 @@ Engine.DB = {};
 Engine.DB.profile={};
 Engine.Profile = Engine.DB.profile;
 
---return two slash commands from a addon name, for example Cecile_ExampleAddon will return cea & cecile_ea
+--return two slash commands from a add-on name, for example Cecile_ExampleAddon will return cea & cecile_ea
 function AddOn:GetSlashFromName(name)
 
 	local slash1 = "";
 	local slash2 = "";
-	
+
 	local i;
 	local c;
 	local picknext = true;
 	local pickedfirstspace = false;
-	
+
 	for i = 1, string.len(name) do
 
 		c = string.sub(name,i,i);
-		
+
 		if (picknext) then
 			slash1 = slash1 .. string.lower(c);
 			if pickedfirstspace then
 				slash2 = slash2 .. string.lower(c);
-			end			
+			end
 			picknext = false;
 		else
 			if (c=="_") or (c==" ") then
@@ -52,29 +52,30 @@ function AddOn:GetSlashFromName(name)
 					slash2 = slash2 .. string.lower(c);
 				end
 			end
-		end		
+		end
 	end
 	if not pickedfirstspace then
 		slash2 = slash2 .. string.lower(name);
 	end
 
-	return slash1,slash2;	
+	return slash1,slash2;
 end
 
---setup options
+--set-up options
 function AddOn:SetupOptions()
 
-	--setup module options and defaults
+	--set-up module options and defaults
 	local module,name
 	local databaseName,databaseTable
 
+	--goes trough all the modules
 	for name,module in pairs(self.modules) do
 
 		--if this module has defaults
 		if(module.Defaults) then
 
 			--get all defaults tables of the module andd add then to the global defaults
-			for databaseName,databaseTable in pairs(module.Defaults) do			
+			for databaseName,databaseTable in pairs(module.Defaults) do
 				Engine.Defaults[databaseName][name] = databaseTable;
 			end
 
@@ -98,8 +99,8 @@ function AddOn:SetupOptions()
 
 	--set profile
 	Engine.Profile = Engine.DB.profile;
-	
-	-- Add the options and profiles to the config dialog
+
+	-- Add the options and profiles to the configuration dialog
 	Engine.Options.args['Profiles'] = AceDBOptions:GetOptionsTable(Engine.DB);
 	Engine.Options.args['Profiles'].name=L["PROFILES"];
 	AceConfig:RegisterOptionsTable(Engine.Name, Engine.Options);
@@ -115,19 +116,48 @@ function AddOn:SetupOptions()
 	--blizzard options
 	AceConfig:RegisterOptionsTable(Engine.Name.."Blizzard", Engine.blizzardOptions);
 	AceConfigDialog:AddToBlizOptions(Engine.Name.."Blizzard", Engine.Name);
-	
-	--get the slash commmands
+
+	--get the slash commands
 	Engine.slash1,Engine.slash2 = AddOn:GetSlashFromName(Engine.Name);
-	
+
 	-- Create slash commands
 	_G["SLASH_"..Engine.Name.."1"] = "/"..Engine.slash1;
 	_G["SLASH_"..Engine.Name.."2"] = "/"..Engine.slash2;
-	SlashCmdList[Engine.Name] = AddOn.ShowConfig;	
+	SlashCmdList[Engine.Name] = AddOn.HandleCommands;
 end
 
--- Open config window
-function AddOn:ShowConfig()
-	LibStub("AceConfigDialog-3.0"):Open(Engine.Name); 
+-- Handle commands
+function AddOn.HandleCommands(args)
+
+	--if not parameters show configuration
+	if args == nil then
+		AceConfigDialog:Open(Engine.Name);
+	else
+
+		--to check if any module has handle this command
+		local handleByMOdule = false
+
+		--goes trough the modules
+		for name,module in pairs(AddOn.modules) do
+
+			--if any module has a HandleCommands
+			if module.handleCommand and type(module.handleCommand)=="function" then
+
+				--call it and mark that a module has handle it
+				handleByMOdule = handleByMOdule or module.handleCommand(args);
+
+			end
+
+		end
+
+		--if not module has handle it, open configuration
+		if not handleByMOdule then
+
+			AceConfigDialog:Open(Engine.Name);
+
+		end
+
+	end
 end
 
 -- Called after profile changed, we reset our datatext
@@ -135,10 +165,10 @@ function AddOn:OnProfileChanged(event, database, newProfileKey)
 
 	--set new profile
 	Engine.Profile = database.profile;
-	
+
 	--notify modules profile change
 	local module,name
-	
+
 	--if any module has a OnProfileChange trigger it
 	for name,module in pairs(self.modules) do
 

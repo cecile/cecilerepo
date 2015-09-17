@@ -1,12 +1,12 @@
 ----------------------------------------------------------------------------------------------------
--- Main file, create the main addon
+-- Main file, create the main add-on
 --
 
---create the addon and store in the engine
+--create the add-on and store in the engine
 local AddOnName, Engine = ...;
 local AddOn = LibStub(	"AceAddon-3.0"):NewAddon(AddOnName,
 	"AceEvent-3.0", 'AceTimer-3.0', 'AceHook-3.0',"AceComm-3.0");
-	
+
 Engine.Name  = AddOnName;
 Engine.AddOn = AddOn;
 
@@ -27,16 +27,16 @@ function AddOn:PLAYER_ENTERING_WORLD()
 
 	--get version
 	local Version = AddOn:GetModule("version");
-	
+
 	print(string.format(L["LOAD_MESSAGE"],Version.Title,Version.Label,Engine.slash1,Engine.slash2));
-	
+
 	self:UnregisterEvent("PLAYER_ENTERING_WORLD");
 end
 
---init the addon
+--initialise the add-on
 function AddOn:OnInitialize()
-	
-	--setup options
+
+	--set-up options
 	AddOn:SetupOptions();
-	
+
 end

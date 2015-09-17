@@ -1,5 +1,5 @@
 ----------------------------------------------------------------------------------------------------
--- Addon Default Const, Options & Options UI
+-- Add-on Default Const, Options & Options UI
 --
 
 --get the engine & Locale
@@ -8,15 +8,15 @@ local L = Engine.Locale;
 
 --create the module
 local mod = Engine.AddOn:NewModule("options");
-	
+
 
 --defaults
 Engine.Defaults = {
-	profile = {	
+	profile = {
 	}
 };
-	
---options table for the options ui
+
+--options table for the options UI
 Engine.Options = {
 	type = "group",
 	name = Engine.Name,
@@ -33,7 +33,7 @@ Engine.Options = {
 			type = "header",
 			name = "",
 			width = "full",
-		},	
+		},
 		general = {
 			order = 2,
 			type = "group",
@@ -45,13 +45,13 @@ Engine.Options = {
 					order = 0,
 					name = L["GENERAL_SETTINGS"],
 					fontSize = "large",
-				},				
+				},
 			}
-		},	
+		},
 	},
 };
 
--- Interface - Addons (Ace3 Blizzard Options)
+-- Interface - Add-ons (ACE3 Blizzard Options)
 Engine.blizzardOptions = {
 	name = string.format(L["CONFIG_WINDOW"],GetAddOnMetadata(AddOnName, "Title"),GetAddOnMetadata(AddOnName, "Version")),
 	handler = x,
@@ -63,8 +63,8 @@ Engine.blizzardOptions = {
 			name = L["OPEN_CONFIG"],
 			desc = L["OPEN_CONFIG_DESC"],
 			func = function() InterfaceOptionsFrameOkay:Click();
-				LibStub("AceConfigDialog-3.0"):Open(AddOnName); 
-				GameMenuButtonContinue:Click() 
+				LibStub("AceConfigDialog-3.0"):Open(AddOnName);
+				GameMenuButtonContinue:Click()
 			end,
 		},
 	},
