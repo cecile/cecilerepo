@@ -11,60 +11,77 @@ local L=Engine.Locale;
 --debug
 local debug = Engine.AddOn:GetModule("debug");
 
-
 --load profile settings
 function mod:LoadProfileSettings()
 
 end
 
+--on escape presessed
 function mod.OnEscapePressed()
+
+	---hide the window
 	mod:Show(false);
 end
 
+--default action on button click
 function mod.OnButtonClick()
+
+	--the the window
 	mod:Show(false);
+
 end
 
+--create a border in a direction,size, and color
 function mod.CreateBorder(object,direction,r,g,b)
 
+	--the size does not have direction
 	local size = math.abs(direction);
 
+	--get the frame border if its has it
 	local border = object.border;
 
+	--if has not border create it
 	if border == nil then
-
 		border = CreateFrame("Frame", nil, object);
-
 	end
 
+	--if has anchors remove them
 	if border:GetPoint() then
 		border:ClearAllPoints();
 	end
 
+	--set the anchors base on our direction
 	border:Point('TOPLEFT', object, 'TOPLEFT', direction, -direction)
 	border:Point('BOTTOMRIGHT', object, 'BOTTOMRIGHT', -direction, direction)
 
+	--se the right frame level
 	border:SetFrameLevel(object:GetFrameLevel() + 1)
 
+	--set a solid backdrop with right insets
 	border:SetBackdrop({
 		edgeFile = [[Interface\BUTTONS\WHITE8X8]],
 		edgeSize = size,
 		insets = { left = size, right = size, top = size, bottom = size }
 	});
 
+	--set the backdrop color
 	border:SetBackdropBorderColor(r, g, b, 1)
 
+	--store border
 	object.border = border;
 end
 
+--se the frame to be just a single color frame
 function mod.SetSolidColor(object, r,g,b,a)
 
+	--create and set the texture
 	object.texture = object:CreateTexture(nil, "BACKGROUND");
 	object.texture:SetAllPoints(true);
 	object.texture:SetTexture(r,g,b,a);
 
 end
 
+--create a UI object and inject our functions
 function mod:CreateUIObject(class,parent,name,template)
 
 	local frame = CreateFrame(class, name, parent, template);
@@ -75,40 +92,60 @@ function mod:CreateUIObject(class,parent,name,template)
 	return frame;
 end
 
+--get the max possible scroll
 function mod:GetMaxScroll()
 
+	--get how many items could be drown on screen
 	local onScreen = math.floor(mod.mainFrame.scrollArea:GetHeight() / 20);
+
+	--get how we could scroll using how many we have and how manny fit
 	local toScroll = (mod.totalItems-1) - onScreen;
+
+	--get in ui coords
 	local maxScroll = toScroll*20;
 
+	--clamp negative values
 	maxScroll = math.max(maxScroll,0);
 
+	--return results
 	return maxScroll;
 
 end
 
+--helper function to set the current scroll and update slider
 function mod:SetScroll(value)
 	mod.mainFrame.scrollArea:SetVerticalScroll(value);
 	mod:UpdateSlider();
 end
 
+--update our slider
 function mod:UpdateSlider()
 
+	--get our max scroll
 	local maxScroll = mod:GetMaxScroll();
 
+	--by default slider cover all him box
 	local from = 0;
 	local to = 0;
 
+	--if we have something to scroll
 	if not (maxScroll==0) then
+
+		--get current scroll
 		local currentScroll = mod.mainFrame.scrollArea:GetVerticalScroll();
+
+		--calculcate el % of our position
 		local percent = currentScroll/maxScroll;
 
+		--calculate from-to
 		from = 75*percent;
 		to = 75*(1-percent);
 	end
 
+	--remve anchors
 	mod.mainFrame.slider:ClearAllPoints();
 
+	--set new anchors
 	mod.mainFrame.slider:SetPoint("TOPLEFT", 		mod.mainFrame.sliderBox,	"TOPLEFT", 		4, -4-from);
 	mod.mainFrame.slider:SetPoint("TOPRIGHT",		mod.mainFrame.sliderBox,	"TOPRIGHT", 	-4, -4-from);
 	mod.mainFrame.slider:SetPoint("BOTTOMLEFT", 	mod.mainFrame.sliderBox,	"BOTTOMLEFT", 	4, 4+to);
@@ -138,8 +175,10 @@ function mod.ScrollingFunction(self, arg)
 	end
 end
 
+--on mouse over a button
 function mod.OnButtonEnter(object)
 
+	--if the object is not selected set the hightligh color
 	if object.selected==false then
 		object:UnlockHighlight();
 		object.highlight:SetVertexColor(0.3,0.3,0.3);
@@ -187,38 +226,48 @@ function mod:CreateScrollItem(text)
 	--insert into our table
 	table.insert(mod.mainFrame.scrollContent.items,frame);
 
+	--hid this button
 	frame:Hide();
 
 end
 
+--add a new item
 function mod:AddItem(item)
 
+	--if we are in our limit don't add
 	if mod.totalItems<mod.maxItems then
 
+		--count
 		mod.totalItems = mod.totalItems + 1;
 
+		--get the button
 		local button = mod.mainFrame.scrollContent.items[mod.totalItems];
 
+		--set the scripts
 		button:SetScript("OnClick", nil);
 		button:SetScript("OnClick", item.func);
 
+		--store the data
 		button.data = item;
-		button.text:SetText(item.displayText);
-		button:Show();
 
-		if mod.totalItems == 1 then
-			mod:SelectButton(button);
-		end
+		--set the text
+		button.text:SetText(item.displayText);
+
+		--display the button
+		button:Show();
 
 	end
 
 end
 
 
+--select a item
 function mod:SelectButton(object)
 
+	--goes trough the objects
 	local key,value;
 
+	--remove highlight and reset selected to all of them
 	for key,value in pairs(mod.mainFrame.scrollContent.items) do
 		value:UnlockHighlight();
 		value.selected = false;
@@ -226,30 +275,36 @@ function mod:SelectButton(object)
 		object.highlight:SetVertexColor(0.3,0.3,0.3);
 	end
 
+	--store in the edit box the one we like
 	mod.mainFrame.editBox.data = object.data;
 	mod.mainFrame.editBox:SetScript("OnEnterPressed", object.data.func);
 
+	--set this to selected
 	object:LockHighlight();
 	object.highlight:SetVertexColor(0.6,0.6,0.6);
 	object.selected = true;
 
 end
 
+--select a object using a index
 function mod:SelectButtonByIndex(index)
 
+	--get the button and select it
 	local button = mod.mainFrame.scrollContent.items[index];
-
 	mod:SelectButton(button);
 
 end
 
-
+--get the current selected button
 function mod:GetSelectedButton()
 
+	--if we have none by default
 	local result = nil;
 
+	--local vars
 	local key,value;
 
+	--find it
 	for key,value in pairs(mod.mainFrame.scrollContent.items) do
 
 		if value.selected then
@@ -258,32 +313,48 @@ function mod:GetSelectedButton()
 		end
 	end
 
+	--return value
 	return result;
 
 end
 
-function mod.OnKeyDown(object,key)
-	debug(key);
-end
-
+--if tab is press
 function mod.OnTabPressed(object)
 
+	--if we dont have item return
 	if mod.totalItems==0 then return; end
 
+	--get the current selected item
 	local selected = mod:GetSelectedButton();
 
+	--if we dont have return
 	if(not selected) then return; end
 
+	--go to the new position
 	local currentSelection = selected.position;
-	local new = currentSelection+1;
+	local new;
 
-	if new > mod.totalItems then
-		new = 1;
+	--reverse with shift
+	if IsShiftKeyDown() then
+		new = currentSelection-1;
+	else
+		new = currentSelection+1;
 	end
 
+	--loop position
+	if new > mod.totalItems then
+		new = 1;
+	elseif new < 1 then
+		new = mod.totalItems;
+	end
+
+	--if actualy we are going anywhere
 	if not (currentSelection==new) then
 
+		--select the new position
 		mod:SelectButtonByIndex(new);
+
+		--scroll to it
 		mod:SetScroll(0);
 		mod.ScrollingFunction(mod.mainFrame.scrollArea,-(4*(new-1)));
 
@@ -291,45 +362,65 @@ function mod.OnTabPressed(object)
 
 end
 
+--remove all items
 function mod:ClearAllItems()
 
+	--local vars
 	local key,value;
 
+	--lopp the items
 	for key,value in pairs(mod.mainFrame.scrollContent.items) do
+
+		--reset object
 		value:Hide();
 		value:SetScript("OnClick", nil);
 		value.data=nil;
 		value:UnlockHighlight();
 		value.selected = false;
+
 	end
 
+	--we dont have items
 	mod.totalItems=0;
 
+	--we dont do nothing on enter now
 	mod.mainFrame.editBox:SetScript("OnEnterPressed", nil);
 end
 
+--if the text has change
 function mod.OnTextChanged(self,char)
 
+	--get the text
 	local text = self:GetText();
 
+	--if has change from the previous text
 	if not (self.lastText == text) then
 
+		--clear all items
 		mod:ClearAllItems();
 
+		--store as last text
 		self.lastText = text;
 
+		--if actually we have any text
 		if(text) then
 
+			--find items for it
 			items = mod.search:FindAll(text);
 
+			--loop trough the items and add them
 			local key,value;
 
 			for key,value in pairs(items) do
-
 				mod:AddItem(value);
-
 			end
 
+			--if we have any item, select the first
+			if mod.totalItems > 0 then
+				mod:SelectButtonByIndex(1);
+			end
+
+			--reset scroll
 			mod:SetScroll(0);
 
 		end
@@ -369,7 +460,6 @@ function mod:CreateUI()
 	mod.mainFrame.editBox:SetText("");
 	mod.mainFrame.editBox:SetScript("OnEscapePressed", mod.OnEscapePressed);
 	mod.mainFrame.editBox:SetScript("OnTextChanged", mod.OnTextChanged);
-	mod.mainFrame.editBox:SetScript("OnKeyDown", mod.OnKeyDown);
 	mod.mainFrame.editBox:SetScript("OnTabPressed", mod.OnTabPressed);
 
 	--create scroll area
@@ -433,6 +523,71 @@ function mod:CreateUI()
 	--hide the frame
 	mod.mainFrame:Hide();
 
+	debug("UI created");
+
+end
+
+--event when we enter combat
+function mod.InCombat()
+	mod.combat = true;
+	mod:Show(false);
+end
+
+--event when we exit combat
+function mod.OutOfCombat()
+	mod.combat = false;
+end
+
+--save & remove a binding
+function mod:SafeSetBinding(key, action)
+	if key == "" then
+		oldkey = GetBindingKey(action)
+		if oldkey then
+			SetBinding(oldkey, nil)
+		end
+	else
+		SetBinding(key, action)
+	end
+	SaveBindings(GetCurrentBindingSet())
+end
+
+
+--set a default binding if no one has it
+function mod:SetDefaultBinding(key,action)
+
+	--get our binding
+	local ourkey1,ourkey2 = GetBindingKey(action);
+
+	--if we dont have it
+	if (ourkey1==nil) and (ourkey2==nil) then
+
+		--get possible action for this binding since SHIFT-P or CTRL-SHIFT-P look the same
+		local possibleAction = GetBindingByKey(key);
+
+		--by default we could set this binding
+		local okToSet = true;
+
+		--if any action
+		if possibleAction then
+
+			--get the action keys
+			local key1,key2 = GetBindingKey(possibleAction);
+
+			--if any key match our key
+			if (key1 == key) or (key2 == key) then
+				okToSet = false;
+			end
+
+		end
+
+		--if ok to set
+		if okToSet then
+			mod:SafeSetBinding(key,action);
+			debug("default binding '%s' set to '%s'", action, key);
+		end
+
+	end
+
 end
 
 --initialize the module
@@ -441,10 +596,21 @@ function mod:OnInitialize()
 	--load profile settings
 	mod:LoadProfileSettings();
 
+	--set the default binding
+	mod:SetDefaultBinding("CTRL-SHIFT-P","LAUNCH_CQL");
+
 	--create the UI
 	mod:CreateUI();
 
+	--save the serch module
 	mod.search = Engine.AddOn:GetModule("search");
+
+	--we are not in combat
+	mod.combat = false;
+
+	--handle in combat
+	Engine.AddOn:RegisterEvent("PLAYER_REGEN_ENABLED",mod.OutOfCombat);
+	Engine.AddOn:RegisterEvent("PLAYER_REGEN_DISABLED",mod.InCombat);
 
 end
 
@@ -456,18 +622,33 @@ end
 --show/hide the main window
 function mod:Show(value)
 
+	--if we like to show
 	if(value) then
+
+		--if we actually no shown
 		if not mod.mainFrame:IsShown() then
 
+			--if we are in combat display a message and return
+			if mod.combat then
+				--get version
+				local Version = Engine.AddOn:GetModule("version");
+
+				print(string.format(L["WINDOW_ERROR_IN_COMBAT"],Version.Title));
+				return;
+			end
+			--reset UI
 			mod.search:Refresh();
 			mod:SetScroll(0);
 			mod.mainFrame.editBox:SetText("");
 			mod:ClearAllItems();
 
+			--show the window
 			mod.mainFrame:Show();
 
 		end
 	else
+
+		--if we actually shown, hide
 		if mod.mainFrame:IsShown() then
 			mod.mainFrame:Hide();
 		end
@@ -504,4 +685,32 @@ function mod.handleCommand(args)
 
 end
 
+--module options table
+mod.Options = {
+	order = 2,
+	type = "group",
+	name = L["WINDOW_SETTINGS"],
+	args = {
+		Frames_Header = {
+			type = "description",
+			order = 0,
+			name = L["WINDOW_SETTINGS"],
+			fontSize = "large",
+		},
+		debug = {
+			order = 1,
+			type = "keybinding",
+			name = L["WINDOW_BINDING_LAUNCH"],
+			desc = L["WINDOW_BINDING_LAUNCH_DESC"],
+			get = function()
+				return GetBindingKey("LAUNCH_CQL");
+			end,
+			set = function(key, value)
 
+				mod:SafeSetBinding(value, "LAUNCH_CQL");
+
+			end,
+		},
+	}
+
+};

@@ -15,12 +15,14 @@ local debug = Engine.AddOn:GetModule("debug");
 --initialize the module
 function mod:OnInitialize()
 
-	local item;
-	local index;
+	--we dont have items
 
 	mod.items = {};
 
 	mod.window = Engine.AddOn:GetModule("window");
+
+	debug("search module initialize");
+
 
 end
 
@@ -129,47 +131,59 @@ end
 
 function mod:Refresh()
 
+	debug("refreshing search data");
+
 	mod.items = {};
 
 	mod:PopulateMounts();
 	mod:PopulatePets();
 
+	debug("data refreshed");
+
 end
 
+--check if we match this item with the entered text
 function mod:MatchItem(item,text)
 
+	--set to lower case
 	local item = item:lower();
 	local text = text:lower();
 
+	--flag to control if we match every wod
 	local matchAllWords = true;
 
+	--local vars
 	local word;
 
-
+	--go word by word and check if we match
 	for word in string.gmatch(text, "[^ ]+") do
-
 		matchAllWords = matchAllWords and (not (string.find(item,word)==nil) );
-
 	end
 
+	--return all words
 	return matchAllWords;
 
 end
 
+--color string based on match
 function mod:ColorItem(item,text)
 
+	--our result
 	local result = item;
 
+	--convert to lower
 	local item = item:lower();
 	local text = text:lower();
 
+	--local vars
 	local word;
-
 	local positions = {};
 	local pos;
 
+	--go word by word
 	for word in string.gmatch(text, "[^ ]+") do
 
+		--if we get one store the position on the string
 		local startPos,endPos = string.find(item,word);
 		pos = { from = startPos, to = endPos };
 
@@ -177,60 +191,74 @@ function mod:ColorItem(item,text)
 
 	end
 
+	--sort the positions
 	table.sort(positions, function(a,b) return a.from < b.from end);
 
+	--more local vars
 	local concatenated = "";
 	local before,token, after;
+
+	--we have not modified, yet
 	local acumulated = 0;
 
+	--loop the words
 	for k,pos in pairs(positions) do
 
+		--empty result
 		concatenated = "";
 
+		--move if we have alreayd modified something
 		pos.from = pos.from + acumulated;
 		pos.to = pos.to + acumulated;
 
+		--get before token string
 		if not (pos.from==1) then
 			before  = string.sub(result,1,pos.from-1);
 		else
 			before = "";
 		end
 
+		--get the token and after string
 		token = string.sub(result,pos.from,pos.to);
 		after = string.sub(result,pos.to+1);
 
+		--colorize it
 		result = before.."|cffffffff"..token.."|r"..after;
 
+		--we increase next positions
 		acumulated = acumulated + 12;
 
 	end
-
 
 	return result;
 
 end
 
+--find all items using the text
 function mod:FindAll(text)
 
+	--our result
 	local result = {};
 
+	--double check that we need something to search
 	if (text==nil) then return result; end
 	if (text=="") then return result; end
 
+	--local vars
 	local word;
 	local k,item;
 	local words;
 
-
-	local matchItem;
+	--loop al items
 	for k, item in pairs(mod.items) do
 
-		matchItem = mod:MatchItem(item.text,text);
+		--if this item match
+		if mod:MatchItem(item.text,text) then
 
-		if matchItem then
-
+			--add color
 			item.displayText =  mod:ColorItem(item.text,text);
 
+			--insert into the table
 			table.insert(result,item);
 
 		end

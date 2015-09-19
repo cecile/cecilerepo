@@ -17,9 +17,6 @@ Engine.Locale = L;
 --store the engine global
 _G[AddOnName] = Engine;
 
-BINDING_HEADER_Cecile_QuickLauncher = AddOnName
-BINDING_NAME_LAUNCH_CQL = "Launch"
-
 
 --register entering the world
 function AddOn:OnEnable()
@@ -34,6 +31,12 @@ function AddOn:PLAYER_ENTERING_WORLD()
 
 	print(string.format(L["LOAD_MESSAGE"],Version.Title,Version.Label,Engine.slash1,Engine.slash2));
 
+
+	--define key bindings
+	_G.BINDING_HEADER_Cecile_QuickLauncher = Version.Title
+	_G.BINDING_NAME_LAUNCH_CQL = L["BINDIGN_DESC"]
+
+
 	self:UnregisterEvent("PLAYER_ENTERING_WORLD");
 end
 
@@ -44,8 +47,12 @@ function AddOn:OnInitialize()
 	AddOn:SetupOptions();
 
 end
-
+--binding function
 function AddOn:Launch()
+
+	--get the window module
 	local window = AddOn:GetModule("window");
+
+	--show the launcher
 	window:Show(true);
 end

@@ -5,9 +5,6 @@
 --get the add-on engine
 local AddOnName, Engine = ...;
 
---force localization to Spanish (only for testing)
---_G.GAME_LOCALE = "esES"
-
 --prepare locale
 local L = LibStub("AceLocale-3.0"):NewLocale(AddOnName, "enUS", true);
 if not L then return; end
