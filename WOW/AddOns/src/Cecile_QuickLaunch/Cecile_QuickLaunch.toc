@@ -1,0 +1,16 @@
+## Interface: 60200
+## Title: |cffffffffCecile|r_|cfffff569QuickLaunch|r
+## Notes: Quick Access to all stuff
+## Author: Cecile
+## Version: 0.0.1.alpha
+## SavedVariables: Cecile_QuickLaunchDB
+## OptionalDeps:
+
+libs\load_libs.xml
+locales\load_locales.xml
+media\load_media.xml
+
+main.lua
+
+modules\load_modules.xml
+config\load_config.xml
