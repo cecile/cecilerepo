@@ -5,4 +5,8 @@
 	<Script file="utils/version_esES.lua"/>
 	<Script file="window_enUS.lua"/>
 	<Script file="window_esES.lua"/>
+	<Script file="search/pets_enUS.lua"/>
+	<Script file="search/pets_esES.lua"/>
+	<Script file="search/mounts_enUS.lua"/>
+	<Script file="search/mounts_esES.lua"/>
 </Ui>

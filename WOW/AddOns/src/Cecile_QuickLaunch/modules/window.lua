@@ -11,8 +11,15 @@ local L=Engine.Locale;
 --debug
 local debug = Engine.AddOn:GetModule("debug");
 
+--sharemedia
+local LSM = LibStub("LibSharedMedia-3.0");
+
 --load profile settings
 function mod:LoadProfileSettings()
+
+	--get the font
+	mod.fontObject = LSM:Fetch("font", Engine.Profile.window.font.name);
+	mod.fontSize = Engine.Profile.window.font.size;
 
 end
 
@@ -51,8 +58,8 @@ function mod.CreateBorder(object,direction,r,g,b)
 	end
 
 	--set the anchors base on our direction
-	border:Point('TOPLEFT', object, 'TOPLEFT', direction, -direction)
-	border:Point('BOTTOMRIGHT', object, 'BOTTOMRIGHT', -direction, direction)
+	border:SetPoint('TOPLEFT', object, 'TOPLEFT', direction, -direction)
+	border:SetPoint('BOTTOMRIGHT', object, 'BOTTOMRIGHT', -direction, direction)
 
 	--se the right frame level
 	border:SetFrameLevel(object:GetFrameLevel() + 1)
@@ -201,6 +208,9 @@ function mod:CreateScrollItem(text)
 	--calculate start and end Y position
 	local startY = position * -20;
 	local endY = startY-20;
+
+	--set the font
+	frame.text:SetFont(mod.fontObject,mod.fontSize);
 
 	--position the object
 	frame:SetPoint("TOPLEFT", 		mod.mainFrame.scrollContent,"TOPLEFT", 	0, startY);
@@ -450,7 +460,7 @@ function mod:CreateUI()
 	mod.mainFrame.editBox:SetPoint("TOPLEFT", 	mod.mainFrame, "TOPLEFT", 	8, -8);
 	mod.mainFrame.editBox:SetPoint("TOPRIGHT", 	mod.mainFrame, "TOPRIGHT", -8, -8);
 
-	mod.mainFrame.editBox:SetFontObject(ChatFontNormal);
+	mod.mainFrame.editBox:SetFont(mod.fontObject,mod.fontSize);
 	mod.mainFrame.editBox:SetHeight(14);
 
 	mod.mainFrame.editBox:SetSolidColor(0.0, 0.0, 0.0, 0.5);
@@ -596,9 +606,6 @@ function mod:OnInitialize()
 	--load profile settings
 	mod:LoadProfileSettings();
 
-	--set the default binding
-	mod:SetDefaultBinding("CTRL-SHIFT-P","LAUNCH_CQL");
-
 	--create the UI
 	mod:CreateUI();
 
@@ -687,7 +694,7 @@ end
 
 --module options table
 mod.Options = {
-	order = 2,
+	order = 3,
 	type = "group",
 	name = L["WINDOW_SETTINGS"],
 	args = {
@@ -713,4 +720,14 @@ mod.Options = {
 		},
 	}
 
+};
+
+--module defaults
+mod.Defaults = {
+	profile = {
+		font = {
+			name = "Cecile",
+			size = 12,
+		},
+	},
 };

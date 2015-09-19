@@ -11,6 +11,6 @@ if not L then return; end
 
 --window module
 L["WINDOW_ERROR_IN_COMBAT"] = "%s |cffff0000: could not be open in combat.|r"
-L["WINDOW_SETTINGS"] = "Launcher Window Settings"
+L["WINDOW_SETTINGS"] = "Window Settings"
 L["WINDOW_BINDING_LAUNCH"] = "Open Launcher Keybinding"
 L["WINDOW_BINDING_LAUNCH_DESC"] = "Change the Keybinding for opening the launcher"

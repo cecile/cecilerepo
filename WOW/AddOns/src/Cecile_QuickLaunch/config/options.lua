@@ -46,6 +46,13 @@ Engine.Options = {
 					name = L["GENERAL_SETTINGS"],
 					fontSize = "large",
 				},
+				about = {
+					order = 1,
+					type = "description",
+					name = L["ABOUT"],
+					width = "full",
+				},
+
 			}
 		},
 	},

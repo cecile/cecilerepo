@@ -31,11 +31,15 @@ function AddOn:PLAYER_ENTERING_WORLD()
 
 	print(string.format(L["LOAD_MESSAGE"],Version.Title,Version.Label,Engine.slash1,Engine.slash2));
 
-
 	--define key bindings
 	_G.BINDING_HEADER_Cecile_QuickLauncher = Version.Title
 	_G.BINDING_NAME_LAUNCH_CQL = L["BINDIGN_DESC"]
 
+	--get Window
+	local Window = AddOn:GetModule("window");
+
+	--set the default binding
+	Window:SetDefaultBinding("CTRL-SHIFT-P","LAUNCH_CQL");
 
 	self:UnregisterEvent("PLAYER_ENTERING_WORLD");
 end

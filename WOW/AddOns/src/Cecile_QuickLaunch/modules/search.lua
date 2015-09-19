@@ -1,4 +1,4 @@
-		----------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
 -- search module
 
 --get the engine and create the module
@@ -15,117 +15,9 @@ local debug = Engine.AddOn:GetModule("debug");
 --initialize the module
 function mod:OnInitialize()
 
-	--we dont have items
-
-	mod.items = {};
-
 	mod.window = Engine.AddOn:GetModule("window");
 
 	debug("search module initialize");
-
-
-end
-
-function mod.summonMount(item)
-
-	mod.window.OnButtonClick(item);
-
-	C_MountJournal.Summon(item.data.id);
-
-end
-
-function mod.dismmissMount(item)
-
-	mod.window.OnButtonClick(item);
-
-	C_MountJournal.Dismiss();
-
-end
-
-function mod:PopulateMounts()
-
-	local index,item;
-
-	local numMounts = C_MountJournal.GetNumMounts();
-	local searchableText = "";
-	local mounted = false;
-
-	for index = 1, numMounts do
-
-		local creatureName, spellID, icon, active, isUsable, sourceType, isFavorite, isFactionSpecific, faction, hideOnChar, isCollected = C_MountJournal.GetMountInfo(index);
-
-		if isUsable and isCollected then
-
-			if active then
-				mounted = true;
-			end
-
-			searchableText = "Mount: ".. creatureName .. (isFavorite and " (favorite)" or "");
-	    	item = { text = searchableText , id=index, func = mod.summonMount};
-	    	table.insert(mod.items,item);
-
-	    end
-
-	end
-
-	if mounted then
-		searchableText = "Mount: Dismount";
-    	item = { text = searchableText , id=index, func = mod.dismmissMount};
-    	table.insert(mod.items,1,item);
-	end
-
-	searchableText = "Mount: Random (favorite)";
-	item = { text = searchableText , id=0, func = mod.summonMount};
-	table.insert(mod.items,1,item);
-
-end
-
-function mod.summonPet(item)
-
-	mod.window.OnButtonClick(item);
-
-	if(item.data.id==0) then
-		C_PetJournal.SummonRandomPet(false);
-	else
-		C_PetJournal.SummonPetByGUID(item.data.id);
-	end
-
-end
-
-function mod:PopulatePets()
-
-	local index,item;
-
-	local numPets = C_PetJournal.GetNumPets();
-	local searchableText = "";
-
-	for index = 1, numPets do
-		local petID, speciesID, owned, customName, level, favorite, isRevoked, speciesName, icon, petType, companionID, tooltip, description, isWild, canBattle, isTradeable, isUnique, obtainable = C_PetJournal.GetPetInfoByIndex(index)
-
-		if owned then
-
-			searchableText = "Pet: ".. (customName and customName or speciesName) .. (favorite and " (favorite)" or "");
-	    	item = { text = searchableText , id=petID, func = mod.summonPet; };
-	    	table.insert(mod.items,item);
-
-		end
-
-	end
-
-	local summonedPetGUID = C_PetJournal.GetSummonedPetGUID();
-
-	if not (summonedPetGUID  == nil) then
-
-		searchableText = "Pet: Dismiss";
-    	item = { text = searchableText , id=summonedPetGUID, func = mod.summonPet; };
-    	table.insert(mod.items,1,item);
-
-	end
-
-	searchableText = "Pet: Random (favorite)";
-    item = { text = searchableText , id=0, func = mod.summonPet; };
-    table.insert(mod.items,1,item);
-
 
 end
 
@@ -133,10 +25,10 @@ function mod:Refresh()
 
 	debug("refreshing search data");
 
-	mod.items = {};
-
-	mod:PopulateMounts();
-	mod:PopulatePets();
+	--goes trough all the modules
+	for name,module in pairs(self.modules) do
+		module:Refresh();
+	end
 
 	debug("data refreshed");
 
@@ -234,15 +126,11 @@ function mod:ColorItem(item,text)
 
 end
 
---find all items using the text
-function mod:FindAll(text)
+--find in a module
+function mod:FindInModule(module,text)
 
 	--our result
 	local result = {};
-
-	--double check that we need something to search
-	if (text==nil) then return result; end
-	if (text=="") then return result; end
 
 	--local vars
 	local word;
@@ -250,18 +138,54 @@ function mod:FindAll(text)
 	local words;
 
 	--loop al items
-	for k, item in pairs(mod.items) do
+	for k, item in pairs(module.items) do
 
 		--if this item match
 		if mod:MatchItem(item.text,text) then
 
 			--add color
-			item.displayText =  mod:ColorItem(item.text,text);
+			item.displayText = mod:ColorItem(item.text,text);
 
 			--insert into the table
 			table.insert(result,item);
 
 		end
+
+	end
+
+	return result;
+
+end
+
+--find all items using the text
+function mod:FindAll(text)
+
+	--our result
+	local result = {};
+
+	--local vars
+	local items;
+
+	--double check that we need something to search
+	if (text==nil) then return result; end
+	if (text=="") then return result; end
+
+	--local vars
+	local module,name, key, item
+
+	--goes trough all the modules
+	for name,module in pairs(self.modules) do
+
+		--get the items for this module
+		items = mod:FindInModule(module,text);
+
+		--merge the tables
+		for key,item in pairs(items) do
+			table.insert(result,item);
+		end
+
+		--we dont need it anymore
+		items = nil;
 
 	end
 
