@@ -3,14 +3,15 @@
 --
 
 --get the engine & Add-on
-local Engine = select(2,...)
-local AddOn = Engine.AddOn
+local Engine = select(2,...);
+local AddOn = Engine.AddOn;
 
 --load libraries
-local AceConfig = LibStub("AceConfig-3.0")
-local AceConfigDialog = LibStub("AceConfigDialog-3.0")
-local AceDB = LibStub("AceDB-3.0")
-local AceDBOptions = LibStub("AceDBOptions-3.0")
+local AceConfig = LibStub("AceConfig-3.0");
+local AceConfigDialog = LibStub("AceConfigDialog-3.0");
+local AceDB = LibStub("AceDB-3.0");
+local AceDBOptions = LibStub("AceDBOptions-3.0");
+local LibDualSpec = LibStub('LibDualSpec-1.0');
 
 --get locale
 local L = Engine.Locale;
@@ -61,61 +62,52 @@ function AddOn:GetSlashFromName(name)
 	return slash1,slash2;
 end
 
---set-up options
-function AddOn:SetupOptions()
+function AddOn:SetupDefaults(object,parent)
 
 	--set-up module options and defaults
-	local module,name
-	local databaseName,databaseTable
+	local module,name;
+	local databaseName,databaseTable;
 
 	--goes trough all the modules
-	for name,module in pairs(self.modules) do
+	for name,module in pairs(object.modules) do
 
 		--if this module has defaults
 		if(module.Defaults) then
 
 			--get all defaults tables of the module andd add then to the global defaults
 			for databaseName,databaseTable in pairs(module.Defaults) do
-				Engine.Defaults[databaseName][name] = databaseTable;
+
+				if parent then
+					Engine.Defaults[databaseName][parent][name] = databaseTable;
+
+				else
+					Engine.Defaults[databaseName][name] = databaseTable;
+				end
+
 			end
 
 		end
 
-		--if this module has an option table add to global options table
-		if(module.Options) then
-			Engine.Options.args[name] = module.Options;
+		if not parent then
+			AddOn:SetupDefaults(module,name);
 		end
 
 	end
+
+end
+
+--setup options
+function AddOn:SetupOptions()
+
+	--setup modules default
+	AddOn:SetupDefaults(self);
 
 	--create database
 	Engine.DB = AceDB:New(Engine.Name.."DB", Engine.Defaults, true);
 	Engine.GLOBAL = _G[Engine.Name.."DB"];
 
-	--register profile changes callbacks
-	Engine.DB.RegisterCallback(self, "OnProfileChanged", "OnProfileChanged");
-	Engine.DB.RegisterCallback(self, "OnProfileCopied", "OnProfileChanged");
-	Engine.DB.RegisterCallback(self, "OnProfileReset", "OnProfileChanged");
-
 	--set profile
 	Engine.Profile = Engine.DB.profile;
-
-	-- Add the options and profiles to the configuration dialog
-	Engine.Options.args['Profiles'] = AceDBOptions:GetOptionsTable(Engine.DB);
-	Engine.Options.args['Profiles'].name=L["PROFILES"];
-	AceConfig:RegisterOptionsTable(Engine.Name, Engine.Options);
-
-	-- Add dual-spec support
-	local LibDualSpec = LibStub('LibDualSpec-1.0');
-	LibDualSpec:EnhanceDatabase(Engine.DB, Engine.Name);
-	LibDualSpec:EnhanceOptions(Engine.Options.args['Profiles'], Engine.DB);
-
-	--get version
-	local Version = AddOn:GetModule("version");
-
-	--blizzard options
-	AceConfig:RegisterOptionsTable(Engine.Name.."Blizzard", Engine.blizzardOptions);
-	AceConfigDialog:AddToBlizOptions(Engine.Name.."Blizzard", Engine.Name);
 
 	--get the slash commands
 	Engine.slash1,Engine.slash2 = AddOn:GetSlashFromName(Engine.Name);
@@ -124,18 +116,83 @@ function AddOn:SetupOptions()
 	_G["SLASH_"..Engine.Name.."1"] = "/"..Engine.slash1;
 	_G["SLASH_"..Engine.Name.."2"] = "/"..Engine.slash2;
 	SlashCmdList[Engine.Name] = AddOn.HandleCommands;
+
+
+end
+
+--create options for blizzard ui
+function AddOn:RegisterBlizzardOptions()
+
+
+	--local vars
+	local k,sorted;
+	sorted = {};
+
+	--get version
+	local Version = AddOn:GetModule("version");
+
+	--register the table and add it to blizzar config ui
+	AceConfig:RegisterOptionsTable(Engine.Name,Engine.Options);
+	AceConfigDialog:AddToBlizOptions(Engine.Name,Version.Title);
+
+	--goes trough all the modules
+	for name,module in pairs(self.modules) do
+
+		if module.Options then
+			table.insert(sorted,module.Options);
+		end
+
+	end
+
+	--sort by order
+	table.sort(sorted, function(a,b) return a.order < b.order end);
+
+	--go trouh the table
+	for k,v in pairs(sorted) do
+
+		--register the table and add it to blizzar config ui
+		AceConfig:RegisterOptionsTable(Engine.Name..k, v);
+		AceConfigDialog:AddToBlizOptions(Engine.Name..k,v.name,Version.Title);
+
+	end
+
+	--register profile changes callbacks
+	Engine.DB.RegisterCallback(self, "OnProfileChanged", "OnProfileChanged");
+	Engine.DB.RegisterCallback(self, "OnProfileCopied", "OnProfileChanged");
+	Engine.DB.RegisterCallback(self, "OnProfileReset", "OnProfileChanged");
+
+	--create profile options
+	local profileOptions = AceDBOptions:GetOptionsTable(Engine.DB);
+	profileOptions.name = L["PROFILES"];
+
+	--setup lib dual spec
+	LibDualSpec:EnhanceDatabase(Engine.DB, Engine.Name);
+	LibDualSpec:EnhanceOptions(profileOptions, Engine.DB);
+
+	--register the table and add it to blizzar config ui
+	AceConfig:RegisterOptionsTable(Engine.Name.."Profile", profileOptions);
+	AceConfigDialog:AddToBlizOptions(Engine.Name.."Profile",L["PROFILES"],Version.Title);
+
+end
+
+function AddOn:OpenBlizzardConfig()
+	--get version
+	local Version = AddOn:GetModule("version");
+
+	--open config twice (yes, if not does not work always)
+	InterfaceOptionsFrame_OpenToCategory(Version.Title);
+	InterfaceOptionsFrame_OpenToCategory(Version.Title);
 end
 
 -- Handle commands
 function AddOn.HandleCommands(args)
-
 	--if not parameters show configuration
 	if args == nil then
-		AceConfigDialog:Open(Engine.Name);
+		AddOn:OpenBlizzardConfig()
 	else
 
 		--to check if any module has handle this command
-		local handleByMOdule = false
+		local handleByModule = false;
 
 		--goes trough the modules
 		for name,module in pairs(AddOn.modules) do
@@ -144,16 +201,16 @@ function AddOn.HandleCommands(args)
 			if module.handleCommand and type(module.handleCommand)=="function" then
 
 				--call it and mark that a module has handle it
-				handleByMOdule = handleByMOdule or module.handleCommand(args);
+				handleByModule = handleByModule or module.handleCommand(args);
 
 			end
 
 		end
 
 		--if not module has handle it, open configuration
-		if not handleByMOdule then
+		if not handleByModule then
 
-			AceConfigDialog:Open(Engine.Name);
+			AddOn:OpenBlizzardConfig();
 
 		end
 
@@ -167,7 +224,7 @@ function AddOn:OnProfileChanged(event, database, newProfileKey)
 	Engine.Profile = database.profile;
 
 	--notify modules profile change
-	local module,name
+	local module,name;
 
 	--if any module has a OnProfileChange trigger it
 	for name,module in pairs(self.modules) do

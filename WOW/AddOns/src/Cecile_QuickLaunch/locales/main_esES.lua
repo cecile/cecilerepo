@@ -2,7 +2,7 @@
 -- localized Spanish (main) strings
 --
 
---get the add-on engine
+--get the AddOn engine
 local AddOnName, Engine = ...;
 
 --Spanish or Latin America Spanish
@@ -16,16 +16,12 @@ end
 
 --main strings
 L["LOAD_MESSAGE"] = "%s (versión |cff0070de%s|r) cargado, escribe /%s o /%s para opciones."
-L["GENERAL"] = "General"
+L["CONFIG_WINDOW"] = "%s (version |cff0070de%s|r)"
 L["PROFILES"] = "Perfiles"
-L["GENERAL_SETTINGS"] = "Opciones Generales"
-L["OPEN_CONFIG"] = "Abrir Configuración"
-L["OPEN_CONFIG_DESC"] = "Abre la ventana de configuración."
-L["CONFIG_WINDOW"] = "%s (versión |cff0070de%s|r) herramienta de configuración."
-L["BINDIGN_DESC"] = "Abrir Lanzador Rápido"
+L["BINDING_DESC"] = "Abrir Lanzador Rápido"
 L["ABOUT"] = [[
 
-|cffff0000Advertencia|r: Este Add-On es una versión preliminar |cffff0000en estado Alpha|r, usalo bajo tu responsabilidad.
+|cffff0000Advertencia|r: Este AddOn es una versión preliminar |cffff0000en estado Beta|r, usalo bajo tu responsabilidad.
 
 |cff0070deUso:|r:
 
@@ -50,6 +46,12 @@ Invocar tu segunda montura favorita:
 
 Invocar a tu Aterracielos volador:
 |cff82c5ffCONTROL+MAYUSCULAS+P|r mont |cff82c5ffESPACIO|r aterr |cff82c5ffINTRO|r
+
+Abrir la configruación de un AddOn:
+|cff82c5ffCONTROL+MAYUSCULAS+P|r cfg |cff82c5ffESPACIO|r <nombre> |cff82c5ffINTRO|r
+
+Abrir la configruación de este AddOn:
+|cff82c5ffCONTROL+MAYUSCULAS+P|r cql |cff82c5ffINTRO|r
 
 |cffffff00Creado por|r
 

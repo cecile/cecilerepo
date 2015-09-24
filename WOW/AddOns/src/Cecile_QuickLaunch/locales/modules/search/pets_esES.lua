@@ -15,7 +15,14 @@ if not L then
 end
 
 --pets module
-L["PETS_PET"] = "Mascota: "
-L["PETS_FAVORITE"] = " (favorita)"
-L["PETS_DISMISS"] = "Mascota: Retirar"
-L["PETS_RANDOM"] = "Mascota: Aleatoria (favorita)"
+L["PETS_PET"] = "Mascota"
+L["PETS_FAVORITE"] = "favorita"
+L["PETS_DISMISS"] = "Retirar"
+L["PETS_RANDOM"] = "Aleatoria"
+L["PETS_MODULE"] = "Módulo de Mascotas"
+L["PETS_RETURN_FAVORITES"] = "Devolver Favoritas"
+L["PETS_RETURN_FAVORITES_DESC"] = "Activar/Desactivar devolver mascotas favoritas"
+L["PETS_RETURN_NO_FAVORITES"] = "Devolver No Favoritas"
+L["PETS_RETURN_NO_FAVORITES_DESC"] = "Activar/Desactivar devolver mascotas no favoritas"
+L["PETS_FAVORITE_TAG"] = "Etiqueta Favoritos"
+L["PETS_FAVORITE_TAG_DESC"] = "Cambia la etiqueta para los items favoritos"

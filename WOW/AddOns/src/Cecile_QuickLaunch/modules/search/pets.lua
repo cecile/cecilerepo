@@ -1,5 +1,5 @@
 ----------------------------------------------------------------------------------------------------
--- search module
+-- search pets module
 
 --get the engine and create the module
 local Engine = select(2,...);
@@ -15,6 +15,110 @@ local L=Engine.Locale;
 --debug
 local debug = Engine.AddOn:GetModule("debug");
 
+--module defaults
+mod.Defaults = {
+	profile = {
+		favorites = true,
+		noFavorites = true,
+		token = L["PETS_PET"],
+		favoriteTag = L["PETS_FAVORITE"],
+	},
+};
+
+--module options table
+mod.Options = {
+	order = 2,
+	type = "group",
+	name = L["PETS_MODULE"],
+	cmdInline = true,
+	args = {
+		enable = {
+			order = 1,
+			type = "toggle",
+			name = L["SEARCH_ENABLE_MODULE"],
+			desc = L["SEARCH_ENABLE_MODULE_DESC"],
+			get = function()
+				return mod:IsEnabled();
+			end,
+			set = function(key, value)
+
+				if(value) then
+					mod:Enable();
+				else
+					mod:Disable();
+				end
+
+				Engine.Profile.search.disableModules[mod:GetName()] = (not value);
+
+			end,
+		},
+		favorites = {
+			order = 2,
+			type = "toggle",
+			name = L["PETS_RETURN_FAVORITES"],
+			desc = L["PETS_RETURN_FAVORITES_DESC"],
+			get = function()
+				return Engine.Profile.search.pets.favorites;
+			end,
+			set = function(key, value)
+				Engine.Profile.search.pets.favorites = value;
+			end,
+			disabled = function()
+				return not mod:IsEnabled();
+			end,
+		},
+		noFavorites = {
+			order = 4,
+			type = "toggle",
+			name = L["PETS_RETURN_NO_FAVORITES"],
+			desc = L["PETS_RETURN_NO_FAVORITES_DESC"],
+			get = function()
+				return Engine.Profile.search.pets.noFavorites;
+			end,
+			set = function(key, value)
+				Engine.Profile.search.pets.noFavorites = value;
+			end,
+			disabled = function()
+				return not mod:IsEnabled();
+			end,
+		},
+		token = {
+			order = 5,
+			type = "input",
+			name = L["SEARCH_TOKEN"],
+			desc = L["SEARCH_TOKEN_DESC"],
+			get = function()
+				return Engine.Profile.search.pets.token;
+			end,
+			set = function(key, value)
+				if not (value=="") then
+					Engine.Profile.search.pets.token = value;
+				end
+			end,
+			disabled = function()
+				return not mod:IsEnabled();
+			end,
+		},
+		favoriteTag = {
+			order = 6,
+			type = "input",
+			name = L["PETS_FAVORITE_TAG"],
+			desc = L["PETS_FAVORITE_TAG_DESC"],
+			get = function()
+				return Engine.Profile.search.pets.favoriteTag;
+			end,
+			set = function(key, value)
+				if not (value=="") then
+					Engine.Profile.search.pets.favoriteTag = value;
+				end
+			end,
+			disabled = function()
+				return not mod:IsEnabled();
+			end,
+		},
+	}
+
+};
 
 --initialize the module
 function mod:OnInitialize()
@@ -27,6 +131,7 @@ function mod:OnInitialize()
 
 	debug("search/pets module initialize");
 
+	mod.desc = L["PETS_MODULE"];
 end
 
 --summon a pet if item.data.id==0 its random
@@ -48,7 +153,13 @@ end
 function mod:PopulatePets()
 
 	--lcoal vars
-	local index,item;
+	local index,item,creatureName;
+
+	--options
+	local token = Engine.Profile.search.pets.token;
+	local favorites = Engine.Profile.search.pets.favorites;
+	local noFavorites = Engine.Profile.search.pets.noFavorites;
+	local favoriteTag = Engine.Profile.search.pets.favoriteTag;
 
 	--get number of pets
 	local numPets = C_PetJournal.GetNumPets();
@@ -58,19 +169,35 @@ function mod:PopulatePets()
 
 	--loop the pets
 	for index = 1, numPets do
-		local petID, speciesID, owned, customName, level, favorite, isRevoked, speciesName, icon, petType, companionID, tooltip, description, isWild, canBattle, isTradeable, isUnique, obtainable = C_PetJournal.GetPetInfoByIndex(index)
+		local petID, speciesID, owned, customName, level, isFavorite, isRevoked, speciesName, icon, petType, companionID, tooltip, description, isWild, canBattle, isTradeable, isUnique, obtainable = C_PetJournal.GetPetInfoByIndex(index)
 
 		--if we own the pet
 		if owned then
 
-			--format the text
-			searchableText = L["PETS_PET"].. (customName and customName or speciesName) .. (favorite and L["PETS_FAVORITE"] or "");
 
-			--add the text and function
-	    	item = { text = searchableText , id=petID, func = mod.summonPet; };
+			searchableText = nil;
 
-	    	--insert the result
-	    	table.insert(mod.items,item);
+			creatureName = speciesName .. (customName and ( " [" .. customName .. "]" ) or "");
+
+			if isFavorite and favorites then
+
+				searchableText = token .. ": " .. creatureName .. " (".. favoriteTag .. ")";
+
+			elseif noFavorites then
+
+				searchableText = token .. ": " .. creatureName;
+
+			end
+
+			if searchableText then
+
+				--add the text and function
+	    		item = { text = searchableText , id=petID, func = mod.summonPet; };
+
+	    		--insert the result
+	    		table.insert(mod.items,item);
+
+	    	end
 
 		end
 
@@ -80,7 +207,7 @@ function mod:PopulatePets()
 	local summonedPetGUID = C_PetJournal.GetSummonedPetGUID();
 
 	--add a random favorite pet on top
-	searchableText = L["PETS_RANDOM"];
+	searchableText = token .. ": " .. L["PETS_RANDOM"] .. " (".. favoriteTag .. ")";
     item = { text = searchableText , id=0, func = mod.summonPet; };
     table.insert(mod.items,1,item);
 
@@ -88,7 +215,7 @@ function mod:PopulatePets()
 	if not (summonedPetGUID  == nil) then
 
 		--create the text
-		searchableText = L["PETS_DISMISS"];
+		searchableText = token .. ": " .. L["PETS_DISMISS"];
 
 		--set the text and function, we calling again to summon will dismm it
     	item = { text = searchableText , id=summonedPetGUID, func = mod.summonPet; };
@@ -116,4 +243,18 @@ end
 --enable module
 function mod:OnEnable()
 
+	--we dont have items
+	mod.items = {};
+
+	debug(mod:GetName().." Enabled");
+
+end
+
+--disabled module
+function mod:OnDisable()
+
+	--we dont have items
+	mod.items = {};
+
+	debug(mod:GetName().." Disabled");
 end

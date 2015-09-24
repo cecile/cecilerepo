@@ -11,13 +11,145 @@ local L=Engine.Locale;
 --debug
 local debug = Engine.AddOn:GetModule("debug");
 
+--module defaults
+mod.Defaults = {
+	profile = {
+		disableModules = {},
+		aliases = {
+			cfg = "addon config",
+			cql = "cecile_quickLaunch",
+		}
+	},
+};
 
---initialize the module
-function mod:OnInitialize()
+--module options table
+mod.Options = {
+	order = 2,
+	type = "group",
+	name = L["SEARCH_NAME"],
+	cmdInline = true,
+	childGroups = "tab",
+	args = {
+		general = {
+			name = L["SEARCH_ALIASES"],
+			type = "group",
+			order = 1,
+			args = {
+				aliases = {
+					order = 2,
+					type = "select",
+					name = L["SEARCH_ALIASES_DESC"],
+					values = function(self)
+						local k,v;
 
-	mod.window = Engine.AddOn:GetModule("window");
+						names={};
 
-	debug("search module initialize");
+						for k,v in pairs(Engine.Profile.search.aliases) do
+							names[k] = k;
+						end
+
+						return names;
+					end,
+					set = function(self,value)
+							mod.selectedAlias = value;
+							mod.selectedAliasName = value;
+							mod.selectedAliasValue = Engine.Profile.search.aliases[value];
+						end,
+					get = function(self)
+						return mod.selectedAlias;
+					end,
+				},
+				aliasName = {
+					name = L["SEARCH_ALIAS_NAME"],
+					order = 3,
+					type = "input",
+					width = "full",
+					get = function(self)
+						return mod.selectedAliasName;
+					end,
+					set = function(self,value)
+						if value=="" then return; end
+						mod.selectedAliasName=value:lower();
+					end,
+				},
+				aliasValue = {
+					name = L["SEARCH_ALIAS_VALUE"],
+					order = 4,
+					type = "input",
+					width = "full",
+					get = function(self)
+						return mod.selectedAliasValue;
+					end,
+					set = function(self,value)
+						if value=="" then return; end
+						mod.selectedAliasValue = value:lower();
+					end,
+				},
+				save = {
+					name = L["SEARCH_ALIAS_SAVE"],
+					desc = L["SEARCH_ALIAS_SAVE_DESC"],
+					order = 6,
+					type = "execute",
+					func = function(self)
+						if not mod.selectedAliasName then return; end
+						if not mod.selectedAliasValue then return; end
+
+						Engine.Profile.search.aliases[mod.selectedAliasName] = mod.selectedAliasValue;
+						mod.selectedAlias = mod.selectedAliasName;
+					end,
+				},
+				new = {
+					name = L["SEARCH_ALIAS_NEW"],
+					desc = L["SEARCH_ALIAS_NEW_DESC"],
+					order = 7,
+					type = "execute",
+					func = function(self)
+						mod.selectedAlias = nil;
+						mod.selectedAliasName = nil;
+						mod.selectedAliasValue = nil;
+					end,
+				},
+				delete = {
+					name = L["SEARCH_ALIAS_DELETE"],
+					desc = L["SEARCH_ALIAS_DELETE_DESC"],
+					order = 8,
+					type = "execute",
+					func = function(self)
+						if not mod.selectedAliasName then return; end
+						if not mod.selectedAliasValue then return; end
+
+						Engine.Profile.search.aliases[mod.selectedAliasName] = nil;
+						mod.selectedAlias = nil;
+						mod.selectedAliasName = nil;
+						mod.selectedAliasValue = nil;
+					end,
+				},
+			},
+		},
+	}
+};
+
+--profile change
+function mod:OnProfileChanged(event)
+
+	local name, module, isDisabled;
+
+	for name,module in pairs(mod.modules) do
+
+		isDisabled =  Engine.Profile.search.disableModules[name];
+
+		if(isDisabled) then
+			module:Disable();
+		else
+			module:Enable();
+		end
+
+		--trigger OnProfileChanged on the modules
+		if module.OnProfileChanged and type(module.OnProfileChanged)=="function" then
+			module.OnProfileChanged(event);
+		end
+
+	end
 
 end
 
@@ -27,7 +159,11 @@ function mod:Refresh()
 
 	--goes trough all the modules
 	for name,module in pairs(self.modules) do
-		module:Refresh();
+
+		if module:IsEnabled() then
+			module:Refresh();
+		end
+
 	end
 
 	debug("data refreshed");
@@ -39,7 +175,6 @@ function mod:MatchItem(item,text)
 
 	--set to lower case
 	local item = item:lower();
-	local text = text:lower();
 
 	--flag to control if we match every wod
 	local matchAllWords = true;
@@ -65,7 +200,6 @@ function mod:ColorItem(item,text)
 
 	--convert to lower
 	local item = item:lower();
-	local text = text:lower();
 
 	--local vars
 	local word;
@@ -126,6 +260,61 @@ function mod:ColorItem(item,text)
 
 end
 
+--remove words that are part of other words, for example remove "mount" if you are searching as well "mo"
+function mod:MergeWords(text)
+
+	--our result
+	local result = "";
+
+
+	--to get our list of words
+	local words={};
+
+	--transform the string into a list of words
+	for word in string.gmatch(text, "[^ ]+") do
+		table.insert(words,word);
+	end
+
+	--sort them by len
+	table.sort(words, function(a,b) return string.len(a) < string.len(b) end);
+
+	--local vars
+	local i,j;
+
+	--will have the words that are required
+	local newwords={};
+
+	---loops from each word ty to find if other word cotain it.
+	for i=1,#words do
+
+		--we have not fonund any
+		found = false;
+
+		--we start in next word to where we are
+		for j=i+1,#words do
+
+			--if we could not find it
+			if not (string.find(words[j],words[i])==nil) then
+				found = true;
+			end
+
+		end
+
+		--if we dont find any word this need to be added
+		if not found then
+			table.insert(newwords,words[i]);
+		end
+	end
+
+	--create the result
+	for k,word in pairs(newwords) do
+		result = result .. word .. (result and " " or "");
+	end
+
+	return result;
+
+end
+
 --find in a module
 function mod:FindInModule(module,text)
 
@@ -157,6 +346,21 @@ function mod:FindInModule(module,text)
 
 end
 
+--expand aliases
+function mod:ExpandAliases(text)
+
+	local result = text;
+
+	local k,v;
+
+	for k,v in pairs(Engine.Profile.search.aliases) do
+		result = string.gsub(result,k,v:lower());
+	end
+
+	return result;
+
+end
+
 --find all items using the text
 function mod:FindAll(text)
 
@@ -170,22 +374,32 @@ function mod:FindAll(text)
 	if (text==nil) then return result; end
 	if (text=="") then return result; end
 
+	--expand aliases
+	local merged = mod:ExpandAliases(text:lower());
+
+	--correct the text
+	local corrected = mod:MergeWords(merged);
+
 	--local vars
-	local module,name, key, item
+	local module,name, key, item;
 
 	--goes trough all the modules
 	for name,module in pairs(self.modules) do
 
-		--get the items for this module
-		items = mod:FindInModule(module,text);
+		if module:IsEnabled() then
 
-		--merge the tables
-		for key,item in pairs(items) do
-			table.insert(result,item);
+			--get the items for this module
+			items = mod:FindInModule(module,corrected);
+
+			--merge the tables
+			for key,item in pairs(items) do
+				table.insert(result,item);
+			end
+
+			--we dont need it anymore
+			items = nil;
+
 		end
-
-		--we dont need it anymore
-		items = nil;
 
 	end
 
@@ -194,5 +408,27 @@ end
 
 --enable module
 function mod:OnEnable()
+
+end
+
+--initialize the module
+function mod:OnInitialize()
+
+	mod.window = Engine.AddOn:GetModule("window");
+
+	debug("search module initialize");
+
+
+	--goes trough all the modules
+	for name,module in pairs(self.modules) do
+
+		--if this module has an option table add to global options table
+		if(module.Options) then
+			mod.Options.args[name] = module.Options;
+		end
+
+	end
+
+	mod:OnProfileChanged();
 
 end

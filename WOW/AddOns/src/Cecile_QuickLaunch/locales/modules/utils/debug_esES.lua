@@ -15,7 +15,7 @@ if not L then
 end
 
 --debug module
-L["DEV_SETTINGS"] = "Opciones del desarollador"
+L["DEV_SETTINGS"] = "Depuración"
 L["DEBUGGING"] = "Activar Depuración"
 L["DEBUGGING_DESC"] = "Activa la depuración del AddOn y muestra la ventana de depuración."
 L["DEBUG_WINDOW_HELP"] = "Rueda de ratón para desplazarse (pulsar shift para principio/fin). Click titulo mover y esquina inferior derecha para tamaño."

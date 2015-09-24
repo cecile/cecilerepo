@@ -5,4 +5,5 @@
 	<Script file="search.lua"/>
 	<Script file="search/mounts.lua"/>
 	<Script file="search/pets.lua"/>
+	<Script file="search/addonsconfig.lua"/>
 </Ui>

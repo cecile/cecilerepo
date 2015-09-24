@@ -1,5 +1,5 @@
 ----------------------------------------------------------------------------------------------------
--- localized Spanish (window module) strings
+-- localized Spanish (addons config module) strings
 --
 
 --get the add-on engine
@@ -14,9 +14,8 @@ if not L then
 	end
 end
 
---window module
-L["WINDOW_ERROR_IN_COMBAT"] = "%s |cffff0000:no se puede abrir en combate.|r"
-L["WINDOW_SETTINGS"] = "Ventana"
-L["WINDOW_BINDING_LAUNCH"] = "Tecla rápida de Abrir Ventana"
-L["WINDOW_BINDING_LAUNCH_DESC"] = "Cambia la tecla rápida para abrir la ventana"
-
+--addons config module
+L["ADDONS_CONFIG_ITEM"] = "Configuración AddOn"
+L["ADDONS_MODULE"] = "Módulo de Configuraciónes de AddOns"
+L["ADDONS_RETURN_SUBSET"] = "Devolver subconjuntos"
+L["ADDONS_RETURN_SUBSET_DESC"] = "Activa/Desactiva devolver subconjuntos de configuracion"

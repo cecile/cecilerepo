@@ -33,13 +33,16 @@ function AddOn:PLAYER_ENTERING_WORLD()
 
 	--define key bindings
 	_G.BINDING_HEADER_Cecile_QuickLauncher = Version.Title
-	_G.BINDING_NAME_LAUNCH_CQL = L["BINDIGN_DESC"]
+	_G.BINDING_NAME_LAUNCH_CQL = L["BINDING_DESC"]
 
 	--get Window
 	local Window = AddOn:GetModule("window");
 
 	--set the default binding
 	Window:SetDefaultBinding("CTRL-SHIFT-P","LAUNCH_CQL");
+
+	--register blizzard options
+	AddOn:RegisterBlizzardOptions();
 
 	self:UnregisterEvent("PLAYER_ENTERING_WORLD");
 end

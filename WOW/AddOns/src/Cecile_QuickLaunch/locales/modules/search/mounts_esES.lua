@@ -15,7 +15,14 @@ if not L then
 end
 
 --mounts module
-L["MOUNTS_MOUNT"] = "Montura: "
-L["MOUNT_FAVORITE"] = " (favorita)"
-L["MOUNT_DISMOUNT"] = "Montura: Desmontar"
-L["MOUNT_RANDOM"] = "Montura: Aleatoria (favorita)"
+L["MOUNTS_MOUNT"] = "Montura"
+L["MOUNT_FAVORITE"] = "favorita"
+L["MOUNT_DISMOUNT"] = "Desmontar"
+L["MOUNT_RANDOM"] = "Aleatoria"
+L["MOUNTS_MODULE"] = "Módulo de Monturas"
+L["MOUNT_RETURN_FAVORITES"] = "Devolver Favoritas"
+L["MOUNT_RETURN_FAVORITES_DESC"] = "Activar/Desactivar devolver monturas favoritas"
+L["MOUNT_RETURN_NO_FAVORITES"] = "Devolver No Favoritas"
+L["MOUNT_RETURN_NO_FAVORITES_DESC"] = "Activar/Desactivar devolver monturas no favoritas"
+L["MOUNT_FAVORITE_TAG"] = "Etiqueta Favoritos"
+L["MOUNT_FAVORITE_TAG_DESC"] = "Cambia la etiqueta para los items favoritos"

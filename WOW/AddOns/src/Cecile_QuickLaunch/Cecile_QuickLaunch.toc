@@ -2,7 +2,7 @@
 ## Title: |cffffffffCecile|r_|cfffff569QuickLaunch|r
 ## Notes: Quick Access to all stuff
 ## Author: Cecile
-## Version: 0.0.1.alpha
+## Version: 0.0.2.beta
 ## SavedVariables: Cecile_QuickLaunchDB
 ## OptionalDeps:
 

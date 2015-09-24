@@ -694,16 +694,10 @@ end
 
 --module options table
 mod.Options = {
-	order = 3,
+	order = 4,
 	type = "group",
 	name = L["WINDOW_SETTINGS"],
 	args = {
-		Frames_Header = {
-			type = "description",
-			order = 0,
-			name = L["WINDOW_SETTINGS"],
-			fontSize = "large",
-		},
 		debug = {
 			order = 1,
 			type = "keybinding",

@@ -23,12 +23,6 @@ mod.Options = {
 	name = L["DEV_SETTINGS"],
 	cmdInline = true,
 	args = {
-		Frames_Header = {
-			type = "description",
-			order = 0,
-			name = L["DEV_SETTINGS"],
-			fontSize = "large",
-		},
 		debug = {
 			order = 1,
 			type = "toggle",
