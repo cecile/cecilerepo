@@ -258,7 +258,7 @@ function mod:Refresh()
 	debug("refreshing Addons config data");
 
 	--clear items
-	mod.items = {};
+	mod.items = wipe(mod.items);
 
 	--populate Blizzard Addons config
 	mod:PopulateAddonsConfig();
@@ -280,8 +280,8 @@ end
 --disabled module
 function mod:OnDisable()
 
-	--we dont have items
-	mod.items = {};
+  --clear items
+  mod.items = wipe(mod.items);
 
 	debug(mod:GetName().." Disabled");
 end

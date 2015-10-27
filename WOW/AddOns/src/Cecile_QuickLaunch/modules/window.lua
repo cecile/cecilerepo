@@ -600,6 +600,24 @@ function mod:SetDefaultBinding(key,action)
 
 end
 
+function mod.playerFlagChanged(event, unit)
+
+	if (unit ~= "player") then
+		return;
+	end
+
+	if UnitIsAFK(unit) then
+		debug("triggering garbage collector");
+		collectgarbage("collect");
+	end
+
+end
+
+function mod.playerEnteringWorld()
+	debug("triggering garbage collector");
+	collectgarbage("collect");
+end
+
 --initialize the module
 function mod:OnInitialize()
 
@@ -618,6 +636,10 @@ function mod:OnInitialize()
 	--handle in combat
 	Engine.AddOn:RegisterEvent("PLAYER_REGEN_ENABLED",mod.OutOfCombat);
 	Engine.AddOn:RegisterEvent("PLAYER_REGEN_DISABLED",mod.InCombat);
+
+	Engine.AddOn:RegisterEvent("PLAYER_FLAGS_CHANGED",mod.playerFlagChanged);
+	Engine.AddOn:RegisterEvent("PLAYER_ENTERING_WORLD",mod.playerEnteringWorld);
+
 
 end
 
@@ -660,6 +682,7 @@ function mod:Show(value)
 			mod.mainFrame:Hide();
 		end
 	end
+
 
 end
 

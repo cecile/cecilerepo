@@ -1,3 +1,6 @@
+v0.0.3
+- Adding Achievements search module
+- Code cleanup
 v0.0.2
 - Initial beta
 - Added AddOns configurations search module.

@@ -27,7 +27,7 @@ mod.Defaults = {
 
 --module options table
 mod.Options = {
-	order = 2,
+	order = 4,
 	type = "group",
 	name = L["PETS_MODULE"],
 	cmdInline = true,
@@ -253,7 +253,7 @@ end
 --disabled module
 function mod:OnDisable()
 
-	--we dont have items
+	--clear items
 	mod.items = {};
 
 	debug(mod:GetName().." Disabled");

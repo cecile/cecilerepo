@@ -13,4 +13,6 @@
 	<Script file="search/mounts_esES.lua"/>
 	<Script file="search/addonsconfig_enUS.lua"/>
 	<Script file="search/addonsconfig_esES.lua"/>
+	<Script file="search/achievements_enUS.lua"/>
+	<Script file="search/achievements_esES.lua"/>
 </Ui>
