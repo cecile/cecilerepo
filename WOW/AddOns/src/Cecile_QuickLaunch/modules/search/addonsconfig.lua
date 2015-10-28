@@ -25,7 +25,7 @@ mod.Defaults = {
 --Engine.Profile.search.addonsconfig.returnChildrens
 --module options table
 mod.Options = {
-	order = 2,
+	order = 5,
 	type = "group",
 	name = L["ADDONS_MODULE"],
 	cmdInline = true,

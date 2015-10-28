@@ -33,6 +33,8 @@ Puedes pulsar |cff82c5ffINTRO|r para selecionar la primera opción o usar |cff82
 
 Alternativamente puedes usar el ratón y su rueda, pero no te lo recomiendo.
 
+Puedes definir |cff82c5ffSinónimos|r y |cff82c5ffuna lista negra|r en las opciones de Búsqueda.
+
 |cff0070deEjemplos:|r
 
 Invocar una mascota aleatoria:

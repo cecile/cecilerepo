@@ -52,7 +52,7 @@ mod.Options = {
 			end,
 		},
 		favorites = {
-			order = 2,
+			order = 3,
 			type = "toggle",
 			name = L["MOUNT_RETURN_FAVORITES"],
 			desc = L["MOUNT_RETURN_FAVORITES_DESC"],

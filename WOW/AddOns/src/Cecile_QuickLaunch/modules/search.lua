@@ -18,7 +18,8 @@ mod.Defaults = {
 		aliases = {
 			cfg = "addon config",
 			cql = "cecile_quickLaunch",
-		}
+		},
+		blacklist = {},
 	},
 };
 
@@ -30,7 +31,7 @@ mod.Options = {
 	cmdInline = true,
 	childGroups = "tab",
 	args = {
-		general = {
+		aliases = {
 			name = L["SEARCH_ALIASES"],
 			type = "group",
 			order = 1,
@@ -123,6 +124,114 @@ mod.Options = {
 						mod.selectedAliasName = nil;
 						mod.selectedAliasValue = nil;
 					end,
+				},
+				help = {
+					order = 9,
+					type = "description",
+					name = L["SEARCH_ALIAS_HELP"],
+					width = "full",
+				},
+			},
+		},
+		blacklist = {
+			name = L["SEARCH_BLACKLIST"],
+			type = "group",
+			order = 2,
+			args = {
+				blacklist = {
+					order = 2,
+					type = "select",
+					name = L["SEARCH_BLACKLIST_DESC"],
+					values = function(self)
+						local k,v;
+
+						names={};
+
+						for k,v in pairs(Engine.Profile.search.blacklist) do
+							names[k] = k;
+						end
+
+						return names;
+					end,
+					set = function(self,value)
+							mod.selectedBlacklist = value;
+							mod.selectedBlacklistName = value;
+							mod.selectedBlacklistValue = Engine.Profile.search.blacklist[value];
+						end,
+					get = function(self)
+						return mod.selectedBlacklist;
+					end,
+				},
+				blacklistName = {
+					name = L["SEARCH_BLACKLIST_NAME"],
+					order = 3,
+					type = "input",
+					width = "full",
+					get = function(self)
+						return mod.selectedBlacklistName;
+					end,
+					set = function(self,value)
+						if value=="" then return; end
+						mod.selectedBlacklistName=value:lower();
+					end,
+				},
+				blacklistValue = {
+					name = L["SEARCH_BLACKLIST_VALUE"],
+					order = 4,
+					type = "input",
+					width = "full",
+					get = function(self)
+						return mod.selectedBlacklistValue;
+					end,
+					set = function(self,value)
+						if value=="" then return; end
+						mod.selectedBlacklistValue = value:lower();
+					end,
+				},
+				save = {
+					name = L["SEARCH_BLACKLIST_SAVE"],
+					desc = L["SEARCH_BLACKLIST_SAVE_DESC"],
+					order = 6,
+					type = "execute",
+					func = function(self)
+						if not mod.selectedBlacklistName then return; end
+						if not mod.selectedBlacklistValue then return; end
+
+						Engine.Profile.search.blacklist[mod.selectedBlacklistName] = mod.selectedBlacklistValue;
+						mod.selectedBlacklist = mod.selectedBlacklistName;
+					end,
+				},
+				new = {
+					name = L["SEARCH_BLACKLIST_NEW"],
+					desc = L["SEARCH_BLACKLIST_NEW_DESC"],
+					order = 7,
+					type = "execute",
+					func = function(self)
+						mod.selectedBlacklist = nil;
+						mod.selectedBlacklistName = nil;
+						mod.selectedBlacklistValue = nil;
+					end,
+				},
+				delete = {
+					name = L["SEARCH_BLACKLIST_DELETE"],
+					desc = L["SEARCH_BLACKLIST_DELETE_DESC"],
+					order = 8,
+					type = "execute",
+					func = function(self)
+						if not mod.selectedBlacklistName then return; end
+						if not mod.selectedBlacklistValue then return; end
+
+						Engine.Profile.search.blacklist[mod.selectedBlacklistName] = nil;
+						mod.selectedBlacklist = nil;
+						mod.selectedBlacklistName = nil;
+						mod.selectedBlacklistValue = nil;
+					end,
+				},
+				help = {
+					order = 9,
+					type = "description",
+					name = L["SEARCH_BLACKIST_HELP"],
+					width = "full",
 				},
 			},
 		},
@@ -362,7 +471,7 @@ function mod:ExpandAliases(text)
 end
 
 --find all items using the text
-function mod:FindAll(text)
+function mod:searchAll(text)
 
 	--our result
 	local result = {};
@@ -374,7 +483,7 @@ function mod:FindAll(text)
 	if (text==nil) then return result; end
 	if (text=="") then return result; end
 
-	--expand aliases
+		--expand aliases
 	local merged = mod:ExpandAliases(text:lower());
 
 	--correct the text
@@ -404,6 +513,64 @@ function mod:FindAll(text)
 	end
 
 	return result;
+
+end
+
+--find all items using the text and apply blacklist
+function mod:FindAll(text)
+
+	--local vars
+	local items = {};
+	local blacklistItems = {};
+	local key,value,item,blacklistKey,blacklistItem,blacklisted;
+
+	--find all items
+	local findItems = mod:searchAll(text);
+
+	--search blacklist items
+	for key,value in pairs(Engine.Profile.search.blacklist) do
+
+		items = mod:searchAll(value);
+
+			--merge the tables
+			for key,item in pairs(items) do
+				table.insert(blacklistItems,item);
+			end
+
+	end
+
+	--empty result
+	items = {};
+
+	--goes trough the finded items
+	for key,item in pairs(findItems) do
+
+		--item is not blacklisted by default
+		blacklisted = false;
+
+		--goes trought the black list
+		for blacklistKey,blacklistItem in pairs(blacklistItems) do
+
+			--if the item is blacklisted mark it
+			if item.text == blacklistItem.text then
+				blacklisted = true;
+				break;
+			end
+
+		end
+
+		--add the item to the result
+		if not blacklisted then
+			table.insert(items,item);
+		end
+
+	end
+
+	blacklistItems = nil;
+	findItems = nil;
+
+	return items;
+
 end
 
 --enable module

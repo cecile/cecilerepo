@@ -30,3 +30,23 @@ L["SEARCH_ALIAS_DELETE"] = "Borrar"
 L["SEARCH_ALIAS_DELETE_DESC"] = "Borra el sinónimo"
 L["SEARCH_TOKEN"] = "Símbolo de busqueda"
 L["SEARCH_TOKEN_DESC"] = "Cambia el símbolo generado por las busquedas"
+L["SEARCH_BLACKLIST"] = "Lista Negra"
+L["SEARCH_BLACKLIST_DESC"] = "Elije un elemento en la lista negra"
+L["SEARCH_BLACKLIST_NAME"] = "Nombre"
+L["SEARCH_BLACKLIST_VALUE"] = "Valor"
+L["SEARCH_BLACKLIST_SAVE"] = "Salvar"
+L["SEARCH_BLACKLIST_SAVE_DESC"] = "Graba el elemento en la lista negra"
+L["SEARCH_BLACKLIST_NEW"] = "Nuevo"
+L["SEARCH_BLACKLIST_NEW_DESC"] = "Nuevo elemento en la lista negra"
+L["SEARCH_BLACKLIST_DELETE"] = "Borrar"
+L["SEARCH_BLACKLIST_DELETE_DESC"] = "Borra el elemento en la lista negra"
+L["SEARCH_ALIAS_HELP"] = [[
+
+Los sinónimos funcionan como sustituciones, cuando hagas una búsqueda replanzara cualquier ocurencia de un nombre de sinónimo con su valor.
+
+]]
+L["SEARCH_BLACKIST_HELP"] = [[
+
+La listas negra funciona como una busqueda negativa, cuando este tecleando cualquier busqueda todos los elmentos que cualquier valor de lista negra devuelva seran descartados del resultado.
+
+]]

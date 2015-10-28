@@ -28,7 +28,7 @@ mod.Defaults  = {
 
 --module options table
 mod.Options = {
-  order = 5,
+  order = 6,
   type = "group",
   name = L["ACHIEVEMENTS_MODULE"],
   cmdInline = true,

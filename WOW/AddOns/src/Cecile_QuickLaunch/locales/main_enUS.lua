@@ -31,6 +31,8 @@ You could press |cff82c5ffENTER|r to select the first option or use |cff82c5ffTA
 
 Alternatively you could use mouse wheel/click, but honestly I don't recommend it.
 
+You could define |cff82c5ffAliases|r and |cff82c5ffBlacklist|r items in the search options.
+
 |cff0070deExamples:|r
 
 Summon a random pet:
