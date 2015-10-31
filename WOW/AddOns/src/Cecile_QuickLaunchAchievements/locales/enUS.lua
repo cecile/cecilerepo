@@ -3,14 +3,14 @@
 --
 
 --get the add-on engine
-local AddOnName, Engine = ...;
+local Engine = _G.Cecile_QuickLaunch;
 
 --prepare locale
-local L = LibStub("AceLocale-3.0"):NewLocale(AddOnName, "enUS", true);
+local L = LibStub("AceLocale-3.0"):NewLocale(Engine.Name, "enUS", true);
 if not L then return; end
 
 --pets module
-L["ACHIEVEMENTS_MODULE"] = "Achievements Module"
+L["ACHIEVEMENTS_MODULE"] = "Achievements"
 L["ACHIEVEMENTS_ACHIEVEMENT"] = "Achievement"
 L["ACHIEVEMENTS_COMPLETED"] = "completed"
 L["ACHIEVEMENTS_UNCOMPLETED"] = "uncompleted"

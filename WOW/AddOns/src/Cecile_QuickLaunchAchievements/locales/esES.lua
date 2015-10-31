@@ -3,19 +3,19 @@
 --
 
 --get the add-on engine
-local AddOnName, Engine = ...;
+local Engine = _G.Cecile_QuickLaunch;
 
 --Spanish or Latin America Spanish
-local L = LibStub("AceLocale-3.0"):NewLocale(AddOnName, "esES")
+local L = LibStub("AceLocale-3.0"):NewLocale(Engine.Name,, "esES")
 if not L then
-  L = LibStub("AceLocale-3.0"):NewLocale(AddOnName, "esMX");
+  L = LibStub("AceLocale-3.0"):NewLocale(Engine.Name,, "esMX");
   if not L then
     return;
   end
 end
 
 --achievements module
-L["ACHIEVEMENTS_MODULE"] = "Módulo de Logros"
+L["ACHIEVEMENTS_MODULE"] = "Logros"
 L["ACHIEVEMENTS_ACHIEVEMENT"] = "Logro"
 L["ACHIEVEMENTS_COMPLETED"] = "completado"
 L["ACHIEVEMENTS_UNCOMPLETED"] = "sin completar"

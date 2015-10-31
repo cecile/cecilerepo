@@ -45,3 +45,4 @@ L["SEARCH_BLACKIST_HELP"] = [[
 Blacklist is like a negative search, whenever you type a search all items that are returned by any blacklist value will be discarded from the result.
 
 ]]
+L["SEARCH_MODULES"] = "Modules"

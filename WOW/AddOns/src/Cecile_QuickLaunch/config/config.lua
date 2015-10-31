@@ -64,6 +64,8 @@ end
 
 function AddOn:SetupDefaults(object,parent)
 
+	print(object:GetName());
+
 	--set-up module options and defaults
 	local module,name;
 	local databaseName,databaseTable;

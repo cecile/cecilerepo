@@ -3,8 +3,4 @@
 	<Script file="utils/version.lua"/>
 	<Script file="window.lua"/>
 	<Script file="search.lua"/>
-	<Script file="search/mounts.lua"/>
-	<Script file="search/pets.lua"/>
-	<Script file="search/addonsconfig.lua"/>
-  <Script file="search/achievements.lua"/>
 </Ui>

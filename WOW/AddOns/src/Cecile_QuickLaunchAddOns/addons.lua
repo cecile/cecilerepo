@@ -2,11 +2,11 @@
 -- search addons config module
 
 --get the engine and create the module
-local Engine = select(2,...);
+local Engine = _G.Cecile_QuickLaunch;
 
 --create the modules as submodule of search
 local search = Engine.AddOn:GetModule("search");
-local mod = search:NewModule("addonsconfig");
+local mod = search:NewModule("addons");
 
 --get the locale
 local L=Engine.Locale;
@@ -22,10 +22,9 @@ mod.Defaults = {
 	},
 };
 
---Engine.Profile.search.addonsconfig.returnChildrens
+--mod.Profile.returnChildrens
 --module options table
 mod.Options = {
-	order = 5,
 	type = "group",
 	name = L["ADDONS_MODULE"],
 	cmdInline = true,
@@ -55,10 +54,10 @@ mod.Options = {
 			name = L["ADDONS_RETURN_SUBSET"],
 			desc = L["ADDONS_RETURN_SUBSET_DESC"],
 			get = function()
-				return Engine.Profile.search.addonsconfig.subsets;
+				return mod.Profile.subsets;
 			end,
 			set = function(key, value)
-				Engine.Profile.search.addonsconfig.subsets = value;
+				mod.Profile.subsets = value;
 			end,
 			disabled = function()
 				return not mod:IsEnabled();
@@ -70,11 +69,11 @@ mod.Options = {
 			name = L["SEARCH_TOKEN"],
 			desc = L["SEARCH_TOKEN_DESC"],
 			get = function()
-				return Engine.Profile.search.addonsconfig.token;
+				return mod.Profile.token;
 			end,
 			set = function(key, value)
 				if not (value=="") then
-					Engine.Profile.search.addonsconfig.token = value;
+					mod.Profile.token = value;
 				end
 			end,
 			disabled = function()
@@ -87,6 +86,12 @@ mod.Options = {
 
 --initialize the module
 function mod:OnInitialize()
+
+  self.DB = Engine.DB:RegisterNamespace(mod:GetName(), mod.Defaults);
+
+  self.Profile = self.DB.profile;
+
+  search.Options.args.modules.args[mod:GetName()] = mod.Options;
 
 	--we dont have items
 	mod.items = {};
@@ -201,8 +206,8 @@ function mod:PopulateAddonsConfig()
 	local index,frame, parentText, searchableText,name,k,v;
 
 	--options
-	local subsets = Engine.Profile.search.addonsconfig.subsets;
-	local token = Engine.Profile.search.addonsconfig.token;
+	local subsets = mod.Profile.subsets;
+	local token = mod.Profile.token;
 
 	--create an stack
 	local stack = mod:CreateStack();

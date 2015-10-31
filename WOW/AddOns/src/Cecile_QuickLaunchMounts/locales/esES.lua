@@ -3,15 +3,15 @@
 --
 
 --get the add-on engine
-local AddOnName, Engine = ...;
+local Engine = _G.Cecile_QuickLaunch;
 
 --Spanish or Latin America Spanish
-local L = LibStub("AceLocale-3.0"):NewLocale(AddOnName, "esES")
+local L = LibStub("AceLocale-3.0"):NewLocale(Engine.Name,, "esES")
 if not L then
-	L = LibStub("AceLocale-3.0"):NewLocale(AddOnName, "esMX");
-	if not L then
-		return;
-	end
+  L = LibStub("AceLocale-3.0"):NewLocale(Engine.Name,, "esMX");
+  if not L then
+    return;
+  end
 end
 
 --mounts module
@@ -19,7 +19,7 @@ L["MOUNTS_MOUNT"] = "Montura"
 L["MOUNT_FAVORITE"] = "favorita"
 L["MOUNT_DISMOUNT"] = "Desmontar"
 L["MOUNT_RANDOM"] = "Aleatoria"
-L["MOUNTS_MODULE"] = "Módulo de Monturas"
+L["MOUNTS_MODULE"] = "Monturas"
 L["MOUNT_RETURN_FAVORITES"] = "Devolver Favoritas"
 L["MOUNT_RETURN_FAVORITES_DESC"] = "Activar/Desactivar devolver monturas favoritas"
 L["MOUNT_RETURN_NO_FAVORITES"] = "Devolver No Favoritas"

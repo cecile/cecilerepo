@@ -2,7 +2,7 @@
 -- search achievements module
 
 --get the engine and create the module
-local Engine = select(2,...);
+local Engine = _G.Cecile_QuickLaunch;
 
 --create the modules as submodule of search
 local search = Engine.AddOn:GetModule("search");
@@ -28,7 +28,6 @@ mod.Defaults  = {
 
 --module options table
 mod.Options = {
-  order = 6,
   type = "group",
   name = L["ACHIEVEMENTS_MODULE"],
   cmdInline = true,
@@ -59,10 +58,10 @@ mod.Options = {
       name = L["ACHIEVEMENTS_RETURN_COMPLETED"],
       desc = L["ACHIEVEMENTS_RETURN_COMPLETED_DESC"],
       get = function()
-        return Engine.Profile.search.achievements.completed;
+        return mod.Profile.completed;
       end,
       set = function(key, value)
-        Engine.Profile.search.achievements.completed = value;
+        mod.Profile.completed = value;
       end,
       disabled = function()
         return not mod:IsEnabled();
@@ -74,10 +73,10 @@ mod.Options = {
       name = L["ACHIEVEMENTS_RETURN_UNCOMPLETED"],
       desc = L["ACHIEVEMENTS_RETURN_UNCOMPLETED_DESC"],
       get = function()
-        return Engine.Profile.search.achievements.uncompleted;
+        return mod.Profile.uncompleted;
       end,
       set = function(key, value)
-        Engine.Profile.search.achievements.uncompleted = value;
+        mod.Profile.uncompleted = value;
       end,
       disabled = function()
         return not mod:IsEnabled();
@@ -89,10 +88,10 @@ mod.Options = {
       name = L["ACHIEVEMENTS_RETURN_CATEGORY"],
       desc = L["ACHIEVEMENTS_RETURN_CATEGORY_DESC"],
       get = function()
-        return Engine.Profile.search.achievements.category;
+        return mod.Profile.category;
       end,
       set = function(key, value)
-        Engine.Profile.search.achievements.category = value;
+        mod.Profile.category = value;
       end,
       disabled = function()
         return not mod:IsEnabled();
@@ -104,11 +103,11 @@ mod.Options = {
       name = L["SEARCH_TOKEN"],
       desc = L["SEARCH_TOKEN_DESC"],
       get = function()
-        return Engine.Profile.search.achievements.token;
+        return mod.Profile.token;
       end,
       set = function(key, value)
         if not (value=="") then
-          Engine.Profile.search.achievements.token = value;
+          mod.Profile.token = value;
         end
       end,
       disabled = function()
@@ -121,11 +120,11 @@ mod.Options = {
       name = L["ACHIEVEMENTS_COMPLETED_TAG"],
       desc = L["ACHIEVEMENTS_COMPLETED_TAG_DESC"],
       get = function()
-        return Engine.Profile.search.achievements.completedTag;
+        return mod.Profile.completedTag;
       end,
       set = function(key, value)
         if not (value=="") then
-          Engine.Profile.search.achievements.completedTag = value;
+          mod.Profile.completedTag = value;
         end
       end,
       disabled = function()
@@ -138,11 +137,11 @@ mod.Options = {
       name = L["ACHIEVEMENTS_UNCOMPLETED_TAG"],
       desc = L["ACHIEVEMENTS_UNCOMPLETED_TAG_DESC"],
       get = function()
-        return Engine.Profile.search.achievements.uncompletedTag;
+        return mod.Profile.uncompletedTag;
       end,
       set = function(key, value)
         if not (value=="") then
-          Engine.Profile.search.achievements.uncompletedTag = value;
+          mod.Profile.uncompletedTag = value;
         end
       end,
       disabled = function()
@@ -155,6 +154,12 @@ mod.Options = {
 
 --initialize the module
 function mod:OnInitialize()
+
+  self.DB = Engine.DB:RegisterNamespace(mod:GetName(), mod.Defaults);
+
+  self.Profile = self.DB.profile;
+
+  search.Options.args.modules.args[mod:GetName()] = mod.Options;
 
   --we dont have items
   mod.items = {};
@@ -211,12 +216,12 @@ function mod:PopulateAchievements()
   local category,number,categoryName,parentCategoryID,parentCategoryName;
 
   --options
-  local token = Engine.Profile.search.achievements.token;
-  local completedTag = Engine.Profile.search.achievements.completedTag;
-  local uncompletedTag = Engine.Profile.search.achievements.uncompletedTag;
-  local showCompleted = Engine.Profile.search.achievements.completed;
-  local showUncompleted = Engine.Profile.search.achievements.uncompleted;
-  local showCategory = Engine.Profile.search.achievements.category;
+  local token = mod.Profile.token;
+  local completedTag = mod.Profile.completedTag;
+  local uncompletedTag = mod.Profile.uncompletedTag;
+  local showCompleted = mod.Profile.completed;
+  local showUncompleted = mod.Profile.uncompleted;
+  local showCategory = mod.Profile.category;
 
   --goes trought the categories
   for _,category in pairs(categories) do

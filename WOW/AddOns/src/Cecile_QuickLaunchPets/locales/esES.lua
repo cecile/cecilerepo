@@ -3,12 +3,12 @@
 --
 
 --get the add-on engine
-local AddOnName, Engine = ...;
+local Engine = _G.Cecile_QuickLaunch;
 
 --Spanish or Latin America Spanish
-local L = LibStub("AceLocale-3.0"):NewLocale(AddOnName, "esES")
+local L = LibStub("AceLocale-3.0"):NewLocale(Engine.Name,, "esES")
 if not L then
-	L = LibStub("AceLocale-3.0"):NewLocale(AddOnName, "esMX");
+	L = LibStub("AceLocale-3.0"):NewLocale(Engine.Name,, "esMX");
 	if not L then
 		return;
 	end
@@ -19,7 +19,7 @@ L["PETS_PET"] = "Mascota"
 L["PETS_FAVORITE"] = "favorita"
 L["PETS_DISMISS"] = "Retirar"
 L["PETS_RANDOM"] = "Aleatoria"
-L["PETS_MODULE"] = "Módulo de Mascotas"
+L["PETS_MODULE"] = "Mascotas"
 L["PETS_RETURN_FAVORITES"] = "Devolver Favoritas"
 L["PETS_RETURN_FAVORITES_DESC"] = "Activar/Desactivar devolver mascotas favoritas"
 L["PETS_RETURN_NO_FAVORITES"] = "Devolver No Favoritas"

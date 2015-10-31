@@ -2,12 +2,11 @@
 -- search pets module
 
 --get the engine and create the module
-local Engine = select(2,...);
+local Engine = _G.Cecile_QuickLaunch;
 
 --create the modules as submodule of search
 local search = Engine.AddOn:GetModule("search");
 local mod = search:NewModule("pets");
-
 
 --get the locale
 local L=Engine.Locale;
@@ -27,13 +26,12 @@ mod.Defaults = {
 
 --module options table
 mod.Options = {
-	order = 4,
 	type = "group",
 	name = L["PETS_MODULE"],
 	cmdInline = true,
 	args = {
 		enable = {
-			order = 4,
+			order = 1,
 			type = "toggle",
 			name = L["SEARCH_ENABLE_MODULE"],
 			desc = L["SEARCH_ENABLE_MODULE_DESC"],
@@ -58,41 +56,41 @@ mod.Options = {
 			name = L["PETS_RETURN_FAVORITES"],
 			desc = L["PETS_RETURN_FAVORITES_DESC"],
 			get = function()
-				return Engine.Profile.search.pets.favorites;
+				return mod.Profile.favorites;
 			end,
 			set = function(key, value)
-				Engine.Profile.search.pets.favorites = value;
+				mod.Profile.favorites = value;
 			end,
 			disabled = function()
 				return not mod:IsEnabled();
 			end,
 		},
 		noFavorites = {
-			order = 4,
+			order = 3,
 			type = "toggle",
 			name = L["PETS_RETURN_NO_FAVORITES"],
 			desc = L["PETS_RETURN_NO_FAVORITES_DESC"],
 			get = function()
-				return Engine.Profile.search.pets.noFavorites;
+				return mod.Profile.noFavorites;
 			end,
 			set = function(key, value)
-				Engine.Profile.search.pets.noFavorites = value;
+				mod.Profile.noFavorites = value;
 			end,
 			disabled = function()
 				return not mod:IsEnabled();
 			end,
 		},
 		token = {
-			order = 5,
+			order = 4,
 			type = "input",
 			name = L["SEARCH_TOKEN"],
 			desc = L["SEARCH_TOKEN_DESC"],
 			get = function()
-				return Engine.Profile.search.pets.token;
+				return mod.Profile.token;
 			end,
 			set = function(key, value)
 				if not (value=="") then
-					Engine.Profile.search.pets.token = value;
+					mod.Profile.token = value;
 				end
 			end,
 			disabled = function()
@@ -100,16 +98,16 @@ mod.Options = {
 			end,
 		},
 		favoriteTag = {
-			order = 6,
+			order = 5,
 			type = "input",
 			name = L["PETS_FAVORITE_TAG"],
 			desc = L["PETS_FAVORITE_TAG_DESC"],
 			get = function()
-				return Engine.Profile.search.pets.favoriteTag;
+				return mod.Profile.favoriteTag;
 			end,
 			set = function(key, value)
 				if not (value=="") then
-					Engine.Profile.search.pets.favoriteTag = value;
+					mod.Profile.favoriteTag = value;
 				end
 			end,
 			disabled = function()
@@ -122,6 +120,12 @@ mod.Options = {
 
 --initialize the module
 function mod:OnInitialize()
+
+	self.DB = Engine.DB:RegisterNamespace(mod:GetName(), mod.Defaults);
+
+	self.Profile = self.DB.profile;
+
+	search.Options.args.modules.args[mod:GetName()] = mod.Options;
 
 	--we dont have items
 	mod.items = {};
@@ -156,10 +160,10 @@ function mod:PopulatePets()
 	local index,item,creatureName;
 
 	--options
-	local token = Engine.Profile.search.pets.token;
-	local favorites = Engine.Profile.search.pets.favorites;
-	local noFavorites = Engine.Profile.search.pets.noFavorites;
-	local favoriteTag = Engine.Profile.search.pets.favoriteTag;
+	local token = mod.Profile.token;
+	local favorites = mod.Profile.favorites;
+	local noFavorites = mod.Profile.noFavorites;
+	local favoriteTag = mod.Profile.favoriteTag;
 
 	--get number of pets
 	local numPets = C_PetJournal.GetNumPets();

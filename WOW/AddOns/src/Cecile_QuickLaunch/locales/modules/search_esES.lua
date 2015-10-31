@@ -50,3 +50,4 @@ L["SEARCH_BLACKIST_HELP"] = [[
 La listas negra funciona como una busqueda negativa, cuando este tecleando cualquier busqueda todos los elmentos que cualquier valor de lista negra devuelva seran descartados del resultado.
 
 ]]
+L["SEARCH_MODULES"] = "Módulos"

@@ -3,10 +3,10 @@
 --
 
 --get the add-on engine
-local AddOnName, Engine = ...;
+local Engine = _G.Cecile_QuickLaunch;
 
 --prepare locale
-local L = LibStub("AceLocale-3.0"):NewLocale(AddOnName, "enUS", true);
+local L = LibStub("AceLocale-3.0"):NewLocale(Engine.Name, "enUS", true);
 if not L then return; end
 
 --pets module
@@ -14,7 +14,7 @@ L["PETS_PET"] = "Pet"
 L["PETS_FAVORITE"] = "favorite"
 L["PETS_DISMISS"] = "Dismiss"
 L["PETS_RANDOM"] = "Random"
-L["PETS_MODULE"] = "Pets Module"
+L["PETS_MODULE"] = "Pets"
 L["PETS_RETURN_FAVORITES"] = "Return Favorites"
 L["PETS_RETURN_FAVORITES_DESC"] = "Enable/Disable returning favorites pets"
 L["PETS_RETURN_NO_FAVORITES"] = "Return No Favorites"

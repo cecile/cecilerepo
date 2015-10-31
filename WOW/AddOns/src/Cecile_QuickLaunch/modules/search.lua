@@ -235,6 +235,13 @@ mod.Options = {
 				},
 			},
 		},
+		modules = {
+			name = L["SEARCH_MODULES"],
+			type = "group",
+			order = 3,
+			args = {
+			}
+		}
 	}
 };
 
@@ -584,17 +591,6 @@ function mod:OnInitialize()
 	mod.window = Engine.AddOn:GetModule("window");
 
 	debug("search module initialize");
-
-
-	--goes trough all the modules
-	for name,module in pairs(self.modules) do
-
-		--if this module has an option table add to global options table
-		if(module.Options) then
-			mod.Options.args[name] = module.Options;
-		end
-
-	end
 
 	mod:OnProfileChanged();
 

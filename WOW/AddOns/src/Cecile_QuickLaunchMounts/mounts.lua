@@ -2,7 +2,7 @@
 -- search mounts module
 
 --get the engine and create the module
-local Engine = select(2,...);
+local Engine = _G.Cecile_QuickLaunch;
 
 --create the modules as submodule of search
 local search = Engine.AddOn:GetModule("search");
@@ -26,7 +26,6 @@ mod.Defaults = {
 
 --module options table
 mod.Options = {
-	order = 3,
 	type = "group",
 	name = L["MOUNTS_MODULE"],
 	cmdInline = true,
@@ -52,46 +51,46 @@ mod.Options = {
 			end,
 		},
 		favorites = {
-			order = 3,
+			order = 2,
 			type = "toggle",
 			name = L["MOUNT_RETURN_FAVORITES"],
 			desc = L["MOUNT_RETURN_FAVORITES_DESC"],
 			get = function()
-				return Engine.Profile.search.mounts.favorites;
+				return mod.Profile.favorites;
 			end,
 			set = function(key, value)
-				Engine.Profile.search.mounts.favorites = value;
+				mod.Profile.favorites = value;
 			end,
 			disabled = function()
 				return not mod:IsEnabled();
 			end,
 		},
 		noFavorites = {
-			order = 4,
+			order = 3,
 			type = "toggle",
 			name = L["MOUNT_RETURN_NO_FAVORITES"],
 			desc = L["MOUNT_RETURN_NO_FAVORITES_DESC"],
 			get = function()
-				return Engine.Profile.search.mounts.noFavorites;
+				return mod.Profile.noFavorites;
 			end,
 			set = function(key, value)
-				Engine.Profile.search.mounts.noFavorites = value;
+				mod.Profile.noFavorites = value;
 			end,
 			disabled = function()
 				return not mod:IsEnabled();
 			end,
 		},
 		token = {
-			order = 5,
+			order = 4,
 			type = "input",
 			name = L["SEARCH_TOKEN"],
 			desc = L["SEARCH_TOKEN_DESC"],
 			get = function()
-				return Engine.Profile.search.mounts.token;
+				return mod.Profile.token;
 			end,
 			set = function(key, value)
 				if not (value=="") then
-					Engine.Profile.search.mounts.token = value;
+					mod.Profile.token = value;
 				end
 			end,
 			disabled = function()
@@ -99,16 +98,16 @@ mod.Options = {
 			end,
 		},
 		favoriteTag = {
-			order = 6,
+			order = 5,
 			type = "input",
 			name = L["MOUNT_FAVORITE_TAG"],
 			desc = L["MOUNT_FAVORITE_TAG_DESC"],
 			get = function()
-				return Engine.Profile.search.mounts.favoriteTag;
+				return mod.Profile.favoriteTag;
 			end,
 			set = function(key, value)
 				if not (value=="") then
-					Engine.Profile.search.mounts.favoriteTag = value;
+					mod.Profile.favoriteTag = value;
 				end
 			end,
 			disabled = function()
@@ -122,6 +121,12 @@ mod.Options = {
 
 --initialize the module
 function mod:OnInitialize()
+
+	self.DB = Engine.DB:RegisterNamespace(mod:GetName(), mod.Defaults);
+
+	self.Profile = self.DB.profile;
+
+	search.Options.args.modules.args[mod:GetName()] = mod.Options;
 
 	--we dont have items
 	mod.items = {};
@@ -163,10 +168,10 @@ function mod:PopulateMounts()
 	local index,item;
 
 	--options
-	local token = Engine.Profile.search.mounts.token;
-	local favorites = Engine.Profile.search.mounts.favorites;
-	local noFavorites = Engine.Profile.search.mounts.noFavorites;
-	local favoriteTag = Engine.Profile.search.mounts.favoriteTag;
+	local token = mod.Profile.token;
+	local favorites = mod.Profile.favorites;
+	local noFavorites = mod.Profile.noFavorites;
+	local favoriteTag = mod.Profile.favoriteTag;
 
 	--get max num of mounts
 	local numMounts = C_MountJournal.GetNumMounts();
