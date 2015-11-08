@@ -230,8 +230,14 @@ end
 
 --write to the debug window
 function mod:Debug(fmt, ...)
-	mod.frame.msg:AddMessage(string.format("%6.3f (%s):  "..fmt, mod:GetTimeShort(),
-		mod:GetCaller(), ...));
+	if (fmt==nil) then
+		mod.frame.msg:AddMessage(string.format("%6.3f (%s):  nil", mod:GetTimeShort(),
+			mod:GetCaller()));
+	else
+		mod.frame.msg:AddMessage(string.format("%6.3f (%s):  "..fmt, mod:GetTimeShort(),
+			mod:GetCaller(), ...));
+	end
+
 end
 
 
