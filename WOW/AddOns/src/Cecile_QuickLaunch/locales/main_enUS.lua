@@ -17,6 +17,7 @@ L["LOAD_MESSAGE"] = "%s (version |cff0070de%s|r) loaded, type /%s or /%s for opt
 L["CONFIG_WINDOW"] = "%s (version |cff0070de%s|r)"
 L["PROFILES"] = "Profiles"
 L["BINDING_DESC"] = "Open Quick Launch"
+L["LAUNCH_BINDING_DESC"] = "Launch Last Command"
 L["ABOUT"] = [[
 
 |cffff0000Warning|r: This AddOn its in a very early |cffff0000Beta Stage|r, use it at your own risk.

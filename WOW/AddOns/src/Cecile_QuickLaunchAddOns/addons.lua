@@ -11,6 +11,8 @@ local mod = search:NewModule("addons");
 --get the locale
 local L=Engine.Locale;
 
+mod.desc = L["ADDONS_MODULE"];
+
 --debug
 local debug = Engine.AddOn:GetModule("debug");
 
@@ -22,34 +24,13 @@ mod.Defaults = {
 	},
 };
 
---mod.Profile.returnChildrens
 --module options table
 mod.Options = {
 	type = "group",
-	name = L["ADDONS_MODULE"],
-	cmdInline = true,
+	name = mod.desc,
 	args = {
-		enable = {
-			order = 1,
-			type = "toggle",
-			name = L["SEARCH_ENABLE_MODULE"],
-			desc = L["SEARCH_ENABLE_MODULE_DESC"],
-			get = function()
-				return mod:IsEnabled();
-			end,
-			set = function(key, value)
-
-				if(value) then
-					mod:Enable();
-				else
-					mod:Disable();
-				end
-
-				Engine.Profile.search.disableModules[mod:GetName()] = (not value);
-			end,
-		},
 		subsets = {
-			order = 2,
+			order = 1,
 			type = "toggle",
 			name = L["ADDONS_RETURN_SUBSET"],
 			desc = L["ADDONS_RETURN_SUBSET_DESC"],
@@ -64,7 +45,7 @@ mod.Options = {
 			end,
 		},
 		token = {
-			order = 3,
+			order = 2,
 			type = "input",
 			name = L["SEARCH_TOKEN"],
 			desc = L["SEARCH_TOKEN_DESC"],
@@ -83,27 +64,6 @@ mod.Options = {
 	}
 
 };
-
---initialize the module
-function mod:OnInitialize()
-
-  self.DB = Engine.DB:RegisterNamespace(mod:GetName(), mod.Defaults);
-
-  self.Profile = self.DB.profile;
-
-  search.Options.args.modules.args[mod:GetName()] = mod.Options;
-
-	--we dont have items
-	mod.items = {};
-
-	--get the window module
-	mod.window = Engine.AddOn:GetModule("window");
-
-	debug("search/addon config module initialize");
-
-	mod.desc = L["ADDONS_MODULE"];
-
-end
 
 --create and stack with push and pop
 function mod:CreateStack()
@@ -171,12 +131,9 @@ end
 
 function mod.openBlizConfig(item)
 
-	--notify window
-	mod.window.OnButtonClick(item);
-
 	--open config twice (yes, if not does not work always)
-	InterfaceOptionsFrame_OpenToCategory(item.data.id);
-	InterfaceOptionsFrame_OpenToCategory(item.data.id);
+	InterfaceOptionsFrame_OpenToCategory(item.id);
+	InterfaceOptionsFrame_OpenToCategory(item.id);
 
 end
 
@@ -262,31 +219,9 @@ function mod:Refresh()
 
 	debug("refreshing Addons config data");
 
-	--clear items
-	mod.items = wipe(mod.items);
-
 	--populate Blizzard Addons config
 	mod:PopulateAddonsConfig();
 
 	debug("data refreshed");
 
-end
-
---enable module
-function mod:OnEnable()
-
-	--we dont have items
-	mod.items = {};
-
-	debug(mod:GetName().." Enabled");
-
-end
-
---disabled module
-function mod:OnDisable()
-
-  --clear items
-  mod.items = wipe(mod.items);
-
-	debug(mod:GetName().." Disabled");
 end

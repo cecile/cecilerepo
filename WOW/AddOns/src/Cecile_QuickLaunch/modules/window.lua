@@ -14,6 +14,54 @@ local debug = Engine.AddOn:GetModule("debug");
 --sharemedia
 local LSM = LibStub("LibSharedMedia-3.0");
 
+--module defaults
+mod.Defaults = {
+	profile = {
+		font = {
+			name = "Cecile",
+			size = 12,
+		},
+	},
+};
+
+--module options table
+mod.Options = {
+	order = 4,
+	type = "group",
+	name = L["WINDOW_SETTINGS"],
+	args = {
+		binding = {
+			order = 1,
+			type = "keybinding",
+			name = L["WINDOW_BINDING_LAUNCH"],
+			desc = L["WINDOW_BINDING_LAUNCH_DESC"],
+			get = function()
+				return GetBindingKey("LAUNCH_CQL");
+			end,
+			set = function(key, value)
+
+				mod:SafeSetBinding(value, "LAUNCH_CQL");
+
+			end,
+		},
+		launch = {
+			order = 2,
+			type = "keybinding",
+			name = L["WINDOW_BINDING_COMMAND"],
+			desc = L["WINDOW_BINDING_COMMAND_DESC"],
+			get = function()
+				return GetBindingKey("CLICK Cecile_QL_IconButton:LeftButton");
+			end,
+			set = function(key, value)
+
+				mod:SafeSetBinding(value, "CLICK Cecile_QL_IconButton:LeftButton");
+
+			end,
+		},
+	}
+
+};
+
 --load profile settings
 function mod:LoadProfileSettings()
 
@@ -28,15 +76,65 @@ function mod.OnEscapePressed()
 
 	---hide the window
 	mod:Show(false);
+
+	--we dont do nothing on enter now
+	mod.mainFrame.editBox:SetScript("OnEnterPressed", nil);
+	mod.mainFrame.iconButton:SetScript("OnClick", nil);
+	mod.mainFrame.iconButton.icon:SetTexture("Interface\\Icons\\Temp");
+
 end
 
 --default action on button click
-function mod.OnButtonClick()
+function mod.OnButtonClick(object)
 
 	--the the window
 	mod:Show(false);
 
+	--call the object func if we have any
+	if object.data then
+		if object.data.func then
+			object.data:func();
+		end
+	end
+
 end
+
+--flattern a ui object removing regions
+function mod.flattern(object)
+
+	local BlizzardRegions = {
+		'Left',
+		'Middle',
+		'Right',
+		'Mid',
+		'LeftDisabled',
+		'MiddleDisabled',
+		'RightDisabled',
+	}
+
+	local name = object:GetName()
+
+	if name then
+		for _, Region in pairs(BlizzardRegions) do
+			if _G[name..Region] then
+				_G[name..Region]:SetAlpha(0)
+			end
+		end
+	end
+
+	for _, Region in pairs(BlizzardRegions) do
+		if object[Region] then
+			object[Region]:SetAlpha(0)
+		end
+	end
+
+	if object.SetNormalTexture then object:SetNormalTexture("") end
+	--if object.SetHighlightTexture then object:SetHighlightTexture("") end
+	if object.SetPushedTexture then object:SetPushedTexture("") end
+	if object.SetDisabledTexture then object:SetDisabledTexture("") end
+
+end
+
 
 --create a border in a direction,size, and color
 function mod.CreateBorder(object,direction,r,g,b)
@@ -95,6 +193,7 @@ function mod:CreateUIObject(class,parent,name,template)
 
 	frame.CreateBorder = mod.CreateBorder;
 	frame.SetSolidColor = mod.SetSolidColor;
+	frame.flattern = mod.flattern;
 
 	return frame;
 end
@@ -255,7 +354,7 @@ function mod:AddItem(item)
 
 		--set the scripts
 		button:SetScript("OnClick", nil);
-		button:SetScript("OnClick", item.func);
+		button:SetScript("OnClick", mod.OnButtonClick);
 
 		--store the data
 		button.data = item;
@@ -287,7 +386,14 @@ function mod:SelectButton(object)
 
 	--store in the edit box the one we like
 	mod.mainFrame.editBox.data = object.data;
-	mod.mainFrame.editBox:SetScript("OnEnterPressed", object.data.func);
+	mod.mainFrame.editBox:SetScript("OnEnterPressed", mod.OnButtonClick);
+
+	--set the icon button
+	mod.mainFrame.iconButton:SetScript("OnClick", mod.OnButtonClick);
+	mod.mainFrame.iconButton.data = object.data;
+
+	local icon = object.data.icon or "Interface\\Icons\\Temp";
+	mod.mainFrame.iconButton.icon:SetTexture(icon);
 
 	--set this to selected
 	object:LockHighlight();
@@ -395,6 +501,8 @@ function mod:ClearAllItems()
 
 	--we dont do nothing on enter now
 	mod.mainFrame.editBox:SetScript("OnEnterPressed", nil);
+	mod.mainFrame.iconButton:SetScript("OnClick", nil);
+	mod.mainFrame.iconButton.icon:SetTexture("Interface\\Icons\\Temp");
 end
 
 --if the text has change
@@ -453,6 +561,16 @@ function mod:CreateUI()
 	mod.mainFrame:SetSolidColor(0.2, 0.2, 0.2, 0.5);
 	mod.mainFrame:CreateBorder(-2,0,0,0);
 	mod.mainFrame:SetScript("OnMouseWheel", mod.ScrollingFunction);
+
+	--create icon button
+	mod.mainFrame.iconButton = mod:CreateUIObject("Button",mod.mainFrame,"Cecile_QL_IconButton","ActionButtonTemplate");
+	mod.mainFrame.iconButton:SetSize(32, 32);
+	mod.mainFrame.iconButton:SetPoint("TOPLEFT", 	mod.mainFrame, "TOPRIGHT", 	0, 0);
+	mod.mainFrame.iconButton.icon:SetTexture("Interface\\Icons\\Temp");
+	mod.mainFrame.iconButton:flattern();
+	mod.mainFrame.iconButton:SetSolidColor(0.2, 0.2, 0.2, 0.5);
+	mod.mainFrame.iconButton:CreateBorder(-3,0,0,0);
+	mod.mainFrame.iconButton:Show();
 
 	--create edit box
 	mod.mainFrame.editBox = mod:CreateUIObject("EditBox",mod.mainFrame,"Launcher_Editbox");
@@ -714,37 +832,3 @@ function mod.handleCommand(args)
 	return handleIt;
 
 end
-
---module options table
-mod.Options = {
-	order = 4,
-	type = "group",
-	name = L["WINDOW_SETTINGS"],
-	args = {
-		debug = {
-			order = 1,
-			type = "keybinding",
-			name = L["WINDOW_BINDING_LAUNCH"],
-			desc = L["WINDOW_BINDING_LAUNCH_DESC"],
-			get = function()
-				return GetBindingKey("LAUNCH_CQL");
-			end,
-			set = function(key, value)
-
-				mod:SafeSetBinding(value, "LAUNCH_CQL");
-
-			end,
-		},
-	}
-
-};
-
---module defaults
-mod.Defaults = {
-	profile = {
-		font = {
-			name = "Cecile",
-			size = 12,
-		},
-	},
-};

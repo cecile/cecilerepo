@@ -11,6 +11,8 @@ local mod = search:NewModule("pets");
 --get the locale
 local L=Engine.Locale;
 
+mod.desc = L["PETS_MODULE"];
+
 --debug
 local debug = Engine.AddOn:GetModule("debug");
 
@@ -27,31 +29,11 @@ mod.Defaults = {
 --module options table
 mod.Options = {
 	type = "group",
-	name = L["PETS_MODULE"],
+	name = mod.desc,
 	cmdInline = true,
 	args = {
-		enable = {
-			order = 1,
-			type = "toggle",
-			name = L["SEARCH_ENABLE_MODULE"],
-			desc = L["SEARCH_ENABLE_MODULE_DESC"],
-			get = function()
-				return mod:IsEnabled();
-			end,
-			set = function(key, value)
-
-				if(value) then
-					mod:Enable();
-				else
-					mod:Disable();
-				end
-
-				Engine.Profile.search.disableModules[mod:GetName()] = (not value);
-
-			end,
-		},
 		favorites = {
-			order = 2,
+			order = 1,
 			type = "toggle",
 			name = L["PETS_RETURN_FAVORITES"],
 			desc = L["PETS_RETURN_FAVORITES_DESC"],
@@ -66,7 +48,7 @@ mod.Options = {
 			end,
 		},
 		noFavorites = {
-			order = 3,
+			order = 2,
 			type = "toggle",
 			name = L["PETS_RETURN_NO_FAVORITES"],
 			desc = L["PETS_RETURN_NO_FAVORITES_DESC"],
@@ -81,7 +63,7 @@ mod.Options = {
 			end,
 		},
 		token = {
-			order = 4,
+			order = 3,
 			type = "input",
 			name = L["SEARCH_TOKEN"],
 			desc = L["SEARCH_TOKEN_DESC"],
@@ -98,7 +80,7 @@ mod.Options = {
 			end,
 		},
 		favoriteTag = {
-			order = 5,
+			order = 4,
 			type = "input",
 			name = L["PETS_FAVORITE_TAG"],
 			desc = L["PETS_FAVORITE_TAG_DESC"],
@@ -115,40 +97,16 @@ mod.Options = {
 			end,
 		},
 	}
-
 };
 
---initialize the module
-function mod:OnInitialize()
-
-	self.DB = Engine.DB:RegisterNamespace(mod:GetName(), mod.Defaults);
-
-	self.Profile = self.DB.profile;
-
-	search.Options.args.modules.args[mod:GetName()] = mod.Options;
-
-	--we dont have items
-	mod.items = {};
-
-	--get the window module
-	mod.window = Engine.AddOn:GetModule("window");
-
-	debug("search/pets module initialize");
-
-	mod.desc = L["PETS_MODULE"];
-end
-
---summon a pet if item.data.id==0 its random
+--summon a pet if id==0 its random
 function mod.summonPet(item)
 
-	--notify window
-	mod.window.OnButtonClick(item);
-
 	--check if its summon normal o random (favorite)
-	if(item.data.id==0) then
+	if(item.id==0) then
 		C_PetJournal.SummonRandomPet(false);
 	else
-		C_PetJournal.SummonPetByGUID(item.data.id);
+		C_PetJournal.SummonPetByGUID(item.id);
 	end
 
 end
@@ -196,7 +154,7 @@ function mod:PopulatePets()
 			if searchableText then
 
 				--add the text and function
-	    		item = { text = searchableText , id=petID, func = mod.summonPet; };
+	    		item = { text = searchableText , id=petID, func = mod.summonPet, icon = icon ;};
 
 	    		--insert the result
 	    		table.insert(mod.items,item);
@@ -212,7 +170,7 @@ function mod:PopulatePets()
 
 	--add a random favorite pet on top
 	searchableText = token .. ": " .. L["PETS_RANDOM"] .. " (".. favoriteTag .. ")";
-    item = { text = searchableText , id=0, func = mod.summonPet; };
+    item = { text = searchableText , id=0, func = mod.summonPet, icon = "Interface\\Icons\\INV_Misc_QuestionMark"; };
     table.insert(mod.items,1,item);
 
 	--if we have a pet sumoned create a search for dismiss
@@ -234,31 +192,9 @@ function mod:Refresh()
 
 	debug("refreshing pet data");
 
-	--clear items
-	mod.items = {};
-
 	--populate the data
 	mod:PopulatePets();
 
 	debug("data refreshed");
 
-end
-
---enable module
-function mod:OnEnable()
-
-	--we dont have items
-	mod.items = {};
-
-	debug(mod:GetName().." Enabled");
-
-end
-
---disabled module
-function mod:OnDisable()
-
-	--clear items
-	mod.items = {};
-
-	debug(mod:GetName().." Disabled");
 end

@@ -2,7 +2,7 @@
 ## Title: |cffffffffCecile|r_|cfffff569QuickLaunch|rPets
 ## Notes: Pets module for |cffffffffCecile|r_|cfffff569QuickLaunch|r
 ## Author: Cecile
-## Version: 0.0.3.beta
+## Version: 0.5.0.beta
 ## OptionalDeps:
 ## Dependencies: Cecile_QuickLaunch
 

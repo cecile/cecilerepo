@@ -19,6 +19,7 @@ L["LOAD_MESSAGE"] = "%s (versión |cff0070de%s|r) cargado, escribe /%s o /%s par
 L["CONFIG_WINDOW"] = "%s (version |cff0070de%s|r)"
 L["PROFILES"] = "Perfiles"
 L["BINDING_DESC"] = "Abrir Lanzador Rápido"
+L["LAUNCH_BINDING_DESC"] = "Lanzar Último Comando"
 L["ABOUT"] = [[
 
 |cffff0000Advertencia|r: Este AddOn es una versión preliminar |cffff0000en estado Beta|r, usalo bajo tu responsabilidad.

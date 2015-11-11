@@ -19,4 +19,5 @@ L["WINDOW_ERROR_IN_COMBAT"] = "%s |cffff0000:no se puede abrir en combate.|r"
 L["WINDOW_SETTINGS"] = "Ventana"
 L["WINDOW_BINDING_LAUNCH"] = "Tecla rápida de Abrir Ventana"
 L["WINDOW_BINDING_LAUNCH_DESC"] = "Cambia la tecla rápida para abrir la ventana"
-
+L["WINDOW_BINDING_COMMAND"] = "Tecla rápida de Ejecutar Último Comando"
+L["WINDOW_BINDING_COMMAND_DESC"] = "Cambia la tecla rápida para ejecutar el último comando"

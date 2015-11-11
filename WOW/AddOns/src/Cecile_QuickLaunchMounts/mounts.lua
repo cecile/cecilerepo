@@ -11,6 +11,8 @@ local mod = search:NewModule("mounts");
 --get the locale
 local L=Engine.Locale;
 
+mod.desc = L["MOUNTS_MODULE"];
+
 --debug
 local debug = Engine.AddOn:GetModule("debug");
 
@@ -27,31 +29,10 @@ mod.Defaults = {
 --module options table
 mod.Options = {
 	type = "group",
-	name = L["MOUNTS_MODULE"],
-	cmdInline = true,
+	name = mod.desc,
 	args = {
-		enable = {
-			order = 1,
-			type = "toggle",
-			name = L["SEARCH_ENABLE_MODULE"],
-			desc = L["SEARCH_ENABLE_MODULE_DESC"],
-			get = function()
-				return mod:IsEnabled();
-			end,
-			set = function(key, value)
-
-				if(value) then
-					mod:Enable();
-				else
-					mod:Disable();
-				end
-
-				Engine.Profile.search.disableModules[mod:GetName()] = (not value);
-
-			end,
-		},
 		favorites = {
-			order = 2,
+			order = 1,
 			type = "toggle",
 			name = L["MOUNT_RETURN_FAVORITES"],
 			desc = L["MOUNT_RETURN_FAVORITES_DESC"],
@@ -66,7 +47,7 @@ mod.Options = {
 			end,
 		},
 		noFavorites = {
-			order = 3,
+			order = 2,
 			type = "toggle",
 			name = L["MOUNT_RETURN_NO_FAVORITES"],
 			desc = L["MOUNT_RETURN_NO_FAVORITES_DESC"],
@@ -81,7 +62,7 @@ mod.Options = {
 			end,
 		},
 		token = {
-			order = 4,
+			order = 3,
 			type = "input",
 			name = L["SEARCH_TOKEN"],
 			desc = L["SEARCH_TOKEN_DESC"],
@@ -98,7 +79,7 @@ mod.Options = {
 			end,
 		},
 		favoriteTag = {
-			order = 5,
+			order = 4,
 			type = "input",
 			name = L["MOUNT_FAVORITE_TAG"],
 			desc = L["MOUNT_FAVORITE_TAG_DESC"],
@@ -115,46 +96,18 @@ mod.Options = {
 			end,
 		},
 	}
-
 };
-
-
---initialize the module
-function mod:OnInitialize()
-
-	self.DB = Engine.DB:RegisterNamespace(mod:GetName(), mod.Defaults);
-
-	self.Profile = self.DB.profile;
-
-	search.Options.args.modules.args[mod:GetName()] = mod.Options;
-
-	--we dont have items
-	mod.items = {};
-
-	--get the window module
-	mod.window = Engine.AddOn:GetModule("window");
-
-	debug("search/mounts module initialize");
-
-	mod.desc = L["MOUNTS_MODULE"];
-end
 
 --summon a mount
 function mod.summonMount(item)
 
-	--notify the window
-	mod.window.OnButtonClick(item);
-
 	--summon the mount
-	C_MountJournal.Summon(item.data.id);
+	C_MountJournal.Summon(item.id);
 
 end
 
 --dismount
 function mod.dismmissMount(item)
-
-	--notify the window
-	mod.window.OnButtonClick(item);
 
 	--dismount
 	C_MountJournal.Dismiss();
@@ -211,7 +164,7 @@ function mod:PopulateMounts()
 			if searchableText then
 
 				--set our function and text
-	    		item = { text = searchableText , id=index, func = mod.summonMount};
+	    		item = { text = searchableText , id=index, func = mod.summonMount, icon = icon};
 
 	    		--add the item
 	    		table.insert(mod.items,item);
@@ -224,7 +177,7 @@ function mod:PopulateMounts()
 
 	--add on top a search for random mount
 	searchableText = token .. ": " .. L["MOUNT_RANDOM"] .. " (".. favoriteTag .. ")";
-	item = { text = searchableText , id=0, func = mod.summonMount};
+	item = { text = searchableText , id=0, func = mod.summonMount, icon = "Interface\\Icons\\INV_Misc_QuestionMark"};
 	table.insert(mod.items,1,item);
 
 	--if we are mounted add a search text for dismount on top
@@ -241,31 +194,9 @@ function mod:Refresh()
 
 	debug("refreshing mount data");
 
-	--clear items
-	mod.items = {};
-
 	--populate the mounts
 	mod:PopulateMounts();
 
 	debug("data refreshed");
 
-end
-
---enable module
-function mod:OnEnable()
-
-	--we dont have items
-	mod.items = {};
-
-	debug(mod:GetName().." Enabled");
-
-end
-
---disabled module
-function mod:OnDisable()
-
-	--clear items
-	mod.items = {};
-
-	debug(mod:GetName().." Disabled");
 end

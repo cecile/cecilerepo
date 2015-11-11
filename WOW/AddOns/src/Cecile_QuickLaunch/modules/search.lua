@@ -28,7 +28,6 @@ mod.Options = {
 	order = 2,
 	type = "group",
 	name = L["SEARCH_NAME"],
-	cmdInline = true,
 	childGroups = "tab",
 	args = {
 		aliases = {
@@ -277,7 +276,12 @@ function mod:Refresh()
 	for name,module in pairs(self.modules) do
 
 		if module:IsEnabled() then
+
+			--clear items
+  		module.items = {};
+
 			module:Refresh();
+
 		end
 
 	end
@@ -585,6 +589,73 @@ function mod:OnEnable()
 
 end
 
+function mod.preInitialize(module)
+
+	if module.Defaults then
+	  module.DB = Engine.DB:RegisterNamespace(module:GetName(), module.Defaults);
+
+	  module.Profile = module.DB.profile;
+	end
+
+	if not module.Options then
+
+		module.Options = {
+				type = "group",
+				name = module.desc,
+				args = {},
+		};
+
+	end
+
+	module.Options.args["enable"] = {
+		order = 0,
+		type = "toggle",
+		name = L["SEARCH_ENABLE_MODULE"],
+		desc = L["SEARCH_ENABLE_MODULE_DESC"],
+		get = function()
+			return module:IsEnabled();
+		end,
+		set = function(key, value)
+
+			if(value) then
+				module:Enable();
+			else
+				module:Disable();
+			end
+
+			Engine.Profile.search.disableModules[module:GetName()] = (not value);
+
+		end,
+	};
+
+	mod.Options.args.modules.args[module:GetName()] = module.Options;
+
+  --we dont have items
+  module.items = {};
+
+  debug("module '"..module.desc.."' initialize");
+
+end
+
+function mod.preEnable(module)
+
+  --we dont have items
+  module.items = {};
+
+  debug("module '"..module.desc.."' enabled");
+
+
+end
+
+function mod.preDisable(module)
+
+  --clear items
+  module.items = {};
+
+  debug("module '"..module.desc.."' disabled");
+
+end
+
 --initialize the module
 function mod:OnInitialize()
 
@@ -593,5 +664,9 @@ function mod:OnInitialize()
 	debug("search module initialize");
 
 	mod:OnProfileChanged();
+
+	local prototype = { OnEnable = mod.preEnable, OnDisable = mod.preDisable, OnInitialize = mod.preInitialize };
+
+	mod:SetDefaultModulePrototype(prototype);
 
 end

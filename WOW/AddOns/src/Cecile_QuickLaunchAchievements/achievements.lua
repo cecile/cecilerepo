@@ -11,6 +11,8 @@ local mod = search:NewModule("achievements");
 --get the locale
 local L=Engine.Locale;
 
+mod.desc = L["ACHIEVEMENTS_MODULE"];
+
 --debug
 local debug = Engine.AddOn:GetModule("debug");
 
@@ -29,31 +31,10 @@ mod.Defaults  = {
 --module options table
 mod.Options = {
   type = "group",
-  name = L["ACHIEVEMENTS_MODULE"],
-  cmdInline = true,
+  name = mod.desc,
   args = {
-    enable = {
-      order = 1,
-      type = "toggle",
-      name = L["SEARCH_ENABLE_MODULE"],
-      desc = L["SEARCH_ENABLE_MODULE_DESC"],
-      get = function()
-        return mod:IsEnabled();
-      end,
-      set = function(key, value)
-
-        if(value) then
-          mod:Enable();
-        else
-          mod:Disable();
-        end
-
-        Engine.Profile.search.disableModules[mod:GetName()] = (not value);
-
-      end,
-    },
     completed = {
-      order = 2,
+      order = 1,
       type = "toggle",
       name = L["ACHIEVEMENTS_RETURN_COMPLETED"],
       desc = L["ACHIEVEMENTS_RETURN_COMPLETED_DESC"],
@@ -68,7 +49,7 @@ mod.Options = {
       end,
     },
     uncompleted = {
-      order = 3,
+      order = 2,
       type = "toggle",
       name = L["ACHIEVEMENTS_RETURN_UNCOMPLETED"],
       desc = L["ACHIEVEMENTS_RETURN_UNCOMPLETED_DESC"],
@@ -83,7 +64,7 @@ mod.Options = {
       end,
     },
     category = {
-      order = 4,
+      order = 3,
       type = "toggle",
       name = L["ACHIEVEMENTS_RETURN_CATEGORY"],
       desc = L["ACHIEVEMENTS_RETURN_CATEGORY_DESC"],
@@ -98,7 +79,7 @@ mod.Options = {
       end,
     },
     token = {
-      order = 5,
+      order = 4,
       type = "input",
       name = L["SEARCH_TOKEN"],
       desc = L["SEARCH_TOKEN_DESC"],
@@ -115,7 +96,7 @@ mod.Options = {
       end,
     },
     completedTag = {
-      order = 6,
+      order = 5,
       type = "input",
       name = L["ACHIEVEMENTS_COMPLETED_TAG"],
       desc = L["ACHIEVEMENTS_COMPLETED_TAG_DESC"],
@@ -132,7 +113,7 @@ mod.Options = {
       end,
     },
     uncompletedTag = {
-      order = 7,
+      order = 6,
       type = "input",
       name = L["ACHIEVEMENTS_UNCOMPLETED_TAG"],
       desc = L["ACHIEVEMENTS_UNCOMPLETED_TAG_DESC"],
@@ -152,31 +133,8 @@ mod.Options = {
 
 };
 
---initialize the module
-function mod:OnInitialize()
-
-  self.DB = Engine.DB:RegisterNamespace(mod:GetName(), mod.Defaults);
-
-  self.Profile = self.DB.profile;
-
-  search.Options.args.modules.args[mod:GetName()] = mod.Options;
-
-  --we dont have items
-  mod.items = {};
-
-  --get the window module
-  mod.window = Engine.AddOn:GetModule("window");
-
-  debug("achievements module initialize");
-
-  mod.desc = L["ACHIEVEMENTS_MODULE"];
-end
-
 --open an achievement
 function mod.openAchievement(item)
-
-  --notify window
-  mod.window.OnButtonClick(item);
 
   --open achievement window
   if not AchievementFrame or not AchievementFrame:IsShown() then
@@ -184,12 +142,12 @@ function mod.openAchievement(item)
   end
 
   --get archivement category and info
-  local category = GetAchievementCategory(item.data.id);
+  local category = GetAchievementCategory(item.id);
   local _, parentID = GetCategoryInfo(category);
   local i,entry;
 
   --select the archivement in the UI
-  AchievementFrame_SelectAchievement(item.data.id);
+  AchievementFrame_SelectAchievement(item.id);
 
   -- expand category list to achievement's location
   if parentID == -1 then
@@ -262,7 +220,7 @@ function mod:PopulateAchievements()
         if ( completed and showCompleted) or (not(completed) and showUncompleted) then
 
           --add the text and function
-          item = { text = searchableText , id=id, func = mod.openAchievement };
+          item = { text = searchableText , id=id, func = mod.openAchievement, icon=icon };
 
           --insert the result
           table.insert(mod.items,item);
@@ -282,31 +240,9 @@ function mod:Refresh()
 
   debug("refreshing achievements data");
 
-  --clear items
-  mod.items = {};
-
   --populate the data
   mod:PopulateAchievements();
 
   debug("data refreshed");
 
-end
-
---enable module
-function mod:OnEnable()
-
-  --we dont have items
-  mod.items = {};
-
-  debug(mod:GetName().." Enabled");
-
-end
-
---disabled module
-function mod:OnDisable()
-
-  --clear items
-  mod.items = {};
-
-  debug(mod:GetName().." Disabled");
 end
