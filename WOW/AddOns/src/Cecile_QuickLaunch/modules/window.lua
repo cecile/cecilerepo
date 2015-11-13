@@ -77,23 +77,24 @@ function mod.OnEscapePressed()
 	---hide the window
 	mod:Show(false);
 
-	--we dont do nothing on enter now
-	mod.mainFrame.editBox:SetScript("OnEnterPressed", nil);
-	mod.mainFrame.iconButton:SetScript("OnClick", nil);
-	mod.mainFrame.iconButton.icon:SetTexture("Interface\\Icons\\Temp");
-
 end
 
 --default action on button click
 function mod.OnButtonClick(object)
 
-	--the the window
-	mod:Show(false);
-
-	--call the object func if we have any
+	--call the object func if we have any function
 	if object.data then
 		if object.data.func then
+
+			--hide the the window
+			mod:Show(false);
+
+			--invoke method
 			object.data:func();
+
+			--set last action binding
+			mod.mainFrame.lastActionButton.data = object.data;
+
 		end
 	end
 
@@ -332,6 +333,10 @@ function mod:CreateScrollItem(text)
 	--store position
 	frame.position = position+1;
 
+	--set the hanlder
+	frame:SetScript("OnClick", mod.OnButtonClick);
+	frame.data = nil;
+
 	--insert into our table
 	table.insert(mod.mainFrame.scrollContent.items,frame);
 
@@ -352,15 +357,12 @@ function mod:AddItem(item)
 		--get the button
 		local button = mod.mainFrame.scrollContent.items[mod.totalItems];
 
-		--set the scripts
-		button:SetScript("OnClick", nil);
-		button:SetScript("OnClick", mod.OnButtonClick);
-
 		--store the data
 		button.data = item;
 
+ 		local text = format('|T%s:14:14:0:0:64:64:4:60:4:60|t %s',item.icon or "Interface\\Icons\\Temp", item.displayText);
 		--set the text
-		button.text:SetText(item.displayText);
+		button.text:SetText(text);
 
 		--display the button
 		button:Show();
@@ -386,12 +388,9 @@ function mod:SelectButton(object)
 
 	--store in the edit box the one we like
 	mod.mainFrame.editBox.data = object.data;
-	mod.mainFrame.editBox:SetScript("OnEnterPressed", mod.OnButtonClick);
-
-	--set the icon button
-	mod.mainFrame.iconButton:SetScript("OnClick", mod.OnButtonClick);
 	mod.mainFrame.iconButton.data = object.data;
 
+	--set the icon button
 	local icon = object.data.icon or "Interface\\Icons\\Temp";
 	mod.mainFrame.iconButton.icon:SetTexture(icon);
 
@@ -489,7 +488,6 @@ function mod:ClearAllItems()
 
 		--reset object
 		value:Hide();
-		value:SetScript("OnClick", nil);
 		value.data=nil;
 		value:UnlockHighlight();
 		value.selected = false;
@@ -499,9 +497,11 @@ function mod:ClearAllItems()
 	--we dont have items
 	mod.totalItems=0;
 
-	--we dont do nothing on enter now
-	mod.mainFrame.editBox:SetScript("OnEnterPressed", nil);
-	mod.mainFrame.iconButton:SetScript("OnClick", nil);
+	--reset items
+	mod.mainFrame.editBox.data = nil;
+	mod.mainFrame.iconButton.data = nil;
+
+	--reset icon
 	mod.mainFrame.iconButton.icon:SetTexture("Interface\\Icons\\Temp");
 end
 
@@ -563,7 +563,7 @@ function mod:CreateUI()
 	mod.mainFrame:SetScript("OnMouseWheel", mod.ScrollingFunction);
 
 	--create icon button
-	mod.mainFrame.iconButton = mod:CreateUIObject("Button",mod.mainFrame,"Cecile_QL_IconButton","ActionButtonTemplate");
+	mod.mainFrame.iconButton = mod:CreateUIObject("Button",mod.mainFrame,nil,"ActionButtonTemplate");
 	mod.mainFrame.iconButton:SetSize(32, 32);
 	mod.mainFrame.iconButton:SetPoint("TOPLEFT", 	mod.mainFrame, "TOPRIGHT", 	0, 0);
 	mod.mainFrame.iconButton.icon:SetTexture("Interface\\Icons\\Temp");
@@ -571,6 +571,17 @@ function mod:CreateUI()
 	mod.mainFrame.iconButton:SetSolidColor(0.2, 0.2, 0.2, 0.5);
 	mod.mainFrame.iconButton:CreateBorder(-3,0,0,0);
 	mod.mainFrame.iconButton:Show();
+
+	--create last action button
+	mod.mainFrame.lastActionButton = mod:CreateUIObject("Button",mod.mainFrame,"Cecile_QL_IconButton","ActionButtonTemplate");
+	mod.mainFrame.lastActionButton:SetSize(16, 16);
+	mod.mainFrame.lastActionButton:SetPoint("TOPLEFT", 	mod.mainFrame, "TOPLEFT", 	-16, 0);
+	mod.mainFrame.lastActionButton.icon:SetTexture("Interface\\Icons\\Temp");
+	mod.mainFrame.lastActionButton:flattern();
+	mod.mainFrame.lastActionButton:SetSolidColor(0.2, 0.2, 0.2, 0.5);
+	mod.mainFrame.lastActionButton:CreateBorder(-3,0,0,0);
+	mod.mainFrame.lastActionButton:Hide();
+
 
 	--create edit box
 	mod.mainFrame.editBox = mod:CreateUIObject("EditBox",mod.mainFrame,"Launcher_Editbox");
@@ -650,6 +661,12 @@ function mod:CreateUI()
 
 	--hide the frame
 	mod.mainFrame:Hide();
+
+	--set the handlers
+	mod.mainFrame.iconButton:SetScript("OnClick", mod.OnButtonClick);
+	mod.mainFrame.lastActionButton:SetScript("OnClick",mod.OnButtonClick);
+	mod.mainFrame.editBox:SetScript("OnEnterPressed", mod.OnButtonClick);
+
 
 	debug("UI created");
 

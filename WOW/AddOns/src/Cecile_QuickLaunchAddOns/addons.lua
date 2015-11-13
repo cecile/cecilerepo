@@ -8,61 +8,30 @@ local Engine = _G.Cecile_QuickLaunch;
 local search = Engine.AddOn:GetModule("search");
 local mod = search:NewModule("addons");
 
+--debug
+local debug = Engine.AddOn:GetModule("debug");
+
 --get the locale
 local L=Engine.Locale;
 
 mod.desc = L["ADDONS_MODULE"];
 
---debug
-local debug = Engine.AddOn:GetModule("debug");
-
---module defaults
-mod.Defaults = {
-	profile = {
-		subsets = true,
-		token = L["ADDONS_CONFIG_ITEM"],
-	},
-};
-
---module options table
-mod.Options = {
-	type = "group",
-	name = mod.desc,
-	args = {
-		subsets = {
-			order = 1,
-			type = "toggle",
-			name = L["ADDONS_RETURN_SUBSET"],
-			desc = L["ADDONS_RETURN_SUBSET_DESC"],
-			get = function()
-				return mod.Profile.subsets;
-			end,
-			set = function(key, value)
-				mod.Profile.subsets = value;
-			end,
-			disabled = function()
-				return not mod:IsEnabled();
-			end,
-		},
-		token = {
-			order = 2,
-			type = "input",
-			name = L["SEARCH_TOKEN"],
-			desc = L["SEARCH_TOKEN_DESC"],
-			get = function()
-				return mod.Profile.token;
-			end,
-			set = function(key, value)
-				if not (value=="") then
-					mod.Profile.token = value;
-				end
-			end,
-			disabled = function()
-				return not mod:IsEnabled();
-			end,
-		},
-	}
-
+--module vars
+mod.Vars = {
+  subsets =  {
+    type = "boolean",
+    default = true,
+    order = 1,
+    label = L["ADDONS_RETURN_SUBSET"],
+    desc = L["ADDONS_RETURN_SUBSET_DESC"]
+  },
+  token =  {
+    type = "string",
+    default = L["ADDONS_CONFIG_ITEM"],
+    order = 2,
+    label = L["SEARCH_TOKEN"],
+    desc = L["SEARCH_TOKEN_DESC"]
+  },
 };
 
 --create and stack with push and pop

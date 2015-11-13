@@ -591,6 +591,70 @@ end
 
 function mod.preInitialize(module)
 
+	--if we have vars
+	if module.Vars then
+
+		--default profile vars
+		module.Defaults = { profile = {} };
+
+		--default options ui
+		module.Options = {
+				type = "group",
+				name = module.desc,
+				args = {},
+		};
+
+		--temporary vars
+		local name, options;
+
+		--loop vars
+		for name , options in pairs(module.Vars) do
+
+			--set the default profile value
+			module.Defaults.profile[name] = options.default;
+
+			if options.type == "boolean" then
+				--setup the option
+				module.Options.args[name] = {
+					order = options.order,
+					type = "toggle",
+					name = options.label,
+					desc = options.desc,
+					get = function()
+						return module.Profile[name];
+					end,
+					set = function(key, value)
+						module.Profile[name] = value;
+					end,
+		      disabled = function()
+		        return not module:IsEnabled();
+		      end,
+				};
+			elseif options.type == "string" then
+				--setup the option
+				module.Options.args[name] = {
+					order = options.order,
+					type = "input",
+					name = options.label,
+					desc = options.desc,
+					get = function()
+						return module.Profile[name];
+					end,
+					set = function(key, value)
+						if not (value=="") then
+							module.Profile[name] = value;
+						end
+					end,
+		      disabled = function()
+		        return not module:IsEnabled();
+		      end,
+				};
+			end
+
+		end
+
+	end
+
 	if module.Defaults then
 	  module.DB = Engine.DB:RegisterNamespace(module:GetName(), module.Defaults);
 

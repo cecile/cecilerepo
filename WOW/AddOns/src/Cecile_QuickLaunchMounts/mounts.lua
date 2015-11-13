@@ -8,94 +8,44 @@ local Engine = _G.Cecile_QuickLaunch;
 local search = Engine.AddOn:GetModule("search");
 local mod = search:NewModule("mounts");
 
+--debug
+local debug = Engine.AddOn:GetModule("debug");
+
 --get the locale
 local L=Engine.Locale;
 
 mod.desc = L["MOUNTS_MODULE"];
 
---debug
-local debug = Engine.AddOn:GetModule("debug");
-
---module defaults
-mod.Defaults = {
-	profile = {
-		favorites = true,
-		noFavorites = true,
-		token = L["MOUNTS_MOUNT"],
-		favoriteTag = L["MOUNT_FAVORITE"],
-	},
-};
-
---module options table
-mod.Options = {
-	type = "group",
-	name = mod.desc,
-	args = {
-		favorites = {
-			order = 1,
-			type = "toggle",
-			name = L["MOUNT_RETURN_FAVORITES"],
-			desc = L["MOUNT_RETURN_FAVORITES_DESC"],
-			get = function()
-				return mod.Profile.favorites;
-			end,
-			set = function(key, value)
-				mod.Profile.favorites = value;
-			end,
-			disabled = function()
-				return not mod:IsEnabled();
-			end,
-		},
-		noFavorites = {
-			order = 2,
-			type = "toggle",
-			name = L["MOUNT_RETURN_NO_FAVORITES"],
-			desc = L["MOUNT_RETURN_NO_FAVORITES_DESC"],
-			get = function()
-				return mod.Profile.noFavorites;
-			end,
-			set = function(key, value)
-				mod.Profile.noFavorites = value;
-			end,
-			disabled = function()
-				return not mod:IsEnabled();
-			end,
-		},
-		token = {
-			order = 3,
-			type = "input",
-			name = L["SEARCH_TOKEN"],
-			desc = L["SEARCH_TOKEN_DESC"],
-			get = function()
-				return mod.Profile.token;
-			end,
-			set = function(key, value)
-				if not (value=="") then
-					mod.Profile.token = value;
-				end
-			end,
-			disabled = function()
-				return not mod:IsEnabled();
-			end,
-		},
-		favoriteTag = {
-			order = 4,
-			type = "input",
-			name = L["MOUNT_FAVORITE_TAG"],
-			desc = L["MOUNT_FAVORITE_TAG_DESC"],
-			get = function()
-				return mod.Profile.favoriteTag;
-			end,
-			set = function(key, value)
-				if not (value=="") then
-					mod.Profile.favoriteTag = value;
-				end
-			end,
-			disabled = function()
-				return not mod:IsEnabled();
-			end,
-		},
-	}
+--module vars
+mod.Vars = {
+  favorites =  {
+    type = "boolean",
+    default = true,
+    order = 1,
+    label = L["MOUNT_RETURN_FAVORITES"],
+    desc = L["MOUNT_RETURN_FAVORITES_DESC"]
+  },
+  noFavorites =  {
+    type = "boolean",
+    default = true,
+    order = 2,
+    label = L["MOUNT_RETURN_NO_FAVORITES"],
+    desc = L["MOUNT_RETURN_NO_FAVORITES_DESC"]
+  },
+  token =  {
+    type = "string",
+    default = L["MOUNTS_MOUNT"],
+    order = 3,
+    label = L["SEARCH_TOKEN"],
+    desc = L["SEARCH_TOKEN_DESC"]
+  },
+  favoriteTag =  {
+    type = "string",
+    default = L["MOUNT_FAVORITE"],
+    order = 4,
+    label = L["MOUNT_FAVORITE_TAG"],
+    desc = L["MOUNT_FAVORITE_TAG_DESC"]
+  },
 };
 
 --summon a mount

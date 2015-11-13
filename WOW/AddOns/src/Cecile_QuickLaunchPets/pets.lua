@@ -8,95 +8,44 @@ local Engine = _G.Cecile_QuickLaunch;
 local search = Engine.AddOn:GetModule("search");
 local mod = search:NewModule("pets");
 
+--debug
+local debug = Engine.AddOn:GetModule("debug");
+
 --get the locale
 local L=Engine.Locale;
 
 mod.desc = L["PETS_MODULE"];
 
---debug
-local debug = Engine.AddOn:GetModule("debug");
-
---module defaults
-mod.Defaults = {
-	profile = {
-		favorites = true,
-		noFavorites = true,
-		token = L["PETS_PET"],
-		favoriteTag = L["PETS_FAVORITE"],
-	},
-};
-
---module options table
-mod.Options = {
-	type = "group",
-	name = mod.desc,
-	cmdInline = true,
-	args = {
-		favorites = {
-			order = 1,
-			type = "toggle",
-			name = L["PETS_RETURN_FAVORITES"],
-			desc = L["PETS_RETURN_FAVORITES_DESC"],
-			get = function()
-				return mod.Profile.favorites;
-			end,
-			set = function(key, value)
-				mod.Profile.favorites = value;
-			end,
-			disabled = function()
-				return not mod:IsEnabled();
-			end,
-		},
-		noFavorites = {
-			order = 2,
-			type = "toggle",
-			name = L["PETS_RETURN_NO_FAVORITES"],
-			desc = L["PETS_RETURN_NO_FAVORITES_DESC"],
-			get = function()
-				return mod.Profile.noFavorites;
-			end,
-			set = function(key, value)
-				mod.Profile.noFavorites = value;
-			end,
-			disabled = function()
-				return not mod:IsEnabled();
-			end,
-		},
-		token = {
-			order = 3,
-			type = "input",
-			name = L["SEARCH_TOKEN"],
-			desc = L["SEARCH_TOKEN_DESC"],
-			get = function()
-				return mod.Profile.token;
-			end,
-			set = function(key, value)
-				if not (value=="") then
-					mod.Profile.token = value;
-				end
-			end,
-			disabled = function()
-				return not mod:IsEnabled();
-			end,
-		},
-		favoriteTag = {
-			order = 4,
-			type = "input",
-			name = L["PETS_FAVORITE_TAG"],
-			desc = L["PETS_FAVORITE_TAG_DESC"],
-			get = function()
-				return mod.Profile.favoriteTag;
-			end,
-			set = function(key, value)
-				if not (value=="") then
-					mod.Profile.favoriteTag = value;
-				end
-			end,
-			disabled = function()
-				return not mod:IsEnabled();
-			end,
-		},
-	}
+--module vars
+mod.Vars = {
+  favorites =  {
+    type = "boolean",
+    default = true,
+    order = 1,
+    label = L["PETS_RETURN_FAVORITES"],
+    desc = L["PETS_RETURN_FAVORITES_DESC"]
+  },
+  noFavorites =  {
+    type = "boolean",
+    default = true,
+    order = 2,
+    label = L["PETS_RETURN_NO_FAVORITES"],
+    desc = L["PETS_RETURN_NO_FAVORITES_DESC"]
+  },
+  token =  {
+    type = "string",
+    default = L["PETS_PET"],
+    order = 3,
+    label = L["SEARCH_TOKEN"],
+    desc = L["SEARCH_TOKEN_DESC"]
+  },
+  favoriteTag =  {
+    type = "string",
+    default = L["PETS_FAVORITE"],
+    order = 4,
+    label = L["PETS_FAVORITE_TAG"],
+    desc = L["PETS_FAVORITE_TAG_DESC"]
+  },
 };
 
 --summon a pet if id==0 its random
