@@ -20,8 +20,6 @@ L["BINDING_DESC"] = "Open Quick Launch"
 L["LAUNCH_BINDING_DESC"] = "Launch Last Command"
 L["ABOUT"] = [[
 
-|cffff0000Warning|r: This AddOn its in a very early |cffff0000Beta Stage|r, use it at your own risk.
-
 |cff0070deUsage:|r:
 
 First you need to set-up a |cff82c5ffkeybinding|r in the window settings to open the launcher, by default it's |cff82c5ffCTRL+SHIFT+P|r.
@@ -37,7 +35,7 @@ You could define |cff82c5ffAliases|r and |cff82c5ffBlacklist|r items in the sear
 |cff0070deExamples:|r
 
 Summon a random pet:
-|cff82c5ffCTRL+SHIFT+P|r pet |cff82c5ffSPACE|r rand |cff82c5ffENTER|r
+|cff82c5ffCTRL+SHIFT+P|r pet |cff82c5ffSPACE|r rando |cff82c5ffENTER|r
 
 Dismount:
 |cff82c5ffCTRL+SHIFT+P|r dism |cff82c5ffENTER|r

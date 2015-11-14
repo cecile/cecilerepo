@@ -14,12 +14,161 @@ local debug = Engine.AddOn:GetModule("debug");
 --sharemedia
 local LSM = LibStub("LibSharedMedia-3.0");
 
---module defaults
-mod.Defaults = {
-	profile = {
+--color schemes
+mod.schemes = {
+	newblue = {
+		name = L["WINDOW_SCHEME_NEONBLUE"],
 		font = {
 			name = "Cecile",
 			size = 12,
+			colors = {
+				normal = {
+					r = 1,
+					g = 1,
+					b = 1,
+				},
+				highlight = {
+					r = 0,
+					g = 1,
+					b = 1,
+				},
+			},
+		},
+		colors = {
+			frame = {
+				r = 0,
+				g = 0.5,
+				b = 0.5,
+				a = 0.5,
+			},
+			border = {
+				r = 0,
+				g = 0.5,
+				b = 0.5,
+			},
+			selected = {
+				r = 0,
+				g = 0.5,
+				b = 1,
+			},
+		},
+	},
+	sunburst = {
+		name = L["WINDOW_SCHEME_SUNBURST"],
+		font = {
+			name = "Cecile",
+			size = 12,
+			colors = {
+				normal = {
+					r = 1,
+					g = 0,
+					b = 0,
+				},
+				highlight = {
+					r = 1,
+					g = 1,
+					b = 0,
+				},
+			},
+		},
+		colors = {
+			frame = {
+				r = 1,
+				g = 0,
+				b = 0,
+				a = 0.5,
+			},
+			border = {
+				r = 1,
+				g = 1,
+				b = 0,
+			},
+			selected = {
+				r = 1,
+				g = 0.5,
+				b = 0,
+			},
+		},
+	},
+	classic = {
+		name = L["WINDOW_SCHEME_CLASSIC"],
+		font = {
+			name = "Cecile",
+			size = 12,
+			colors = {
+				normal = {
+					r = 0.5,
+					g = 0.5,
+					b = 0.5,
+				},
+				highlight = {
+					r = 1,
+					g = 1,
+					b = 1,
+				},
+			},
+		},
+		colors = {
+			frame = {
+				r = 0.2,
+				g = 0.2,
+				b = 0.2,
+				a = 0.5,
+			},
+			border = {
+				r = 0,
+				g = 0,
+				b = 0,
+			},
+			selected = {
+				r = 0.6,
+				g = 0.6,
+				b = 0.6,
+			},
+		},
+	},
+	custom = {
+		name = L["WINDOW_SCHEME_CUSTOM"]
+	},
+};
+
+--module defaults
+mod.Defaults = {
+	profile = {
+		scheme = "newblue",
+		font = {
+			name = "Cecile",
+			size = 12,
+			colors = {
+				normal = {
+					r = 1,
+					g = 1,
+					b = 1,
+				},
+				highlight = {
+					r = 0,
+					g = 1,
+					b = 1,
+				},
+			},
+		},
+		colors = {
+			frame = {
+				r = 0,
+				g = 0.5,
+				b = 0.5,
+				a = 0.5,
+			},
+			border = {
+				r = 0,
+				g = 0.5,
+				b = 0.5,
+			},
+			selected = {
+				r = 0,
+				g = 0.5,
+				b = 1,
+			},
 		},
 	},
 };
@@ -29,37 +178,215 @@ mod.Options = {
 	order = 4,
 	type = "group",
 	name = L["WINDOW_SETTINGS"],
+	childGroups = "tab",
 	args = {
-		binding = {
+		appearance ={
+			type = "group",
+			name = L["WINDOW_APPEARANCE"],
 			order = 1,
-			type = "keybinding",
-			name = L["WINDOW_BINDING_LAUNCH"],
-			desc = L["WINDOW_BINDING_LAUNCH_DESC"],
-			get = function()
-				return GetBindingKey("LAUNCH_CQL");
-			end,
-			set = function(key, value)
+			args = {
+				schemes = {
+					order = 1,
+					type = "select",
+					name = L["WINDOW_SCHEMES"],
+					desc = L["WINDOW_SCHEMES_DESC"],
+					width = "full",
+					values = function(self)
+						local k,v;
 
-				mod:SafeSetBinding(value, "LAUNCH_CQL");
+						names={};
 
-			end,
+						for k,v in pairs(mod.schemes) do
+							names[k] = v.name;
+						end
+
+						return names;
+					end,
+					set = function(self,value)
+							Engine.Profile.window.scheme = value;
+
+							if not(value=="custom") then
+								Engine.Profile.window.font = mod.schemes[value].font;
+								Engine.Profile.window.colors = mod.schemes[value].colors;
+								Engine.AddOn:OnCfgChange();
+							end
+
+						end,
+					get = function(self)
+						return Engine.Profile.window.scheme;
+					end,
+				},
+				font = {
+					type = "select", dialogControl = 'LSM30_Font',
+					order = 2,
+					name = L["WINDOW_FONT"],
+					desc = L["WINDOW_FONT_DESC"],
+					values = AceGUIWidgetLSMlists.font,
+					get = function()
+						return Engine.Profile.window.font.name;
+					end,
+					set = function(key, value)
+						Engine.Profile.window.font.name = value;
+						Engine.AddOn:OnCfgChange();
+					end,
+					disabled = function()
+		        return not(Engine.Profile.window.scheme=="custom");
+		      end,
+				},
+				fontSize = {
+					order = 3,
+					name = L["WINDOW_FONT_SIZE"],
+					desc = L["WINDOW_FONT_SIZE_DESC"],
+					type = "range",
+					min = 6, max = 22, step = 1,
+					get = function()
+						return Engine.Profile.window.font.size;
+					end,
+					set = function(key, value)
+						Engine.Profile.window.font.size = value;
+						Engine.AddOn:OnCfgChange();
+					end,
+					disabled = function()
+		        return not(Engine.Profile.window.scheme=="custom");
+		      end,
+				},
+				normalColor = {
+					order = 4,
+					name = L["WINDOW_NORMAL_COLOR"],
+					desc = L["WINDOW_NORMAL_COLOR_DESC"],
+					type = "color",
+					get = function()
+						return 	Engine.Profile.window.font.colors.normal.r,
+								Engine.Profile.window.font.colors.normal.g,
+								Engine.Profile.window.font.colors.normal.b
+					end,
+					set = function(key,r,g,b)
+						Engine.Profile.window.font.colors.normal.r = r;
+						Engine.Profile.window.font.colors.normal.g = g;
+						Engine.Profile.window.font.colors.normal.b = b;
+						Engine.AddOn:OnCfgChange();
+					end,
+					disabled = function()
+		        return not(Engine.Profile.window.scheme=="custom");
+		      end,
+				},
+				highlightColor = {
+					order = 5,
+					name = L["WINDOW_HIGHLIGHT_COLOR"],
+					desc = L["WINDOW_HIGHLIGHT_COLOR_DESC"],
+					type = "color",
+					get = function()
+						return 	Engine.Profile.window.font.colors.highlight.r,
+								Engine.Profile.window.font.colors.highlight.g,
+								Engine.Profile.window.font.colors.highlight.b
+					end,
+					set = function(key,r,g,b)
+						Engine.Profile.window.font.colors.highlight.r = r;
+						Engine.Profile.window.font.colors.highlight.g = g;
+						Engine.Profile.window.font.colors.highlight.b = b;
+						Engine.AddOn:OnCfgChange();
+					end,
+					disabled = function()
+		        return not(Engine.Profile.window.scheme=="custom");
+		      end,
+				},
+				frameColor = {
+					order = 6,
+					name = L["WINDOW_FRAME_COLOR"],
+					desc = L["WINDOW_FRAME_COLOR_DESC"],
+					type = "color",
+					hasAlpha = true,
+					get = function()
+						return 	Engine.Profile.window.colors.frame.r,
+								Engine.Profile.window.colors.frame.g,
+								Engine.Profile.window.colors.frame.b,
+								Engine.Profile.window.colors.frame.a
+					end,
+					set = function(key,r,g,b,a)
+						Engine.Profile.window.colors.frame.r = r;
+						Engine.Profile.window.colors.frame.g = g;
+						Engine.Profile.window.colors.frame.b = b;
+						Engine.Profile.window.colors.frame.a = a;
+						Engine.AddOn:OnCfgChange();
+					end,
+					disabled = function()
+		        return not(Engine.Profile.window.scheme=="custom");
+		      end,
+				},
+				borderColor = {
+					order = 7,
+					name = L["WINDOW_BORDER_COLOR"],
+					desc = L["WINDOW_BORDER_COLOR_DESC"],
+					type = "color",
+					get = function()
+						return 	Engine.Profile.window.colors.border.r,
+								Engine.Profile.window.colors.border.g,
+								Engine.Profile.window.colors.border.b
+					end,
+					set = function(key,r,g,b)
+						Engine.Profile.window.colors.border.r = r;
+						Engine.Profile.window.colors.border.g = g;
+						Engine.Profile.window.colors.border.b = b;
+						Engine.AddOn:OnCfgChange();
+					end,
+					disabled = function()
+		        return not(Engine.Profile.window.scheme=="custom");
+		      end,
+				},
+				selectedColor = {
+					order = 8,
+					name = L["WINDOW_SELECTED_COLOR"],
+					desc = L["WINDOW_SELECTED_COLOR_DESC"],
+					type = "color",
+					get = function()
+						return 	Engine.Profile.window.colors.selected.r,
+								Engine.Profile.window.colors.selected.g,
+								Engine.Profile.window.colors.selected.b
+					end,
+					set = function(key,r,g,b)
+						Engine.Profile.window.colors.selected.r = r;
+						Engine.Profile.window.colors.selected.g = g;
+						Engine.Profile.window.colors.selected.b = b;
+						Engine.AddOn:OnCfgChange();
+					end,
+					disabled = function()
+		        return not(Engine.Profile.window.scheme=="custom");
+		      end,
+				},
+			},
 		},
-		launch = {
+		keybindings = {
+			type = "group",
+			name = "Keybindings",
 			order = 2,
-			type = "keybinding",
-			name = L["WINDOW_BINDING_COMMAND"],
-			desc = L["WINDOW_BINDING_COMMAND_DESC"],
-			get = function()
-				return GetBindingKey("CLICK Cecile_QL_IconButton:LeftButton");
-			end,
-			set = function(key, value)
-
-				mod:SafeSetBinding(value, "CLICK Cecile_QL_IconButton:LeftButton");
-
-			end,
+			args ={
+				launch = {
+					order = 1,
+					type = "keybinding",
+					name = L["WINDOW_BINDING_LAUNCH"],
+					desc = L["WINDOW_BINDING_LAUNCH_DESC"],
+					get = function()
+						return GetBindingKey("LAUNCH_CQL");
+					end,
+					set = function(key, value)
+						mod:SafeSetBinding(value, "LAUNCH_CQL");
+					end,
+				},
+				relaunch = {
+					order = 2,
+					type = "keybinding",
+					name = L["WINDOW_BINDING_COMMAND"],
+					desc = L["WINDOW_BINDING_COMMAND_DESC"],
+					get = function()
+						return GetBindingKey("CLICK Cecile_QL_IconButton:LeftButton");
+					end,
+						set = function(key, value)
+						mod:SafeSetBinding(value, "CLICK Cecile_QL_IconButton:LeftButton");
+					end,
+				},
+			}
 		},
 	}
-
 };
 
 --load profile settings
@@ -68,10 +395,42 @@ function mod:LoadProfileSettings()
 	--get the font
 	mod.fontObject = LSM:Fetch("font", Engine.Profile.window.font.name);
 	mod.fontSize = Engine.Profile.window.font.size;
+	mod.fontColors = Engine.Profile.window.font.colors;
+
+	mod.mainFrame.editBox:SetFont(mod.fontObject,mod.fontSize);
+	mod.mainFrame.editBox:SetTextColor(mod.fontColors.highlight.r,mod.fontColors.highlight.g,mod.fontColors.highlight.b);
+	mod.mainFrame.editBox:SetHeight(14);
+
+	mod.colors = Engine.Profile.window.colors;
+
+	mod.selectedColor = mod.colors.selected;
+	mod.overColor = { r = mod.colors.selected.r/2 , g = mod.colors.selected.g/2 , b = mod.colors.selected.b/2  };
+
+	--local vars
+	local key,frame;
+
+	--lopp the items
+	for key,frame in pairs(mod.mainFrame.scrollContent.items) do
+
+		--set the font
+		frame.text:SetFont(mod.fontObject,mod.fontSize);
+		frame.text:SetTextColor(mod.fontColors.normal.r,mod.fontColors.normal.g,mod.fontColors.normal.b);
+		frame:SetBorderColor(mod.colors.border.r, mod.colors.border.g, mod.colors.border.b);
+	end
+
+	mod.mainFrame:SetSolidColor(mod.colors.frame.r, mod.colors.frame.g, mod.colors.frame.b, mod.colors.frame.a);
+	mod.mainFrame:SetBorderColor(mod.colors.border.r, mod.colors.border.g, mod.colors.border.b);
+	mod.mainFrame.iconButton:SetBorderColor(mod.colors.border.r, mod.colors.border.g, mod.colors.border.b);
+	mod.mainFrame.editBox:SetBorderColor(mod.colors.border.r, mod.colors.border.g, mod.colors.border.b);
+	mod.mainFrame.scrollArea:SetBorderColor(mod.colors.border.r, mod.colors.border.g, mod.colors.border.b);
+
+	mod.mainFrame.sliderBox:SetBorderColor(mod.colors.border.r, mod.colors.border.g, mod.colors.border.b);
+	mod.mainFrame.slider:SetSolidColor(mod.colors.border.r, mod.colors.border.g, mod.colors.border.b, mod.colors.frame.a);
+	--mod.mainFrame.slider:SetBorderColor(mod.colors.border.r, mod.colors.border.g, mod.colors.border.b);
 
 end
 
---on escape presessed
+--on escape pressed
 function mod.OnEscapePressed()
 
 	---hide the window
@@ -177,12 +536,23 @@ function mod.CreateBorder(object,direction,r,g,b)
 	object.border = border;
 end
 
+function mod.SetBorderColor(object,r,g,b)
+
+	if object.border then
+		object.border:SetBackdropBorderColor(r, g, b, 1)
+	end
+
+end
+
 --se the frame to be just a single color frame
 function mod.SetSolidColor(object, r,g,b,a)
 
-	--create and set the texture
-	object.texture = object:CreateTexture(nil, "BACKGROUND");
-	object.texture:SetAllPoints(true);
+	--if does not have a texture, create it
+	if object.texture == nil then
+		object.texture = object:CreateTexture(nil, "BACKGROUND");
+		object.texture:SetAllPoints(true);
+	end
+
 	object.texture:SetTexture(r,g,b,a);
 
 end
@@ -193,6 +563,7 @@ function mod:CreateUIObject(class,parent,name,template)
 	local frame = CreateFrame(class, name, parent, template);
 
 	frame.CreateBorder = mod.CreateBorder;
+	frame.SetBorderColor = mod.SetBorderColor;
 	frame.SetSolidColor = mod.SetSolidColor;
 	frame.flattern = mod.flattern;
 
@@ -288,7 +659,7 @@ function mod.OnButtonEnter(object)
 	--if the object is not selected set the hightligh color
 	if object.selected==false then
 		object:UnlockHighlight();
-		object.highlight:SetVertexColor(0.3,0.3,0.3);
+		object.highlight:SetVertexColor(mod.overColor.r,mod.overColor.g,mod.overColor.b);
 	end
 
 end
@@ -309,9 +680,6 @@ function mod:CreateScrollItem(text)
 	local startY = position * -20;
 	local endY = startY-20;
 
-	--set the font
-	frame.text:SetFont(mod.fontObject,mod.fontSize);
-
 	--position the object
 	frame:SetPoint("TOPLEFT", 		mod.mainFrame.scrollContent,"TOPLEFT", 	0, startY);
 	frame:SetPoint("TOPRIGHT", 		mod.mainFrame.scrollContent,"TOPRIGHT",	0, startY);
@@ -325,7 +693,6 @@ function mod:CreateScrollItem(text)
 
 	--set style
 	frame:CreateBorder(-1,0,0,0);
-	frame.text:SetTextColor(0.5,0.5,0.5);
 
 	--set the text
 	frame.text:SetText(text);
@@ -383,7 +750,7 @@ function mod:SelectButton(object)
 		value:UnlockHighlight();
 		value.selected = false;
 
-		object.highlight:SetVertexColor(0.3,0.3,0.3);
+		object.highlight:SetVertexColor(mod.overColor.r,mod.overColor.g,mod.overColor.b);
 	end
 
 	--store in the edit box the one we like
@@ -396,7 +763,7 @@ function mod:SelectButton(object)
 
 	--set this to selected
 	object:LockHighlight();
-	object.highlight:SetVertexColor(0.6,0.6,0.6);
+	object.highlight:SetVertexColor(mod.selectedColor.r,mod.selectedColor.g,mod.selectedColor.b);
 	object.selected = true;
 
 end
@@ -565,10 +932,10 @@ function mod:CreateUI()
 	--create icon button
 	mod.mainFrame.iconButton = mod:CreateUIObject("Button",mod.mainFrame,nil,"ActionButtonTemplate");
 	mod.mainFrame.iconButton:SetSize(32, 32);
-	mod.mainFrame.iconButton:SetPoint("TOPLEFT", 	mod.mainFrame, "TOPRIGHT", 	0, 0);
+	mod.mainFrame.iconButton:SetPoint("TOPLEFT", 	mod.mainFrame, "TOPRIGHT", 	6, 0);
 	mod.mainFrame.iconButton.icon:SetTexture("Interface\\Icons\\Temp");
 	mod.mainFrame.iconButton:flattern();
-	mod.mainFrame.iconButton:SetSolidColor(0.2, 0.2, 0.2, 0.5);
+	--mod.mainFrame.iconButton:SetSolidColor(0.2, 0.2, 0.2, 0.5);
 	mod.mainFrame.iconButton:CreateBorder(-3,0,0,0);
 	mod.mainFrame.iconButton:Show();
 
@@ -589,12 +956,8 @@ function mod:CreateUI()
 	mod.mainFrame.editBox:SetPoint("TOPLEFT", 	mod.mainFrame, "TOPLEFT", 	8, -8);
 	mod.mainFrame.editBox:SetPoint("TOPRIGHT", 	mod.mainFrame, "TOPRIGHT", -8, -8);
 
-	mod.mainFrame.editBox:SetFont(mod.fontObject,mod.fontSize);
-	mod.mainFrame.editBox:SetHeight(14);
-
 	mod.mainFrame.editBox:SetSolidColor(0.0, 0.0, 0.0, 0.5);
 	mod.mainFrame.editBox:CreateBorder(-2,0,0,0);
-	mod.mainFrame.editBox:SetTextColor(1,1,1);
 
 	mod.mainFrame.editBox:SetText("");
 	mod.mainFrame.editBox:SetScript("OnEscapePressed", mod.OnEscapePressed);
@@ -624,7 +987,7 @@ function mod:CreateUI()
 	mod.mainFrame.sliderBox:CreateBorder(-2,0,0,0);
 
 	--slider
-	mod.mainFrame.slider = mod:CreateUIObject("Frame",mod.mainFrame);
+	mod.mainFrame.slider = mod:CreateUIObject("Frame",mod.mainFrame.sliderBox);
 
 	mod.mainFrame.slider:SetPoint("TOPLEFT", 		mod.mainFrame.sliderBox,	"TOPLEFT", 		4, -4);
 	mod.mainFrame.slider:SetPoint("TOPRIGHT",		mod.mainFrame.sliderBox,	"TOPRIGHT", 	-4, -4);
@@ -635,6 +998,7 @@ function mod:CreateUI()
 	mod.mainFrame.slider:SetPoint("BOTTOMRIGHT",	mod.mainFrame.sliderBox,	"BOTTOMRIGHT", 	4, 4);
 
 	mod.mainFrame.slider:SetSolidColor(0.5, 0.5, 0.5, 0.5);
+	--mod.mainFrame.slider:CreateBorder(1,0,0,0);
 
 	--create scroll content
 	mod.mainFrame.scrollContent = mod:CreateUIObject("Frame",mod.mainFrame.scrollArea);
@@ -756,11 +1120,11 @@ end
 --initialize the module
 function mod:OnInitialize()
 
-	--load profile settings
-	mod:LoadProfileSettings();
-
 	--create the UI
 	mod:CreateUI();
+
+	--load profile settings
+	mod:LoadProfileSettings();
 
 	--save the serch module
 	mod.search = Engine.AddOn:GetModule("search");

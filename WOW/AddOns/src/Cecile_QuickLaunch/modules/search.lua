@@ -244,9 +244,20 @@ mod.Options = {
 	}
 };
 
---profile change
-function mod:OnProfileChanged(event)
+--returna a color string for a giving color in rgba(floats)
+function mod:getColorString(color)
 
+	local result = string.format("|c%02X%02X%02X%02X",
+		color.a and color.a*255 or 255,
+		color.r*255,
+		color.g*255,
+		color.b*255)
+
+	return result;
+end
+
+
+function mod:LoadProfileSettings()
 	local name, module, isDisabled;
 
 	for name,module in pairs(mod.modules) do
@@ -259,12 +270,17 @@ function mod:OnProfileChanged(event)
 			module:Enable();
 		end
 
-		--trigger OnProfileChanged on the modules
-		if module.OnProfileChanged and type(module.OnProfileChanged)=="function" then
-			module.OnProfileChanged(event);
-		end
-
 	end
+
+	mod.fontColors = Engine.Profile.window.font.colors;
+
+	mod.highlight = mod:getColorString(mod.fontColors.highlight);
+end
+
+--profile change
+function mod:OnProfileChanged(event)
+
+		mod:LoadProfileSettings();
 
 end
 
@@ -369,7 +385,7 @@ function mod:ColorItem(item,text)
 		after = string.sub(result,pos.to+1);
 
 		--colorize it
-		result = before.."|cffffffff"..token.."|r"..after;
+		result = before..mod.highlight..token.."|r"..after;
 
 		--we increase next positions
 		acumulated = acumulated + 12;
@@ -656,9 +672,19 @@ function mod.preInitialize(module)
 	end
 
 	if module.Defaults then
+
 	  module.DB = Engine.DB:RegisterNamespace(module:GetName(), module.Defaults);
 
-	  module.Profile = module.DB.profile;
+		module.Profile = module.DB.profile;
+
+		module.OnProfileChanged = function (event,database, newProfileKey)
+				module.Profile = database.profile;
+		end
+
+		module.DB.RegisterCallback(module, "OnProfileChanged", module.OnProfileChanged);
+		module.DB.RegisterCallback(module, "OnProfileCopied", module.OnProfileChanged);
+		module.DB.RegisterCallback(module, "OnProfileReset", module.OnProfileChanged);
+
 	end
 
 	if not module.Options then
@@ -727,7 +753,7 @@ function mod:OnInitialize()
 
 	debug("search module initialize");
 
-	mod:OnProfileChanged();
+	mod:LoadProfileSettings();
 
 	local prototype = { OnEnable = mod.preEnable, OnDisable = mod.preDisable, OnInitialize = mod.preInitialize };
 

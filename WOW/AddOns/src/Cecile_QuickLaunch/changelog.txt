@@ -1,3 +1,6 @@
+v1.0.0
+- First release
+- Added options to change appearance
 v0.5.0
 - Splitting the different modules in separate AddOns
 - Added a Keybinding to repeat last command

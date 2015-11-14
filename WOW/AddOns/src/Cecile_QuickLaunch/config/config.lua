@@ -219,7 +219,7 @@ function AddOn.HandleCommands(args)
 	end
 end
 
--- Called after profile changed, we reset our datatext
+-- Called after profile changed
 function AddOn:OnProfileChanged(event, database, newProfileKey)
 
 	--set new profile
@@ -237,4 +237,25 @@ function AddOn:OnProfileChanged(event, database, newProfileKey)
 
 	end
 
+end
+
+function AddOn:NotifyChange(object)
+
+	--notify module
+	local module,name;
+
+	--if any module has a OnProfileChange trigger it
+	for name,module in pairs(object.modules) do
+
+		if module.LoadProfileSettings and type(module.LoadProfileSettings)=="function" then
+			module:LoadProfileSettings();
+		end
+
+		AddOn:NotifyChange(module);
+	end
+
+end
+
+function AddOn:OnCfgChange()
+	AddOn:NotifyChange(self);
 end

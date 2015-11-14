@@ -22,7 +22,6 @@ L["BINDING_DESC"] = "Abrir Lanzador Rápido"
 L["LAUNCH_BINDING_DESC"] = "Lanzar Último Comando"
 L["ABOUT"] = [[
 
-|cffff0000Advertencia|r: Este AddOn es una versión preliminar |cffff0000en estado Beta|r, usalo bajo tu responsabilidad.
 
 |cff0070deUso:|r:
 
