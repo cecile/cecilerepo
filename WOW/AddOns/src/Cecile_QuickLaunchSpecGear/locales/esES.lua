@@ -21,7 +21,7 @@ end
 L["SPECGEAR_MODULE"] = "Especializaciones y Conjuntos de Equipo"
 L["SPECGEAR_SPEC"] = "Especialización"
 L["SPECGEAR_RETURN_SPECS"] = "Devolver Especializacipnes"
-L["SPECGEAR_RETURN_SPECS_DESC"] = "Return especializacipnes de clase"
+L["SPECGEAR_RETURN_SPECS_DESC"] = "Devuelve especializacipnes de clase"
 L["SPECGEAR_ACTIVE"] = "activa"
 L["SPECGEAR_INACTIVE"] = "inactiva"
 L["SPECGEAR_AUTO_EQUIP_SET"] = "Auto equipar conjunto"

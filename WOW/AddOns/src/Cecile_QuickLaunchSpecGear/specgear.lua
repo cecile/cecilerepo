@@ -137,6 +137,8 @@ function mod:PopulateSpecs()
   local inactiveTag = mod.Profile.inactiveTag;
   local activeIndex = GetActiveSpecGroup();
   local active=false;
+  local searchableText = "";
+  local index,item;
 
   for index = 1, GetNumSpecGroups() do
 
@@ -172,6 +174,7 @@ function mod:PopulateSets()
   local tokenSet = mod.Profile.tokenSet;
   local equippedTag = mod.Profile.equippedTag;
   local umequippedTag = mod.Profile.umequippedTag;
+  local index,item;
 
   for index = 1, GetNumEquipmentSets() do
 

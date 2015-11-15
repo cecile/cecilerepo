@@ -1,6 +1,7 @@
 v1.0.0
 - First release
-- Added options to change appearance
+- Added options to change window appearance
+- Added social module
 v0.5.0
 - Splitting the different modules in separate AddOns
 - Added a Keybinding to repeat last command
@@ -13,7 +14,7 @@ v0.0.2
 - Initial beta
 - Added AddOns configurations search module.
 - Now pets with custom name display both, specie and custom name.
-- Merging words, for example searching 'mount mo' is like searching 'mount'.
+- Merging words, for example searching 'mount mo' is like searching 'mo'.
 - Added the ability to add aliases in the search options.
 - Added two aliases : cfg for Addon Config and cql for Cecile_QuickLaunch.
 - Added Options to enable / disable modules.

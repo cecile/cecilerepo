@@ -204,13 +204,7 @@ mod.Options = {
 					end,
 					set = function(self,value)
 							Engine.Profile.window.scheme = value;
-
-							if not(value=="custom") then
-								Engine.Profile.window.font = mod.schemes[value].font;
-								Engine.Profile.window.colors = mod.schemes[value].colors;
-								Engine.AddOn:OnCfgChange();
-							end
-
+							Engine.AddOn:OnCfgChange();
 						end,
 					get = function(self)
 						return Engine.Profile.window.scheme;
@@ -391,6 +385,13 @@ mod.Options = {
 
 --load profile settings
 function mod:LoadProfileSettings()
+
+	local scheme = Engine.Profile.window.scheme;
+
+	if not(scheme=="custom") then
+		Engine.Profile.window.font = mod.schemes[scheme].font;
+		Engine.Profile.window.colors = mod.schemes[scheme].colors;
+	end
 
 	--get the font
 	mod.fontObject = LSM:Fetch("font", Engine.Profile.window.font.name);
