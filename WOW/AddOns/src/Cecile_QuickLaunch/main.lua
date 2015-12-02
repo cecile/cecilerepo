@@ -58,12 +58,22 @@ function AddOn:OnInitialize()
 	AddOn:SetupOptions();
 
 end
---binding function
-function AddOn:Launch()
+
+--this function is actually the one showing the window
+function AddOn:DelayShow()
 
 	--get the window module
 	local window = AddOn:GetModule("window");
 
 	--show the launcher
 	window:Show(true);
+
+end
+
+--binding function
+function AddOn:Launch()
+
+	--delay the opening of the window 1 millisecond
+	AddOn:ScheduleTimer("DelayShow", 0.1);
+
 end
