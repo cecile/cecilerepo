@@ -801,8 +801,8 @@ function mod:GetSelectedButton()
 
 end
 
---if tab is press
-function mod.OnTabPressed(object)
+--manage scroll UP/DOWN
+function mod:ManageScroll(direction)
 
 	--if we dont have item return
 	if mod.totalItems==0 then return; end
@@ -818,7 +818,7 @@ function mod.OnTabPressed(object)
 	local new;
 
 	--reverse with shift
-	if IsShiftKeyDown() then
+	if direction=="UP" then
 		new = currentSelection-1;
 	else
 		new = currentSelection+1;
@@ -842,6 +842,22 @@ function mod.OnTabPressed(object)
 		mod.ScrollingFunction(mod.mainFrame.scrollArea,-(4*(new-1)));
 
 	end
+end
+
+--cursor keys pressed
+function mod.OnArrowPressed(self, key)
+
+	if (key=="UP" or key=="DOWN") then
+		mod:ManageScroll(key);
+	end
+
+end
+
+--if tab is press
+function mod.OnTabPressed(object)
+
+	--scroll up or down
+	mod:ManageScroll(IsShiftKeyDown() and "UP" or "DOWN");
 
 end
 
@@ -915,8 +931,6 @@ function mod.OnTextChanged(self,char)
 
 end
 
-
-
 --create UI
 function mod:CreateUI()
 
@@ -950,25 +964,6 @@ function mod:CreateUI()
 	mod.mainFrame.lastActionButton:CreateBorder(-3,0,0,0);
 	mod.mainFrame.lastActionButton:Hide();
 
-
-	mod.mainFrame.upCursorButton = mod:CreateUIObject("Button",mod.mainFrame,"Cecile_QL_UpCursorButton","ActionButtonTemplate");
-	mod.mainFrame.upCursorButton:SetSize(16, 16);
-	mod.mainFrame.upCursorButton:SetPoint("BOTTOMLEFT", 	mod.mainFrame, "BOTTOMRIGHT", 16, 16);
-	mod.mainFrame.upCursorButton.icon:SetTexture("Interface\\Icons\\Temp");
-	mod.mainFrame.upCursorButton:flattern();
-	mod.mainFrame.upCursorButton:SetSolidColor(0.2, 0.2, 0.2, 0.5);
-	mod.mainFrame.upCursorButton:CreateBorder(-3,0,0,0);
-	mod.mainFrame.upCursorButton:SetScript("OnClick", function () print("up"); end);
-
-	mod.mainFrame.downCursorButton = mod:CreateUIObject("Button",mod.mainFrame,"Cecile_QL_DownCursorButton","ActionButtonTemplate");
-	mod.mainFrame.downCursorButton:SetSize(16, 16);
-	mod.mainFrame.downCursorButton:SetPoint("BOTTOMLEFT", 	mod.mainFrame, "BOTTOMRIGHT", 16, 0);
-	mod.mainFrame.downCursorButton.icon:SetTexture("Interface\\Icons\\Temp");
-	mod.mainFrame.downCursorButton:flattern();
-	mod.mainFrame.downCursorButton:SetSolidColor(0.2, 0.2, 0.2, 0.5);
-	mod.mainFrame.downCursorButton:CreateBorder(-3,0,0,0);
-	mod.mainFrame.downCursorButton:SetScript("OnClick", function () print("down"); end);
-
 	--create edit box
 	mod.mainFrame.editBox = mod:CreateUIObject("EditBox",mod.mainFrame,"Launcher_Editbox");
 
@@ -982,6 +977,8 @@ function mod:CreateUI()
 	mod.mainFrame.editBox:SetScript("OnEscapePressed", mod.OnEscapePressed);
 	mod.mainFrame.editBox:SetScript("OnTextChanged", mod.OnTextChanged);
 	mod.mainFrame.editBox:SetScript("OnTabPressed", mod.OnTabPressed);
+	--mod.mainFrame.editBox:SetAltArrowKeyMode(true);
+	mod.mainFrame.editBox:HookScript("OnArrowPressed", mod.OnArrowPressed);
 
 	--create scroll area
 	mod.mainFrame.scrollArea = mod:CreateUIObject("ScrollFrame",mod.mainFrame);
@@ -1192,18 +1189,12 @@ function mod:Show(value)
 			--show the window
 			mod.mainFrame:Show();
 
-			SetOverrideBindingClick(mod.mainFrame, true, "KEY_UP", "Cecile_QL_UpCursorButton", "LeftClick")
-			SetOverrideBindingClick(mod.mainFrame, true, "KEY_DOWN", "Cecile_QL_DownCursorButton", "LeftClick")
-
 		end
 	else
 
 		--if we actually shown, hide
 		if mod.mainFrame:IsShown() then
 			mod.mainFrame:Hide();
-
-			ClearOverrideBindings(mod.mainFrame);
-
 		end
 	end
 

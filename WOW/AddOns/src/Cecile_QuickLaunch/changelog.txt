@@ -1,3 +1,6 @@
+v1.0.1
+- Fix issue: after pressing the keybinding the actual key its output in the editbox
+- Added scrolling the items using arrow keys
 v1.0.0
 - First release
 - Added options to change window appearance

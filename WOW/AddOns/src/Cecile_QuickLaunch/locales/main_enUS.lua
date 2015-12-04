@@ -28,7 +28,7 @@ When the window pop-up you could start typing to search.
 
 You could press |cff82c5ffENTER|r to select the first option or use |cff82c5ffTAB or SHIFT-TAB|r to navigate trough the results.
 
-Alternatively you could use mouse wheel/click, but honestly I don't recommend it.
+Alternatively you could use arrow keys or mouse wheel/click.
 
 You could define |cff82c5ffAliases|r and |cff82c5ffBlacklist|r items in the search options.
 
