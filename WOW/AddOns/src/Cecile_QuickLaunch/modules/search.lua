@@ -614,7 +614,7 @@ function mod:searchAll(text)
 			--get the items for this module
 			items = mod:FindInModule(module,corrected);
 
-			--merge the tab
+			--merge the tables
 			for key,item in pairs(items) do
 				table.insert(result,item);
 			end
