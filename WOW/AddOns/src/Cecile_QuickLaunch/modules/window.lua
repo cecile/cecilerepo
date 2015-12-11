@@ -1163,6 +1163,15 @@ function mod:OnEnable()
 
 end
 
+--reset the UI
+function mod:ResetUI()
+
+		mod:SetScroll(0);
+		mod.mainFrame.editBox:SetText("");
+		mod:ClearAllItems();
+
+end
+
 --show/hide the main window
 function mod:Show(value)
 
@@ -1180,11 +1189,11 @@ function mod:Show(value)
 				print(string.format(L["WINDOW_ERROR_IN_COMBAT"],Version.Title));
 				return;
 			end
-			--reset UI
+
 			mod.search:Refresh();
-			mod:SetScroll(0);
-			mod.mainFrame.editBox:SetText("");
-			mod:ClearAllItems();
+
+			--reset UI
+			mod:ResetUI();
 
 			--show the window
 			mod.mainFrame:Show();

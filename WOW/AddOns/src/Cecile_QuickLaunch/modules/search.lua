@@ -20,6 +20,7 @@ mod.Defaults = {
 			cql = "cecile_quickLaunch",
 		},
 		blacklist = {},
+		twoSteps = false,
 	},
 };
 
@@ -30,6 +31,33 @@ mod.Options = {
 	name = L["SEARCH_NAME"],
 	childGroups = "tab",
 	args = {
+		general = {
+			name = L["SEARCH_GENERAL"],
+			desc = L["SEARCH_GENERAL"],
+			type = "group",
+			order = 0,
+			args = {
+				twoSteps = {
+					name = L["SEARCH_TWO_STEPS"],
+					desc = L["SEARCH_TWO_STEPS_DESC"],
+					type = "toggle",
+					order = 1,
+					get = function()
+						return Engine.Profile.search.twoSteps;
+					end,
+					set = function(key, value)
+						Engine.Profile.search.twoSteps = value;
+						Engine.AddOn:OnCfgChange();
+					end,
+				},
+				help = {
+					order = 2,
+					type = "description",
+					name = L["SEARCH_TWO_STEPS_HELP"],
+					width = "full",
+				},
+			},
+		},
 		aliases = {
 			name = L["SEARCH_ALIASES"],
 			type = "group",
@@ -275,6 +303,9 @@ function mod:LoadProfileSettings()
 	mod.fontColors = Engine.Profile.window.font.colors;
 
 	mod.highlight = mod:getColorString(mod.fontColors.highlight);
+
+	mod.twoSteps = Engine.Profile.search.twoSteps;
+
 end
 
 --profile change
@@ -284,19 +315,75 @@ function mod:OnProfileChanged(event)
 
 end
 
-function mod:Refresh()
-
-	debug("refreshing search data");
+function mod.twoStepsSelectModule(item)
+	--local vars
+	local name,module;
 
 	--goes trough all the modules
-	for name,module in pairs(self.modules) do
+	for name,module in pairs(mod.modules) do
 
 		if module:IsEnabled() then
 
 			--clear items
   		module.items = {};
 
-			module:Refresh();
+  		--only refresh the module that we have choose
+  		if name == item.id then
+
+  			module:Refresh();
+
+  		end
+
+  	end
+
+	end
+
+	--get the window module
+	local window = Engine.AddOn:GetModule("window");
+
+	--reset UI
+	window:ResetUI();
+
+	--show the window
+	window.mainFrame:Show();
+
+end
+
+function mod:Refresh()
+
+	debug("refreshing search data");
+
+	--local vars
+	local name,module;
+
+	--goes trough all the modules
+	for name,module in pairs(self.modules) do
+
+		--local vars
+		local item, searchableText;
+
+		if module:IsEnabled() then
+
+			--clear items
+  		module.items = {};
+
+			--if we are doing two steps searchs
+			if mod.twoSteps then
+
+				--setup text
+				searchableText = L["SEARCH_MODULES"] .. ": " .. module.desc;
+
+				--setup item
+				item = { text = searchableText , id=name, func = mod.twoStepsSelectModule};
+
+				--add the item
+				table.insert(module.items,item);
+
+			else
+
+				module:Refresh();
+
+			end
 
 		end
 
@@ -527,7 +614,7 @@ function mod:searchAll(text)
 			--get the items for this module
 			items = mod:FindInModule(module,corrected);
 
-			--merge the tables
+			--merge the tab
 			for key,item in pairs(items) do
 				table.insert(result,item);
 			end

@@ -46,3 +46,11 @@ Blacklist is like a negative search, whenever you type a search all items that a
 
 ]]
 L["SEARCH_MODULES"] = "Modules"
+L["SEARCH_TWO_STEPS"] = "Two steps"
+L["SEARCH_TWO_STEPS_DESC"] = "Change search to be a 'two steps', first module, them the items for that module"
+L["SEARCH_GENERAL"] = "General"
+L["SEARCH_TWO_STEPS_HELP"] = [[
+
+When 'two steps' search is enabled after using the binding you will search in the list of availables modules, them after selecting a module you will search on the items only of that module.
+
+]]

@@ -51,3 +51,11 @@ La listas negra funciona como una busqueda negativa, cuando este tecleando cualq
 
 ]]
 L["SEARCH_MODULES"] = "Módulos"
+L["SEARCH_TWO_STEPS"] = "End dos pasos"
+L["SEARCH_TWO_STEPS_DESC"] = "Cambia las búsquedas para funcionar en dos pasos, primero el modulo, segundo elementos del modulo"
+L["SEARCH_GENERAL"] = "General"
+L["SEARCH_TWO_STEPS_HELP"] = [[
+
+Cuando se activa la busqueda 'en dos pasos' despues de usar la tecla rápida buscarás en la lista de módulos activos, depues trás selecionar un módulo buscarás en los elementos de solo ese módulo.
+
+]]
