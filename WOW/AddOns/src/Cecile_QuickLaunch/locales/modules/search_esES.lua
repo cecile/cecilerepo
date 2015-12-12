@@ -59,3 +59,4 @@ L["SEARCH_TWO_STEPS_HELP"] = [[
 Cuando se activa la busqueda 'en dos pasos' despues de usar la tecla rápida buscarás en la lista de módulos activos, depues trás selecionar un módulo buscarás en los elementos de solo ese módulo.
 
 ]]
+L["SEARCH_HELP_ITEM"] = "Pulsa %s para usar,\n %s para cancelar."

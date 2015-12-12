@@ -847,3 +847,25 @@ function mod:OnInitialize()
 	mod:SetDefaultModulePrototype(prototype);
 
 end
+
+function mod:SecondsToClock(seconds)
+
+    result = "";
+
+    local hours = math.floor( seconds / 3600 );
+    seconds = seconds - (hours*3600);
+    local mins = math.floor( seconds / 60);
+    seconds = seconds - (mins*60);
+
+    if hours>0 then
+      result = string.format("%02.fh ",hours);
+    end
+
+    if mins>0 then
+      result = result .. string.format("%02.fm ",mins);
+    end
+
+    result = result .. string.format("%02.fs",seconds);
+
+    return result
+end

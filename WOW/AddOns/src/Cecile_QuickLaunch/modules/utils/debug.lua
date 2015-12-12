@@ -312,3 +312,6 @@ function mod.handleCommand(args)
 
 end
 
+function mod:dump(...)
+	_G.DevTools_Dump(...);
+end

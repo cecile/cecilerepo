@@ -427,7 +427,14 @@ function mod:LoadProfileSettings()
 
 	mod.mainFrame.sliderBox:SetBorderColor(mod.colors.border.r, mod.colors.border.g, mod.colors.border.b);
 	mod.mainFrame.slider:SetSolidColor(mod.colors.border.r, mod.colors.border.g, mod.colors.border.b, mod.colors.frame.a);
-	--mod.mainFrame.slider:SetBorderColor(mod.colors.border.r, mod.colors.border.g, mod.colors.border.b);
+
+	mod.secureButton.help.text:SetFont(mod.fontObject,mod.fontSize);
+	mod.secureButton.help.text:SetTextColor(mod.fontColors.normal.r,mod.fontColors.normal.g,mod.fontColors.normal.b);
+
+	mod.secureButton.name.text:SetFont(mod.fontObject,mod.fontSize);
+	mod.secureButton.name.text:SetTextColor(mod.fontColors.highlight.r,mod.fontColors.highlight.g,mod.fontColors.highlight.b);
+
+	mod.secureButton:SetBorderColor(mod.colors.border.r, mod.colors.border.g, mod.colors.border.b);
 
 end
 
@@ -439,23 +446,92 @@ function mod.OnEscapePressed()
 
 end
 
+function mod.secureHide()
+	mod.secureButton:Hide();
+	mod.secureButtonClose:Hide();
+	mod.secureButton.help:Hide();
+	mod.secureButton.name:Hide();
+
+	ClearOverrideBindings(mod.secureButton);
+	ClearOverrideBindings(mod.secureButtonClose);
+end
+
+function mod.secureOnEnter(self)
+	GameTooltip:SetOwner(mod.secureButton, "ANCHOR_RIGHT");
+
+	mod.secureButton.addTooptipFunc(_G.GameTooltip,mod.secureButton.item.id);
+
+end
+
+function mod.secureOnLeave(self)
+	GameTooltip:Hide();
+end
+
+function mod:UseItem(item)
+
+	local name, link, quality, iLevel, reqLevel, class, subclass, maxStack, equipSlot, texture, vendorPrice = GetItemInfo(item.id);
+
+	mod.secureButton.icon:SetTexture(texture);
+
+	mod.secureButton.help.text:SetText(string.format(L["SEARCH_HELP_ITEM"],
+		mod.search:getColorString(mod.fontColors.highlight).._G.KEY_ENTER.."|r",
+		mod.search:getColorString(mod.fontColors.highlight).._G.KEY_ESCAPE.."|r"));
+
+	mod.secureButton.name.text:SetText(name);
+
+	if _G.PlayerHasToy(item.id) then
+		mod.secureButton.addTooptipFunc =_G.GameTooltip.SetToyByItemID;
+	else
+		mod.secureButton.addTooptipFunc =_G.GameTooltip.SetItemByID;
+	end
+
+	mod.secureButton:SetAttribute("type","item");
+	mod.secureButton:SetAttribute("item",name);
+	mod.secureButton.item = item;
+
+	local cooldown = mod.secureButton.cooldown;
+	local start, duration, enable = GetItemCooldown(item.id);
+	if (cooldown and start and duration) then
+		if (enable) then
+			cooldown:Hide();
+		else
+			cooldown:Show();
+		end
+		CooldownFrame_SetTimer(cooldown, start, duration, enable);
+	else
+		cooldown:Hide();
+	end
+
+	mod.secureButton:Show();
+	mod.secureButtonClose:Show();
+	mod.secureButton.help:Show();
+	mod.secureButton.name:Show();
+
+  SetOverrideBindingClick(mod.secureButtonClose, true, "ESCAPE", "CQL_SECURE_BUTTON_CLOSE", "LeftClick");
+	SetOverrideBindingClick(mod.secureButton, true, "ENTER", "CQL_SECURE_BUTTON", "LeftClick");
+
+end
+
 --default action on button click
 function mod.OnButtonClick(object)
 
+	--hide the the window
+	mod:Show(false);
+
 	--call the object func if we have any function
 	if object.data then
+
+		--if we have a funcion call it
 		if object.data.func then
-
-			--hide the the window
-			mod:Show(false);
-
-			--invoke method
-			object.data:func();
-
-			--set last action binding
-			mod.mainFrame.lastActionButton.data = object.data;
-
+				object.data:func();
+		--if its a item use it
+		elseif object.data.type and object.data.type == "item" then
+				mod:UseItem(object.data);
 		end
+
+		--set last action binding
+		mod.mainFrame.lastActionButton.data = object.data;
+
 	end
 
 end
@@ -1047,6 +1123,47 @@ function mod:CreateUI()
 	mod.mainFrame.lastActionButton:SetScript("OnClick",mod.OnButtonClick);
 	mod.mainFrame.editBox:SetScript("OnEnterPressed", mod.OnButtonClick);
 
+	--create secure button
+	mod.secureButton = mod:CreateUIObject("Button",UIParent,"CQL_SECURE_BUTTON","ActionButtonTemplate,SecureActionButtonTemplate");
+	mod.secureButton:SetSize(64, 64);
+	mod.secureButton:SetPoint("CENTER", 0, 0);
+
+	mod.secureButton:RegisterForClicks("AnyUp");
+	mod.secureButton:flattern();
+	mod.secureButton:CreateBorder(-3,0,0,0);
+
+	mod.secureButton.cooldown:ClearAllPoints();
+	mod.secureButton.cooldown:SetInside();
+	mod.secureButton.cooldown:SetDrawEdge(false);
+	mod.secureButton.cooldown:SetSwipeColor(0, 0, 0, 1);
+
+	mod.secureButton:HookScript("OnClick", mod.secureHide);
+	mod.secureButton:HookScript("OnEnter", mod.secureOnEnter);
+	mod.secureButton:HookScript("OnLeave", mod.secureOnLeave);
+
+	mod.secureButton.help = CreateFrame("Frame", mod.secureButton, UIParent)
+	mod.secureButton.help.text = mod.secureButton.help:CreateFontString(nil, "ARTWORK", "GameFontHighlightSmall")
+	mod.secureButton.help.text:SetJustifyH("CENTER");
+	mod.secureButton.help.text:SetJustifyV("TOP");
+	mod.secureButton.help.text:SetText("");
+	mod.secureButton.help.text:SetPoint("TOP",mod.secureButton,"BOTTOM", 0, -5);
+	mod.secureButton.help:Hide();
+
+
+	mod.secureButton.name = CreateFrame("Frame", mod.secureButton, UIParent)
+	mod.secureButton.name.text = mod.secureButton.name:CreateFontString(nil, "ARTWORK", "GameFontHighlightSmall")
+	mod.secureButton.name.text:SetJustifyH("CENTER");
+	mod.secureButton.name.text:SetJustifyV("TOP");
+	mod.secureButton.name.text:SetText("");
+	mod.secureButton.name.text:SetPoint("BOTTOM",mod.secureButton,"TOP", 0, 5);
+	mod.secureButton.name:Hide();
+
+	mod.secureButton:Hide();
+
+
+	mod.secureButtonClose = mod:CreateUIObject("Button",UIParent,"CQL_SECURE_BUTTON_CLOSE","SecureActionButtonTemplate");
+	mod.secureButtonClose:HookScript("OnClick", mod.secureHide);
+	mod.secureButtonClose:Hide();
 
 	debug("UI created");
 
@@ -1056,6 +1173,7 @@ end
 function mod.InCombat()
 	mod.combat = true;
 	mod:Show(false);
+	mod.secureHide();
 end
 
 --event when we exit combat
@@ -1207,6 +1325,8 @@ function mod:Show(value)
 		end
 	end
 
+	--always hide the secure button
+	mod.secureHide();
 
 end
 
