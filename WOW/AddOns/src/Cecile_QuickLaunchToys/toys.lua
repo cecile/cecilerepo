@@ -57,7 +57,8 @@ function mod:Populate()
   local noFavorites = mod.Profile.noFavorites;
   local favoriteTag = mod.Profile.favoriteTag;
 
-  --get number of pets
+  --get number of toys
+  C_ToyBox.FilterToys();
   local numToys = C_ToyBox.GetNumToys();
 
   --local vars
@@ -85,7 +86,7 @@ function mod:Populate()
 
         if searchableText then
 
-          --get the coldown
+          --get the cooldown
           start, duration, enable = GetItemCooldown(toyID);
 
           if start>0 then

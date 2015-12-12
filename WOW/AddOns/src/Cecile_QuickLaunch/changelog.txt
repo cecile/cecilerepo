@@ -1,5 +1,7 @@
 v1.1.1
 - Added 'two steps' search option
+- Added Toys module
+- Added Spells module
 v1.0.1
 - Fix issue: after pressing the keybinding the actual key its output in the editbox
 - Added scrolling the items using arrow keys

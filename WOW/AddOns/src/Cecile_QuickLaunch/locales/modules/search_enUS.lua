@@ -54,4 +54,3 @@ L["SEARCH_TWO_STEPS_HELP"] = [[
 When 'two steps' search is enabled after using the binding you will search in the list of availables modules, them after selecting a module you will search on the items only of that module.
 
 ]]
-L["SEARCH_HELP_ITEM"] = "Press %s to use,\n %s to cancel."

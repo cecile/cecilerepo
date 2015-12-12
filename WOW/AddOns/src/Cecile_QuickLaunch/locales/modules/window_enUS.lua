@@ -37,6 +37,8 @@ L["WINDOW_BORDER_COLOR"] = "Border Color"
 L["WINDOW_BORDER_COLOR_DESC"] = "Change the border color"
 L["WINDOW_SELECTED_COLOR"] = "Selected Color"
 L["WINDOW_SELECTED_COLOR_DESC"] = "Change the selected items color"
+L["WINDOW_HELP_ITEM"] = "Press %s to use,\n %s to cancel."
+L["WINDOW_HELP_SPELL"] = "Press %s to cast,\n %s to cancel."
 
 
 

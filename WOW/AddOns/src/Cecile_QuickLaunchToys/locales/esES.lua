@@ -25,4 +25,4 @@ L["TOYS_RETURN_FAVORITES_DESC"] = "Activar/Desactivar devolver juguetes favorito
 L["TOYS_RETURN_NO_FAVORITES"] = "Return No Favoritos"
 L["TOYS_RETURN_NO_FAVORITES_DESC"] = "Activar/Desactivar devolver juguetes no favoritos"
 L["TOYS_FAVORITE_TAG"] = "Etiqueta Favoritos"
-L["TOYS_FAVORITE_TAG_DESC"] = "Cambia la etiqueta para los items favoritos"
+L["TOYS_FAVORITE_TAG_DESC"] = "Cambia la etiqueta para los juguetes favoritos"

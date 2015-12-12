@@ -459,7 +459,7 @@ end
 function mod.secureOnEnter(self)
 	GameTooltip:SetOwner(mod.secureButton, "ANCHOR_RIGHT");
 
-	mod.secureButton.addTooptipFunc(_G.GameTooltip,mod.secureButton.item.id);
+	mod.secureButton.addTooptipFunc(_G.GameTooltip,mod.secureButton.item.id,false,true);
 
 end
 
@@ -467,30 +467,20 @@ function mod.secureOnLeave(self)
 	GameTooltip:Hide();
 end
 
-function mod:UseItem(item)
+--prepare the secure button
+function mod:PrepareSecureButton(item,name,icon,help,start,duration,enable)
 
-	local name, link, quality, iLevel, reqLevel, class, subclass, maxStack, equipSlot, texture, vendorPrice = GetItemInfo(item.id);
+	mod.secureButton.icon:SetTexture(icon);
 
-	mod.secureButton.icon:SetTexture(texture);
-
-	mod.secureButton.help.text:SetText(string.format(L["SEARCH_HELP_ITEM"],
+	mod.secureButton.help.text:SetText(string.format(help,
 		mod.search:getColorString(mod.fontColors.highlight).._G.KEY_ENTER.."|r",
 		mod.search:getColorString(mod.fontColors.highlight).._G.KEY_ESCAPE.."|r"));
 
 	mod.secureButton.name.text:SetText(name);
 
-	if _G.PlayerHasToy(item.id) then
-		mod.secureButton.addTooptipFunc =_G.GameTooltip.SetToyByItemID;
-	else
-		mod.secureButton.addTooptipFunc =_G.GameTooltip.SetItemByID;
-	end
-
-	mod.secureButton:SetAttribute("type","item");
-	mod.secureButton:SetAttribute("item",name);
 	mod.secureButton.item = item;
 
 	local cooldown = mod.secureButton.cooldown;
-	local start, duration, enable = GetItemCooldown(item.id);
 	if (cooldown and start and duration) then
 		if (enable) then
 			cooldown:Hide();
@@ -512,6 +502,50 @@ function mod:UseItem(item)
 
 end
 
+--use a spell
+function mod:UseSpell(item)
+
+	local name, rank, icon, castingTime, minRange, maxRange, spellID = GetSpellInfo(item.id);
+	local start, duration, enable = GetSpellCooldown(name);
+	local help = L["WINDOW_HELP_SPELL"];
+
+	mod.secureButton.addTooptipFunc =_G.GameTooltip.SetSpellByID;
+
+	mod.secureButton:SetAttribute("type","spell");
+	mod.secureButton:SetAttribute("spell",item.id);
+
+	if rank and not(rank=="") then
+		name = name.." ("..rank..")";
+	end
+
+	local petIndex, petName = GetCallPetSpellInfo(spellID);
+	if petIndex and petIndex and not(petName=="") then
+			name = name.." ("..petName..")";
+	end
+	mod:PrepareSecureButton(item,name,icon,help,start,duration,enable);
+
+end
+
+--use a item
+function mod:UseItem(item)
+
+	local name, link, quality, iLevel, reqLevel, class, subclass, maxStack, equipSlot, icon, vendorPrice = GetItemInfo(item.id);
+	local start, duration, enable = GetItemCooldown(item.id);
+	local help = L["WINDOW_HELP_ITEM"];
+
+	if _G.PlayerHasToy(item.id) then
+		mod.secureButton.addTooptipFunc =_G.GameTooltip.SetToyByItemID;
+	else
+		mod.secureButton.addTooptipFunc =_G.GameTooltip.SetItemByID;
+	end
+
+	mod.secureButton:SetAttribute("type","item");
+	mod.secureButton:SetAttribute("item",name);
+
+	mod:PrepareSecureButton(item,name,icon,help,start,duration,enable);
+
+end
+
 --default action on button click
 function mod.OnButtonClick(object)
 
@@ -524,9 +558,13 @@ function mod.OnButtonClick(object)
 		--if we have a funcion call it
 		if object.data.func then
 				object.data:func();
-		--if its a item use it
-		elseif object.data.type and object.data.type == "item" then
+		--if we have type
+		elseif object.data.type then
+			if object.data.type == "item" then
 				mod:UseItem(object.data);
+			elseif object.data.type == "spell" then
+				mod:UseSpell(object.data);
+			end
 		end
 
 		--set last action binding
@@ -1133,7 +1171,10 @@ function mod:CreateUI()
 	mod.secureButton:CreateBorder(-3,0,0,0);
 
 	mod.secureButton.cooldown:ClearAllPoints();
-	mod.secureButton.cooldown:SetInside();
+
+	mod.secureButton.cooldown:SetPoint('TOPLEFT', mod.secureButton, 'TOPLEFT', 0, 0)
+	mod.secureButton.cooldown:SetPoint('BOTTOMRIGHT', mod.secureButton, 'BOTTOMRIGHT', 0, 0)
+
 	mod.secureButton.cooldown:SetDrawEdge(false);
 	mod.secureButton.cooldown:SetSwipeColor(0, 0, 0, 1);
 
