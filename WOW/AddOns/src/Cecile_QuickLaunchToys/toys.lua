@@ -18,12 +18,33 @@ mod.desc = L["TOYS_MODULE"];
 
 --module vars
 mod.Vars = {
+  favorites =  {
+    type = "boolean",
+    default = true,
+    order = 1,
+    label = L["TOYS_RETURN_FAVORITES"],
+    desc = L["TOYS_RETURN_FAVORITES_DESC"]
+  },
+  noFavorites =  {
+    type = "boolean",
+    default = true,
+    order = 2,
+    label = L["TOYS_RETURN_NO_FAVORITES"],
+    desc = L["TOYS_RETURN_NO_FAVORITES_DESC"]
+  },
   token =  {
     type = "string",
     default = L["TOYS"],
     order = 1,
     label = L["TOYS_TOKEN"],
     desc = L["TOYS_TOKEN_DESC"],
+  },
+  favoriteTag =  {
+    type = "string",
+    default = L["TOYS_FAVORITE"],
+    order = 4,
+    label = L["TOYS_FAVORITE_TAG"],
+    desc = L["TOYS_FAVORITE_TAG_DESC"]
   },
 };
 
@@ -32,6 +53,9 @@ function mod:Populate()
 
   --options
   local token = mod.Profile.token;
+  local favorites = mod.Profile.favorites;
+  local noFavorites = mod.Profile.noFavorites;
+  local favoriteTag = mod.Profile.favoriteTag;
 
   --get number of pets
   local numToys = C_ToyBox.GetNumToys();
@@ -42,30 +66,40 @@ function mod:Populate()
   for index = 1, numToys do
 
     idx = C_ToyBox.GetToyFromIndex(index);
-    toyID, name, icon, fav = C_ToyBox.GetToyInfo(idx);
+    toyID, name, icon, isFavorite = C_ToyBox.GetToyInfo(idx);
 
     if name ~= nil and toyID ~= nil then
       if _G.PlayerHasToy(toyID) then
 
-        --base text
-        searchableText = token .. ": ";
+        searchableText = nil;
 
-        --complete the text
-        searchableText = searchableText .. name;
+        if isFavorite and favorites then
 
-        --get the coldown
-        start, duration, enable = GetItemCooldown(toyID);
+          searchableText = token .. ": " .. name .. " (".. favoriteTag .. ")";
 
-        if start>0 then
-          remain = duration - (GetTime() - start);
-          searchableText = searchableText .. " ["..search:SecondsToClock(remain).."]";
+        elseif not(isFavorite) and noFavorites then
+
+          searchableText = token .. ": " .. name;
+
         end
 
-        --add the text and function
-        item = { text = searchableText , id=toyID, type = "item", icon = icon};
+        if searchableText then
 
-        --insert the result
-        table.insert(mod.items,item);
+          --get the coldown
+          start, duration, enable = GetItemCooldown(toyID);
+
+          if start>0 then
+            remain = duration - (GetTime() - start);
+            searchableText = searchableText .. " ["..search:SecondsToClock(remain).."]";
+          end
+
+          --add the text and function
+          item = { text = searchableText , id=toyID, type = "item", icon = icon};
+
+          --insert the result
+          table.insert(mod.items,item);
+
+        end
 
 
       end

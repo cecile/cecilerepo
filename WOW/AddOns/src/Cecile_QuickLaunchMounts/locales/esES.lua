@@ -25,4 +25,4 @@ L["MOUNT_RETURN_FAVORITES_DESC"] = "Activar/Desactivar devolver monturas favorit
 L["MOUNT_RETURN_NO_FAVORITES"] = "Devolver No Favoritas"
 L["MOUNT_RETURN_NO_FAVORITES_DESC"] = "Activar/Desactivar devolver monturas no favoritas"
 L["MOUNT_FAVORITE_TAG"] = "Etiqueta Favoritos"
-L["MOUNT_FAVORITE_TAG_DESC"] = "Cambia la etiqueta para los items favoritos"
+L["MOUNT_FAVORITE_TAG_DESC"] = "Cambia la etiqueta para las monturas favoritas"

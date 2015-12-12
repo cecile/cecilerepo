@@ -105,7 +105,7 @@ function mod:PopulateMounts()
 
 				searchableText = token .. ": " .. creatureName .. " (".. favoriteTag .. ")";
 
-			elseif noFavorites then
+			elseif not(isFavorite) and noFavorites then
 
 				searchableText = token .. ": " .. creatureName;
 

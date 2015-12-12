@@ -25,4 +25,4 @@ L["PETS_RETURN_FAVORITES_DESC"] = "Activar/Desactivar devolver mascotas favorita
 L["PETS_RETURN_NO_FAVORITES"] = "Devolver No Favoritas"
 L["PETS_RETURN_NO_FAVORITES_DESC"] = "Activar/Desactivar devolver mascotas no favoritas"
 L["PETS_FAVORITE_TAG"] = "Etiqueta Favoritos"
-L["PETS_FAVORITE_TAG_DESC"] = "Cambia la etiqueta para los items favoritos"
+L["PETS_FAVORITE_TAG_DESC"] = "Cambia la etiqueta para las mascotas favoritas"

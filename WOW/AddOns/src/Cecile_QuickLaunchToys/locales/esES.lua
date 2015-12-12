@@ -15,7 +15,14 @@ if not L then
 end
 
 --Toys module
-L["TOYS"] = "Toys"
-L["TOYS_MODULE"] = "Toys"
-L["TOYS_TOKEN"] = "Etiqueta Toys"
-L["TOYS_TOKEN_DESC"] = "Cambia la etiqueta de Toys"
+L["TOYS"] = "Juguetes"
+L["TOYS_MODULE"] = "Juguetes"
+L["TOYS_TOKEN"] = "Etiqueta de Juguetes"
+L["TOYS_TOKEN_DESC"] = "Cambia la etiqueta de Juguetes"
+L["TOYS_FAVORITE"] = "favorito"
+L["TOYS_RETURN_FAVORITES"] = "Devolver Favoritos"
+L["TOYS_RETURN_FAVORITES_DESC"] = "Activar/Desactivar devolver juguetes favoritos"
+L["TOYS_RETURN_NO_FAVORITES"] = "Return No Favoritos"
+L["TOYS_RETURN_NO_FAVORITES_DESC"] = "Activar/Desactivar devolver juguetes no favoritos"
+L["TOYS_FAVORITE_TAG"] = "Etiqueta Favoritos"
+L["TOYS_FAVORITE_TAG_DESC"] = "Cambia la etiqueta para los items favoritos"
