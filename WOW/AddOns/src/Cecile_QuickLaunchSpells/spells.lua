@@ -27,13 +27,6 @@ mod.Vars = {
   },
 };
 
---dummy
-function mod.dummy(item)
-
-  print(item.id)
-
-end
-
 --populate flyouts spells
 function mod:PopulateFlyouts()
 

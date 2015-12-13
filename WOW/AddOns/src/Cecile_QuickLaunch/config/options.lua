@@ -12,6 +12,9 @@ local mod = Engine.AddOn:NewModule("options");
 --defaults
 Engine.Defaults = {
 	profile = {
+			minimap = {
+				hide = false,
+			},
 	},
 	global = {
 	},

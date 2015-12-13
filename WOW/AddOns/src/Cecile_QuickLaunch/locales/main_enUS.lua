@@ -6,7 +6,7 @@
 local AddOnName, Engine = ...;
 
 --force localization to Spanish (only for testing)
-_G.GAME_LOCALE = "esES"
+--_G.GAME_LOCALE = "esES"
 
 --prepare locale
 local L = LibStub("AceLocale-3.0"):NewLocale(AddOnName, "enUS", true);
@@ -15,6 +15,9 @@ if not L then return; end
 --main strings
 L["LOAD_MESSAGE"] = "%s (version |cff0070de%s|r) loaded, type /%s or /%s for options."
 L["CONFIG_WINDOW"] = "%s (version |cff0070de%s|r) by |cffffffffCecile|r - |cff0070deEU|r - |cffff2020Zul'jin|r"
+L["MINIMAP_LABEL"] = "%s (|cff0070de%s|r)"
+L["MINIMAP_HELP_1"] = "|cFFCFCFCFleft click|r: Open the Launcher"
+L["MINIMAP_HELP_2"] = "|cFFCFCFCFRight click|r: Open the Configuration"
 L["PROFILES"] = "Profiles"
 L["BINDING_DESC"] = "Open Quick Launch"
 L["LAUNCH_BINDING_DESC"] = "Launch Last Command"
@@ -35,6 +38,12 @@ You could define |cff82c5ffAliases|r and |cff82c5ffBlacklist|r items in the sear
 The different |cff82c5ffsearch modules|r could be customized in the module list within the search options.
 
 The window |cff82c5ffappearance|r could be change in the windows options.
+
+This AddOn include a |cff82c5ffminimap icon|r and some |cff82c5ffslash commands|r.
+
+|cff82c5ffOpen the configuration window:|r /cql
+
+|cff82c5ffOpen the launcher window:|r /cql launch
 
 |cff0070deSearch Modules:|r
 

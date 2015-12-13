@@ -180,7 +180,30 @@ mod.Options = {
 	name = L["WINDOW_SETTINGS"],
 	childGroups = "tab",
 	args = {
-		appearance ={
+		general = {
+			type = "group",
+			name = "General",
+			order = 0,
+			args = {
+				minimap = {
+					order = 1,
+					type = "toggle",
+					name = L["WINDOW_SHOW_MINIMAP_ICON"],
+					desc = L["WINDOW_SHOW_MINIMAP_ICON_DESC"],
+					get = function()
+						return not(Engine.Profile.minimap.hide);
+					end,
+					set = function(key, value)
+
+						Engine.Profile.minimap.hide = not(value);
+
+						Engine.AddOn:OnCfgChange();
+
+					end,
+				},
+			},
+		},
+		appearance = {
 			type = "group",
 			name = L["WINDOW_APPEARANCE"],
 			order = 1,

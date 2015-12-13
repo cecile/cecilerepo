@@ -255,5 +255,60 @@ function AddOn:NotifyChange(object)
 end
 
 function AddOn:OnCfgChange()
+
 	AddOn:NotifyChange(self);
+
+	local LDBIcon = LibStub("LibDBIcon-1.0", true);
+
+	LDBIcon:Refresh(Engine.Name);
+
+end
+
+function AddOn:SetupMinimapIcon()
+
+	--get version
+	local label = string.format(L["MINIMAP_LABEL"],GetAddOnMetadata(Engine.Name, "Title"),GetAddOnMetadata(Engine.Name, "Version"));
+	local icon_file = GetAddOnMetadata(Engine.Name, "X-Icon");
+
+	--get libraries
+	local LDB = LibStub("LibDataBroker-1.1", true);
+	local LDBIcon = LDB and LibStub("LibDBIcon-1.0", true);
+
+	if LDB then
+
+		local databroker = LDB:NewDataObject(Engine.Name, {
+			type = "data source",
+			icon = icon_file,
+			text = "0",
+
+			HotCornerIgnore = true,
+
+			OnClick = function (self, button)
+
+				if (button == "LeftButton") then
+
+					AddOn.HandleCommands("launch");
+
+				elseif (button == "RightButton") then
+
+					AddOn.HandleCommands();
+
+				end
+
+			end,
+			OnTooltipShow = function (tooltip)
+				tooltip:AddLine(label, 1, 1, 1);
+				tooltip:AddLine(L["MINIMAP_HELP_1"]);
+				tooltip:AddLine(L["MINIMAP_HELP_2"]);
+			end,
+		})
+
+		if (databroker and not LDBIcon:IsRegistered(Engine.Name)) then
+			LDBIcon:Register(Engine.Name, databroker, Engine.Profile.minimap);
+		end
+
+		AddOn.databroker = databroker;
+
+	end
+
 end

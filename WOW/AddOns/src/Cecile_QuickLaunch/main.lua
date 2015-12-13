@@ -57,6 +57,9 @@ function AddOn:OnInitialize()
 	--set-up options
 	AddOn:SetupOptions();
 
+	--set-up minimap icon
+	AddOn:SetupMinimapIcon();
+
 end
 
 --this function is actually the one showing the window

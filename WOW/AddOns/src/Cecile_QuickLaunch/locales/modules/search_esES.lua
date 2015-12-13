@@ -51,7 +51,7 @@ La listas negra funciona como una busqueda negativa, cuando este tecleando cualq
 
 ]]
 L["SEARCH_MODULES"] = "Módulos"
-L["SEARCH_TWO_STEPS"] = "End dos pasos"
+L["SEARCH_TWO_STEPS"] = "En dos pasos"
 L["SEARCH_TWO_STEPS_DESC"] = "Cambia las búsquedas para funcionar en dos pasos, primero el modulo, segundo elementos del modulo"
 L["SEARCH_GENERAL"] = "General"
 L["SEARCH_TWO_STEPS_HELP"] = [[

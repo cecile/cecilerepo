@@ -40,6 +40,8 @@ L["WINDOW_SELECTED_COLOR_DESC"] = "Change the selected items color"
 L["WINDOW_HELP_ITEM"] = "Press %s to use,\n %s to cancel."
 L["WINDOW_HELP_ITEM_EQUIPP"] = "Press %s to equipp,\n %s to cancel."
 L["WINDOW_HELP_SPELL"] = "Press %s to cast,\n %s to cancel."
+L["WINDOW_SHOW_MINIMAP_ICON"] = "Show Minimap Icon"
+L["WINDOW_SHOW_MINIMAP_ICON_DESC"] = "Enable/Disable showing the minimap icon"
 
 
 

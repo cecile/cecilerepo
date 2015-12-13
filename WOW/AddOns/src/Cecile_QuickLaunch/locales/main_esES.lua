@@ -17,6 +17,9 @@ end
 --main strings
 L["LOAD_MESSAGE"] = "%s (versión |cff0070de%s|r) cargado, escribe /%s o /%s para opciones."
 L["CONFIG_WINDOW"] = "%s (version |cff0070de%s|r) creado por |cffffffffCecile|r - |cff0070deEU|r - |cffff2020Zul'jin|r"
+L["MINIMAP_LABEL"] = "%s (|cff0070de%s|r)"
+L["MINIMAP_HELP_1"] = "|cFFCFCFCFClick Izquierdo|r: Abre el lanzador"
+L["MINIMAP_HELP_2"] = "|cFFCFCFCFClick Derecho|r: Abre la configuración"
 L["PROFILES"] = "Perfiles"
 L["BINDING_DESC"] = "Abrir Lanzador Rápido"
 L["LAUNCH_BINDING_DESC"] = "Lanzar Último Comando"
@@ -37,6 +40,12 @@ Puedes definir |cff82c5ffSinónimos|r y |cff82c5ffuna lista negra|r en las opcio
 Los diversos |cff82c5ffmódulos de busqueda|r se pueden personalizar en la lista de módulos dentro de las opciones de búsqueda.
 
 Se puede cambiar la |cff82c5ffapariencia|r de la ventana en las opciones de la misma.
+
+Este AddOn incluye un |cff82c5fficono en el minimapa|r y algunos |cff82c5ffcommandos|r.
+
+|cff82c5ffAbrir la ventana de configuración:|r /cql
+
+|cff82c5ffAbrir el lanzador:|r /cql launch
 
 |cff0070deMódulos de Búsqueda:|r
 
