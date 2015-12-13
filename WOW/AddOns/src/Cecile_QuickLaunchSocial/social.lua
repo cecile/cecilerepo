@@ -65,9 +65,6 @@ mod.Vars = {
 --invite function
 function mod.invite(item)
 
-  print("invite")
-  print(item.id)
-
   if type(item.id) ~= 'number' then
     _G.InviteUnit(item.id)
   else
