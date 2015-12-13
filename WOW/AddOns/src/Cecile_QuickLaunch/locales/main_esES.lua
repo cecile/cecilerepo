@@ -30,30 +30,13 @@ Cuando se muestre la ventana puedes empezar a escribir para buscar.
 
 Puedes pulsar |cff82c5ffINTRO|r para selecionar la primera opción o usar |cff82c5ffTABULADOR o MAYUSCULAS-TABULADOR|r para navegar por los resultados.
 
-Alternativamente puedes usar los cursores y el ratón y su rueda.
+Alternativamente puedes usar los |cff82c5ffcursores|r y la |cff82c5ffrueda del ratón|r.
 
 Puedes definir |cff82c5ffSinónimos|r y |cff82c5ffuna lista negra|r en las opciones de Búsqueda.
 
 Los diversos |cff82c5ffmódulos de busqueda|r se pueden personalizar en la lista de módulos dentro de las opciones de búsqueda.
 
 Se puede cambiar la |cff82c5ffapariencia|r de la ventana en las opciones de la misma.
-
-|cff0070deEjemplos:|r
-
-Invocar una mascota aleatoria:
-|cff82c5ffCONTROL+MAYUSCULAS+P|r masco |cff82c5ffESPACIO|r aleat |cff82c5ffENTER|r
-
-Invocar tu segunda montura favorita:
-|cff82c5ffCONTROL+MAYUSCULAS+P|r mont |cff82c5ffESPACIO|r favo |cff82c5ffTABULADOR|r |cff82c5ffTABULADOR|r |cff82c5ffTABULADOR|r |cff82c5ffINTRO|r
-
-Invocar a tu Aterracielos volador:
-|cff82c5ffCONTROL+MAYUSCULAS+P|r mont |cff82c5ffESPACIO|r aterr |cff82c5ffINTRO|r
-
-Abrir la configruación de un AddOn:
-|cff82c5ffCONTROL+MAYUSCULAS+P|r cfg |cff82c5ffESPACIO|r <nombre> |cff82c5ffINTRO|r
-
-Abrir la configruación de este AddOn:
-|cff82c5ffCONTROL+MAYUSCULAS+P|r cql |cff82c5ffINTRO|r
 
 |cff0070deMódulos de Búsqueda:|r
 
@@ -68,4 +51,33 @@ Abrir la configruación de este AddOn:
 |cff82c5ffEspecialización y conjuntos:|r
 - Cambiar de especialización o conjuntos de equipo.
 |cff82c5ffSocial:|r
-- Invitar a grupo o banda o susurrar a tus amigos. Coventir a banda o grupo.]]
+- Invitar a grupo o banda o susurrar a tus amigos. Coventir a banda o grupo.
+|cff82c5ffJuguetes:|r
+- Use any favorite or not favorite toys.
+|cff82c5ffEchizos:|r
+- Lanza habilidates, teleportaciones, portales, invocaciones, bufos, etc.
+|cff82c5ffObjetos:|r
+- Usa cualquier de los objetos en tus bolsas o que lleves equipados.
+
+|cff0070deEjemplos:|r
+
+Invocar una mascota aleatoria:
+|cff82c5ffCONTROL+MAYUSCULAS+P|r masco |cff82c5ffESPACIO|r aleat |cff82c5ffINTRO|r
+
+Invocar tu segunda montura favorita:
+|cff82c5ffCONTROL+MAYUSCULAS+P|r mont |cff82c5ffESPACIO|r favo |cff82c5ffTABULADOR|r |cff82c5ffTABULADOR|r |cff82c5ffTABULADOR|r |cff82c5ffINTRO|r
+
+Abrir la configruación de este AddOn:
+|cff82c5ffCONTROL+MAYUSCULAS+P|r cql |cff82c5ffINTRO|r
+
+Abrir el logro de Gloria del héroe de Draenor:
+|cff82c5ffCONTROL+MAYUSCULAS+P|r glor |cff82c5ffSPACE|r drae |cff82c5ffINTRO|r
+
+Use tu piedra de hogar:
+|cff82c5ffCONTROL+MAYUSCULAS+P|r hogar |cff82c5ffINTRO|r
+
+Teleportate a dalaran:
+|cff82c5ffCONTROL+MAYUSCULAS+P|r tele |cff82c5ffSPACE|r dala |cff82c5ffINTRO|r
+
+Use el juguete Trenza de Gammon:
+|cff82c5ffCONTROL+MAYUSCULAS+P|r gammon |cff82c5ffINTRO|r]]
