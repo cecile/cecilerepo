@@ -62,9 +62,11 @@ function mod:Populate()
   local numToys = C_ToyBox.GetNumToys();
 
   --local vars
-  local idx,toyID, name, icon, fav,start, duration, enable, remain;
+  local idx,toyID, name, icon, fav,start, duration, enable, remain, item;
 
   for index = 1, numToys do
+
+    item = nil;
 
     idx = C_ToyBox.GetToyFromIndex(index);
     toyID, name, icon, isFavorite = C_ToyBox.GetToyInfo(idx);

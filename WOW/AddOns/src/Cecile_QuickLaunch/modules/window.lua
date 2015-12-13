@@ -533,6 +533,10 @@ function mod:UseItem(item)
 	local start, duration, enable = GetItemCooldown(item.id);
 	local help = L["WINDOW_HELP_ITEM"];
 
+	if IsEquippableItem(name) and not IsEquippedItem(name) then
+		help = L["WINDOW_HELP_ITEM_EQUIPP"];
+	end
+
 	if _G.PlayerHasToy(item.id) then
 		mod.secureButton.addTooptipFunc =_G.GameTooltip.SetToyByItemID;
 	else

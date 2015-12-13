@@ -1,7 +1,8 @@
-v1.1.1
+v1.1.0
 - Added 'two steps' search option
 - Added Toys module
-- Added Spells module
+- Added Spells (abilities, teleports & portals, summons, buffs,etc.) module
+- Added Items (bags & equipped) module
 v1.0.1
 - Fix issue: after pressing the keybinding the actual key its output in the editbox
 - Added scrolling the items using arrow keys

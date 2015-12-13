@@ -41,7 +41,7 @@ function mod:PopulateFlyouts()
   local token = mod.Profile.token;
 
   --local vars
-  local numFlyouts,flyoutNumber,flyoutID,flyoutName, description, numSlots, isFlyoutKnown;
+  local numFlyouts,flyoutNumber,flyoutID,flyoutName, description, numSlots, isFlyoutKnown,item;
   local spellID, overrideSpellID, isKnown, spellName, slotSpecID;
   local name, rank, icon, castingTime, minRange, maxRange, spellID;
   local petIndex, petName;
@@ -65,6 +65,7 @@ function mod:PopulateFlyouts()
 
             if(name) then
 
+              item = nil;
               petIndex, petName = GetCallPetSpellInfo(spellID);
 
               if not (petIndex and (not petName or petName == "")) then
@@ -118,7 +119,7 @@ function mod:PopulateNormalSpells()
   local token = mod.Profile.token;
 
   --local vars
-  local index,name, rank, icon, castingTime, minRange, maxRange, spellID, offset, numEntries, isGuild, offspecID;
+  local index,name, rank, icon, castingTime, minRange, maxRange, spellID, offset, numEntries, isGuild, offspecID,item;
 
   --get all spell tabs
   local numTabs = GetNumSpellTabs();
@@ -136,6 +137,8 @@ function mod:PopulateNormalSpells()
           name, rank, icon, castingTime, minRange, maxRange, spellID = GetSpellInfo(index, BOOKTYPE_SPELL);
 
           if(name) then
+
+            item = nil;
 
             --base text
             searchableText = token .. ":";
