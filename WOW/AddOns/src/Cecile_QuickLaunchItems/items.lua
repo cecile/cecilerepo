@@ -129,7 +129,7 @@ function mod:PopulateBagsItems()
   local name, link, itemId, slot, icon;
 
   --add the items in a list to avoid duplicated items
-  for index = 1, 4 do
+  for index = 0, _G.NUM_BAG_SLOTS do
 
     numSlots = GetContainerNumSlots(index);
 
