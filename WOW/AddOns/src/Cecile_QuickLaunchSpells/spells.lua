@@ -38,6 +38,7 @@ function mod:PopulateFlyouts()
   local spellID, overrideSpellID, isKnown, spellName, slotSpecID;
   local name, rank, icon, castingTime, minRange, maxRange, spellID;
   local petIndex, petName;
+  local searchableText, start, duration, enable, slot;
 
   numFlyouts = GetNumFlyouts();
 
@@ -112,14 +113,15 @@ function mod:PopulateNormalSpells()
   local token = mod.Profile.token;
 
   --local vars
-  local index,name, rank, icon, castingTime, minRange, maxRange, spellID, offset, numEntries, isGuild, offspecID,item;
+  local name, rank, icon, castingTime, minRange, maxRange, spellID, offset, numEntries, isGuild, offspecID;
+  local index, searchableText, start, duration, enable;
 
   --get all spell tabs
   local numTabs = GetNumSpellTabs();
 
   for tabID=1,numTabs do
 
-    local name, icon, offset, numEntries, isGuild, offspecID = GetSpellTabInfo(tabID)
+    name, icon, offset, numEntries, isGuild, offspecID = GetSpellTabInfo(tabID)
 
     if offspecID == 0 then
 
@@ -134,7 +136,7 @@ function mod:PopulateNormalSpells()
             item = nil;
 
             --base text
-            searchableText = token .. ":";
+            searchableText = token .. ": ";
 
             --complete the text
             if rank and not(rank=="") then
@@ -143,7 +145,7 @@ function mod:PopulateNormalSpells()
               searchableText = searchableText .. name;
             end
 
-            --get the coldown
+            --get the cooldown
             start, duration, enable = GetSpellCooldown(index, BOOKTYPE_SPELL);
 
             if start and start>0 and enable==1 then
@@ -168,6 +170,70 @@ function mod:PopulateNormalSpells()
 
 end
 
+--populate
+function mod:PopulateProfession(profession)
+
+  --local vars
+  local item , searchableText, start, duration, enable;
+
+  local prefessionName, icon, rank, maxRank, numEntries, offset, skillLine, rankModifier, specializationIndex, specializationOffset;
+
+  local castingTime, minRange, maxRange, spellID;
+
+  prefessionName, icon, rank, maxRank, numEntries, offset, skillLine, rankModifier, specializationIndex, specializationOffset = GetProfessionInfo(profession);
+
+  for index = offset + 1, offset + numEntries do
+
+    if not IsPassiveSpell(index, BOOKTYPE_PROFESSION) then
+
+      name, rank, icon, castingTime, minRange, maxRange, spellID = GetSpellInfo(index, BOOKTYPE_PROFESSION);
+
+      if(name) then
+
+        item = nil;
+
+        --base text
+        searchableText = prefessionName .. ": ";
+
+        --complete the text
+        if rank and not(rank=="") then
+          searchableText = searchableText .. name.." ("..rank..")";
+        else
+          searchableText = searchableText .. name;
+        end
+
+        --get the cooldown
+        start, duration, enable = GetSpellCooldown(index, BOOKTYPE_PROFESSION);
+
+        if start and start>0 and enable==1 then
+
+          remain = duration - (GetTime() - start);
+          searchableText = searchableText .. " ["..search:SecondsToClock(remain).."]";
+        end
+
+        --add the text and function
+        item = { text = searchableText , id=spellID, type = "spell", icon=icon};
+
+        --insert the result
+        table.insert(mod.items,item);
+      end
+    end
+
+  end
+
+end
+
+function mod:PopulateProfessions(...)
+
+  local i;
+  local n = select('#', ...);
+
+  for i = 1, n do
+    mod:PopulateProfession(select(i, ...));
+  end
+
+end
+
 --refresh the data
 function mod:Refresh()
 
@@ -176,6 +242,7 @@ function mod:Refresh()
   --populate data
   mod:PopulateFlyouts();
   mod:PopulateNormalSpells();
+  mod:PopulateProfessions(_G.GetProfessions());
 
   debug("data refreshed");
 

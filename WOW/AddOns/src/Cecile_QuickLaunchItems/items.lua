@@ -81,8 +81,9 @@ function mod:PopulateEquippedItems()
   local equippedToken = mod.Profile.equippedToken;
 
   --local vars
-  local iventoryId, itemId, icon, checkRelic;
+  local iventoryId, itemId, icon, checkRelic, slot;
   local name, link, quality, iLevel, reqLevel, class, subclass, maxStack, equipSlot, icon, vendorPrice;
+  local searchableText, start, duration, enable;
 
   for _,slot in pairs(mod.slots) do
 
@@ -127,6 +128,7 @@ function mod:PopulateBagsItems()
 
   local item, index, numSlots;
   local name, link, itemId, slot, icon;
+  local searchableText, start, duration, enable;
 
   --add the items in a list to avoid duplicated items
   for index = 0, _G.NUM_BAG_SLOTS do
@@ -140,7 +142,12 @@ function mod:PopulateBagsItems()
       if link then
         name = GetItemInfo(link);
 
-        savedItems[name] = link;
+        if name then
+
+          savedItems[name] = link;
+
+        end
+
       end
 
     end

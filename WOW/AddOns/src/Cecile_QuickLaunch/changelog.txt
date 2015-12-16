@@ -1,3 +1,6 @@
+v1.1.2
+- Module Items : Fix issue with items with no name (issue)
+- Spell Items : Adding Basic profession spells (Enchanting, Cooking Fire, etc)
 v1.1.1
 - Module Items : Scanning bagpack (issue)
 v1.1.0
